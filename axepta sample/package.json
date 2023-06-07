@@ -1,0 +1,15 @@
+{
+  "name": "gateway-node-client",
+  "version": "1.0.0",
+  "description": "This package is designed to provide a simple start with Gateway",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tobias Kloy",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "egoroof-blowfish": "^2.2.2"
+  }
+}
