@@ -34,7 +34,6 @@ const Cart: NextPage = () => {
 
   //   stripe.redirectToCheckout({ sessionId: data.id });
   // };
-  
 
   return (
     <div className="w-11/12 mx-auto h-full vh-full">
@@ -64,11 +63,13 @@ const Cart: NextPage = () => {
             <MyForm setOpenForm={setOpenForm} />
           ) : (
             <button
-              onClick={()=> {setOpenForm(true)}}
+              onClick={() => {
+                setOpenForm(true);
+              }}
               className="text-xl text-center px-4 py-2 text-white bg-black rounded w-full mt-8"
               hidden={cartItems.length == 0}
             >
-              Payer
+              passer à l`expédition
             </button>
           )}
         </div>
