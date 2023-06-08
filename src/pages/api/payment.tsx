@@ -5,12 +5,10 @@ import MacGeneration from "../../utils/hmacGeneration";
 import { v4 as uuid } from "uuid";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const unique_id = uuid();
-  const TransactionId = "TR" + "-" + unique_id;
-  const ReferenceId = "Ref" + "-" + unique_id;
   if (req.method === "POST") {
     try {
       const {
+        unique_id,
         items,
         Amount,
         CustomField1,
@@ -24,7 +22,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         CustomField9,
         PayType,
       } = req.body;
-      console.log(items)
+      const TransactionId = "TR" + "-" + unique_id;
+      const ReferenceId = "Ref" + "-" + unique_id;
+      console.log(items);
       const mac = new MacGeneration(
         `*${TransactionId}*${process.env.NEXT_PUBLIC_MERCHANT_ID}*${Amount}*EUR`
       );
@@ -40,10 +40,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         Data: encrypt_result,
         Len: unencrypt.length,
         Template: "PaymentPageDropDown_BNP_v1",
-        Language: "en",
+        Language: "fr",
         CCTemplate: "Cards_BNP_v1",
         SDDTemplate: "DirectDebit_BNP_v1",
-        URLBack: "http://www.xphones.fr/",
+        URLBack: "https://xphones.fr/cart",
         CustomField1,
         CustomField2,
         CustomField3,
