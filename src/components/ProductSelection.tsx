@@ -111,7 +111,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
       productId: product._id,
       color: selectedColor,
       capacity: selectedCapacity,
-      grade: selectedGrade,
+      grade: selectedGrade, 
       price,
       quantity: 1,
     };

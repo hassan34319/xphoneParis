@@ -1,7 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
+
+import Layout from "../components/Layout";
+
 /* eslint-disable @next/next/no-img-element */
 const Us = () => {
   return (
+    <Layout>
     <div className="w-11/12 mx-auto flex flex-col">
       <h1 className="text-2xl text-center mt-10 font-bold">
         XPHONES PARIS : NOTRE BOUTIQUE
@@ -182,6 +186,7 @@ const Us = () => {
         </p>
       </div>
     </div>
+    </Layout>
   );
 };
 

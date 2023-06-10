@@ -1,6 +1,9 @@
+import Layout from "../components/Layout";
+
 /* eslint-disable react/no-unescaped-entities */
 const mentions = () => {
   return (
+    <Layout>
     <div className="mx-auto w-11/12 rounded my-2 p-4">
       <h1 className="text-xl mb-2 text-center">Mentions legales</h1>
       <p>
@@ -62,6 +65,7 @@ const mentions = () => {
         et transactions intervenus entre les parties.
       </p>
     </div>
+    </Layout>
   );
 };
 

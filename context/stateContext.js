@@ -96,6 +96,26 @@ export const StateContext = ({ children }) => {
       return;
     }
   };
+  const calculateTotalPrice = (cartItems) => {
+    return cartItems.reduce((totalPrice, item) => {
+      return totalPrice + item.price * item.quantity;
+    }, 0);
+  };
+  
+  const calculateTotalQuantity = (cartItems) => {
+    return cartItems.reduce((totalQuantity, item) => {
+      return totalQuantity + item.quantity;
+    }, 0);
+  };
+  const setCart = (cart) => {
+    const isCartDifferent = JSON.stringify(cart) !== JSON.stringify(cartItems);
+
+    if (isCartDifferent && cartItems.length == 0) {
+      setCartItems(cart);
+      setTotalPrice(calculateTotalPrice(cart));
+      setTotalQuantity(calculateTotalQuantity(cart));
+    }
+  };
 
   return (
     <Context.Provider
@@ -108,6 +128,7 @@ export const StateContext = ({ children }) => {
         removeFromCart,
         setCartItems,
         setTotalPrice,
+        setCart
       }}
     >
       {children}

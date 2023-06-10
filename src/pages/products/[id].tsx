@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { sanityClient, urlFor } from "../../../lib/sanityClient";
+import Layout from "../../components/Layout";
 import ProductSelection from "../../components/ProductSelection";
 import { product } from "../../utils/types";
 
@@ -34,21 +35,23 @@ const Product: NextPage = () => {
   if (loading) return <h1>Loading...</h1>;
 
   return (
-    <div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 bg-white w-11/12 p-4 mx-auto rounded">
-        <div className="flex flex-col justify-center items-center">
-          {image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={image} alt="product image" className="w-2/3" />
-          )}
-        </div>
-        <div>
-          {product && (
-            <ProductSelection product={product} setImage={setImage} />
-          )}
+    <Layout>
+      <div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 bg-white w-11/12 p-4 mx-auto rounded">
+          <div className="flex flex-col justify-center items-center">
+            {image && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={image} alt="product image" className="w-2/3" />
+            )}
+          </div>
+          <div>
+            {product && (
+              <ProductSelection product={product} setImage={setImage} />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 export default Product;

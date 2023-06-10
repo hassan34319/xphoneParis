@@ -5,26 +5,35 @@ import Footer from "../components/Footer";
 import Head from "next/head";
 import { StateContext } from "../../context/stateContext";
 import { Toaster } from "react-hot-toast";
-
-function MyApp({ Component, pageProps }: AppProps) {
+import Modal from "../components/Modal";
+import LoginModal from "../components/LoginModal";
+import RegisterModal from "../components/RegisterModal";
+import ChangeAdressModal from "../components/ChangeAdressModal";
+import { SessionProvider } from "next-auth/react";
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <StateContext>
-      <Head>
-        <title>XPHONES</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <div
-        className="flex flex-col h-screen justify-between"
-        id="outer-container"
-      >
-        <Toaster />
-        <Navbar />
-        <div className="mt-6 relative mb-auto" id="page-wrap">
-          <Component {...pageProps} />
+    <SessionProvider session={session}>
+      <StateContext>
+        <Head>
+          <title>XPHONES</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
+        <div
+          className="flex flex-col h-screen justify-between"
+          id="outer-container"
+        >
+          <Toaster />
+          <ChangeAdressModal />
+          <LoginModal />
+          <RegisterModal />
+          <Navbar />
+          <div className="mt-6 relative mb-auto" id="page-wrap">
+            <Component {...pageProps} />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </StateContext>
+      </StateContext>
+    </SessionProvider>
   );
 }
 

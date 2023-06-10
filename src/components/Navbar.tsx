@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useStateContext } from "../../context/stateContext";
 import TopMenu from "./TopMenu";
 import BurgerMenu from "./BurgerMenu";
+import UserMenu from "./userMenu";
+
 
 const Navbar = () => {
   const { totalQuantity } = useStateContext();
@@ -48,6 +50,9 @@ const Navbar = () => {
                 <h1>Panier</h1>
               </div>
             </Link>
+            <div className="md:w-1/4">
+              <UserMenu />
+            </div>
           </div>
         </div>
       </div>
