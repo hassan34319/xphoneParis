@@ -9,7 +9,6 @@ function Success() {
 
   useEffect(() => {
     // runFireworks();
-    localStorage.clear();
     setCartItems([]);
     setTotalPrice(0);
     setTotalQuantity(0);

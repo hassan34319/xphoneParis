@@ -1,6 +1,7 @@
 import { useEffect, ReactNode } from "react";
 import { useStateContext } from "../../context/stateContext";
 import { v4 as uuidv4 } from "uuid";
+import Cookies from "js-cookie";
 import { fetchCart } from "../utils/fetchCart";
 
 interface Item {
@@ -23,14 +24,14 @@ const Layout = ({ children }: LayoutProps) => {
 
   useEffect(() => {
     const fetchAndCreateCartData = async () => {
-      // Check if cartId exists in session storage
-      const existingCartId = sessionStorage.getItem("cartId");
-      console.log(existingCartId);
+      // Check if cartId exists in cookies
+      const existingCartId = Cookies.get("cartId");
+      console.log(existingCartId)
 
       if (!existingCartId) {
         // Generate a new cartId if it doesn't exist
         const newCartId = generateCartId();
-        sessionStorage.setItem("cartId", newCartId.toString());
+        Cookies.set("cartId", newCartId.toString(), { expires: 7, sameSite: "Lax", secure : true }); // Set cookie expiration to 7 days
 
         // Send a request to your backend API to create a new cart
         await createCart(newCartId.toString());
@@ -44,7 +45,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   useEffect(() => {
     const updateCartInDatabase = async () => {
-      const cartId = sessionStorage.getItem("cartId");
+      const cartId = Cookies.get("cartId");
       if (cartId) {
         // Send a request to your backend API to update the cart in the database
         await updateCart(cartId, cartItems);
@@ -55,19 +56,18 @@ const Layout = ({ children }: LayoutProps) => {
   }, [cartItems]);
 
   const generateCartId = () => {
-    return uuidv4();
+    return Date.now();
   };
 
-  const createCart = async (cartId: string) => {
+  const createCart = async (cartId: String) => {
     try {
-      // Send a request to your backend API to create a new cart and associate it with the session
+      // Send a request to your backend API to create a new cart
       await fetch("/api/cart", {
         method: "POST",
         body: JSON.stringify({ cartId }),
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "same-origin", // Send cookies or session information with the request
       });
     } catch (error) {
       console.error("Error creating cart:", error);
@@ -83,9 +83,8 @@ const Layout = ({ children }: LayoutProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "same-origin", // Send cookies or session information with the request
       });
-      console.log(response);
+      console.log(response)
     } catch (error) {
       console.error("Error updating cart:", error);
     }
