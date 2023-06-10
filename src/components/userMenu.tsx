@@ -9,6 +9,8 @@ import { User } from "@prisma/client";
 import MenuItem from "./MenuItem";
 import Avatar from "./Avatar";
 import useChangeAdressModal from "../hooks/useChangeAdressModal";
+import { RiTeamLine } from "react-icons/ri";
+import { BiUser } from "react-icons/bi";
 
 export type SafeUser = Omit<
   User,
@@ -20,28 +22,28 @@ export type SafeUser = Omit<
 };
 
 interface UserMenuProps {
-  currentUser?: SafeUser | null
+  currentUser?: SafeUser | null;
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({}) => {
   const router = useRouter();
 
   const loginModal = useLoginModal();
-  const registerModal = useRegisterModal()
-  const changeAdressModal = useChangeAdressModal()
+  const registerModal = useRegisterModal();
+  const changeAdressModal = useChangeAdressModal();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
   const { data: session } = useSession();
-  const currentUser = session?.user
-  return ( 
+  const currentUser = session?.user;
+  return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
-        <div 
-        onClick={toggleOpen}
-        className="
+        <div
+          onClick={toggleOpen}
+          className="
           p-4
           md:py-1
           md:px-2
@@ -57,14 +59,11 @@ const UserMenu: React.FC<UserMenuProps> = ({}) => {
           transition
           "
         >
-          <AiOutlineMenu />
-          <div className="hidden md:block">
-            <Avatar src={currentUser?.image} />
-          </div>
+          <BiUser className="text-2xl lg:text-4xl" />
         </div>
       </div>
       {isOpen && (
-        <div 
+        <div
           className="
             absolute 
             rounded-xl 
@@ -81,33 +80,24 @@ const UserMenu: React.FC<UserMenuProps> = ({}) => {
           <div className="flex flex-col cursor-pointer">
             {currentUser ? (
               <>
-                <MenuItem 
-                  label="Change Adress" 
+                <MenuItem
+                  label="Change Adress"
                   onClick={changeAdressModal.onOpen}
                 />
                 <hr />
-                <MenuItem 
-                  label="Logout" 
-                  onClick={() => signOut()}
-                />
+                <MenuItem label="Logout" onClick={() => signOut()} />
               </>
             ) : (
               <>
-                <MenuItem 
-                  label="Login" 
-                  onClick={loginModal.onOpen}
-                />
-                <MenuItem 
-                  label="Sign up" 
-                  onClick={registerModal.onOpen}
-                />
+                <MenuItem label="Login" onClick={loginModal.onOpen} />
+                <MenuItem label="Sign up" onClick={registerModal.onOpen} />
               </>
             )}
           </div>
         </div>
       )}
     </div>
-   );
-}
- 
+  );
+};
+
 export default UserMenu;
