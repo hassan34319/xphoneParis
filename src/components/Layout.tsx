@@ -31,7 +31,7 @@ const Layout = ({ children }: LayoutProps) => {
       if (!existingCartId) {
         // Generate a new cartId if it doesn't exist
         const newCartId = generateCartId();
-        Cookies.set("cartId", newCartId.toString(), { expires: 7 }); // Set cookie expiration to 7 days
+        Cookies.set("cartId", newCartId.toString(), { expires: 7, sameSite: "Lax", secure : true }); // Set cookie expiration to 7 days
 
         // Send a request to your backend API to create a new cart
         await createCart(newCartId.toString());
