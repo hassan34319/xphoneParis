@@ -8,9 +8,6 @@ export const StateContext = ({ children }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQuantity, setTotalQuantity] = useState(0);
 
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
 
   const addToCart = (product) => {
     setTotalPrice((prevTotalPrice) => prevTotalPrice + product.price);
