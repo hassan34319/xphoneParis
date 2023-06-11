@@ -8,10 +8,11 @@ import { BiArrowBack } from "react-icons/bi";
 var styles = {
   bmBurgerButton: {
     position: "absolute",
-    width: "36px",
-    height: "30px",
+    width: "24px",
+    height: "24px",
     left: "16px",
     top: "36px",
+    zIndex: "1" // Add this line to set the z-index
   },
   bmBurgerBars: {
     background: "#000000",

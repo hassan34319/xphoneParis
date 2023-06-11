@@ -8,7 +8,6 @@ import TopMenu from "./TopMenu";
 import BurgerMenu from "./BurgerMenu";
 import UserMenu from "./userMenu";
 
-
 const Navbar = () => {
   const { totalQuantity } = useStateContext();
 
@@ -29,6 +28,9 @@ const Navbar = () => {
           </div>
           <Search />
           <div className="flex flex-row order-2 lg:order-3  items-center gap-8 lg:gap-0 justify-around my-4 lg:my-0 cursor-pointer flex-1">
+            <div className="w-auto md:w-1/4">
+              <UserMenu />
+            </div>
             <Link href={"/"}>
               <div className="flex flex-col justify-center items-center">
                 <BsHouseDoor className="text-2xl lg:text-4xl " />
@@ -50,9 +52,6 @@ const Navbar = () => {
                 <h1>Panier</h1>
               </div>
             </Link>
-            <div className="md:w-1/4">
-              <UserMenu />
-            </div>
           </div>
         </div>
       </div>
