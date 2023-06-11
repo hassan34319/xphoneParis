@@ -19,6 +19,7 @@ const ChangeAdressModal = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -62,6 +63,7 @@ const ChangeAdressModal = () => {
         disabled={isLoading}
         register={register}
         errors={errors}
+        watch={watch}
         required
       />
       <Input
@@ -70,6 +72,7 @@ const ChangeAdressModal = () => {
         disabled={isLoading}
         register={register}
         errors={errors}
+        watch={watch}
         required
       />
     </div>

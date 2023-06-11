@@ -17,6 +17,7 @@ import Modal from "./Modal";
 import Input from "./Input";
 import Heading from "./Heading";
 import Button from "./Button";
+import { watch } from "fs";
 
 const LoginModal = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const LoginModal = () => {
   const { 
     register, 
     handleSubmit,
+    watch,
     formState: {
       errors,
     },
@@ -76,6 +78,7 @@ const LoginModal = () => {
         disabled={isLoading}
         register={register}  
         errors={errors}
+        watch={watch}
         required
       />
       <Input
@@ -83,6 +86,7 @@ const LoginModal = () => {
         label="Password"
         type="password"
         disabled={isLoading}
+        watch={watch}
         register={register}
         errors={errors}
         required
