@@ -21,7 +21,7 @@ export async function fetchCart(
 
     if (response.ok) {
       const {items}  = data;
-      console.log(items)
+      console.log("GET QUERY ITEMS", items)
       if(items.length==0){
         return
       }

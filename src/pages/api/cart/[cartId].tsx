@@ -8,8 +8,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { cartId } = req.query;
-  console.log("GET QUERY IS HERE");
   if (req.method === "GET") {
+    console.log("GET QUERY IS HERE", cartId);
     try {
       const cart = await prisma.cart.findUnique({
         where: {
@@ -19,6 +19,7 @@ export default async function handler(
           items: true,
         },
       });
+      console.log("I AM CART", cart)      
 
       if (cart) {
         res.status(200).json(cart);
