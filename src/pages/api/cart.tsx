@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import {prisma} from './client'
+import { prisma } from "./client";
 interface Item {
   image: string;
   name: string;
@@ -46,12 +46,12 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
   } catch (error) {
     console.error("Error creating cart:", error);
     res.status(500).send("Internal Server Error");
-  } 
+  }
 }
 
 async function handlePutRequest(req: NextApiRequest, res: NextApiResponse) {
   const { cartId, items } = req.body;
-  console.log("I AM ITEMS PASSED",items)
+  console.log("I AM ITEMS PASSED", items);
   try {
     // Find the cart in the database
     const cart = await prisma.cart.findUnique({
@@ -65,29 +65,16 @@ async function handlePutRequest(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Update the cart items in the database
-    const del = await prisma.cart.update({
+    const update = await prisma.cart.update({
       where: {
         id: cartId,
       },
       data: {
         items: {
-          deleteMany: {},
-        },
-      },
-      include: { items: true }
-    });
-    
-    console.log("I del", del)
-    // Create new items in the database for the cart
-    const add = await prisma.cart.update({
-      where: {
-        id: cartId,
-      },
-      data: {
-        items: {
+          deleteMany: {}, // Delete all existing items
           createMany: {
             data: items.map((item: Item) => ({
-              id : item.productId,
+              id: item.productId,
               image: item.image,
               name: item.name,
               productId: item.productId,
@@ -97,14 +84,14 @@ async function handlePutRequest(req: NextApiRequest, res: NextApiResponse) {
               price: item.price,
               quantity: item.quantity,
             })),
-            skipDuplicates: true
+            skipDuplicates: true,
           },
         },
       },
+      include: { items: true },
     });
-
-    console.log("I ADD",add)
-
+    // Create new items in the database for the cart
+    
     console.log("CART UPDATED SUCCESSFULLY");
     res.send("Cart updated successfully");
   } catch (error) {

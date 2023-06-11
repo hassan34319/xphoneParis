@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -33,40 +33,48 @@ const UserMenu: React.FC<UserMenuProps> = ({}) => {
   const changeAdressModal = useChangeAdressModal();
   const [isOpen, setIsOpen] = useState(false);
 
+
+  const { data: session } = useSession();
+  const currentUser = session?.user;
+  const menuRef = useRef<HTMLDivElement>(null);
+
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
-  const { data: session } = useSession();
-  const currentUser = session?.user;
+
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [handleClickOutside]);
+
   return (
-    <div className="relative">
-      <div className="flex flex-row items-center gap-3">
+    <div className="relative" ref={menuRef}>
+      <div className="">
         <div
           onClick={toggleOpen}
-          className="
-          p-4
-          md:py-1
-          md:px-2
-          border-[1px] 
-          border-neutral-200 
-          flex 
-          flex-row 
-          items-center 
-          gap-3 
-          rounded-full 
-          cursor-pointer 
-          hover:shadow-md 
-          transition
+          className="flex flex-col justify-center items-center
           "
         >
           <BiUser className="text-2xl lg:text-4xl" />
+          <h1>utilisatrice</h1>
         </div>
       </div>
       {isOpen && (
         <div
           className="
             absolute 
-            rounded-xl 
             shadow-md
             w-max
             md:w-full 

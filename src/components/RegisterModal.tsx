@@ -27,12 +27,14 @@ const RegisterModal= () => {
     formState: {
       errors,
     },
+    watch,
   } = useForm<FieldValues>({
     defaultValues: {
       firstName: '',
       lastName : '',
       email: '',
       password: '',
+      confirmPassword:'',
       shippingAdress : '',
       postalCode: ''
     },
@@ -69,9 +71,11 @@ const RegisterModal= () => {
       <Input
         id="email"
         label="Email"
+        type="email"
         disabled={isLoading}
         register={register}
         errors={errors}
+        watch={watch}
         required
       />
       <Input
@@ -80,14 +84,16 @@ const RegisterModal= () => {
         disabled={isLoading}
         register={register}
         errors={errors}
+        watch={watch}
         required
       />
       <Input
         id="lastName"
-        label="Last Name"
+        label="Last-Name"
         disabled={isLoading}
         register={register}
         errors={errors}
+        watch={watch}
         required
       />
       <Input
@@ -97,6 +103,17 @@ const RegisterModal= () => {
         disabled={isLoading}
         register={register}
         errors={errors}
+        watch={watch}
+        required
+      />
+      <Input
+        id="confirmPassword"
+        label="Confirm Password"
+        type="password"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        watch={watch}
         required
       />
       <Input
@@ -106,6 +123,7 @@ const RegisterModal= () => {
         register={register}
         errors={errors}
         required
+        watch={watch}
       />
       <Input
         id="postalCode"
@@ -113,6 +131,7 @@ const RegisterModal= () => {
         disabled={isLoading}
         register={register}
         errors={errors}
+        watch={watch}
         required
       />
 

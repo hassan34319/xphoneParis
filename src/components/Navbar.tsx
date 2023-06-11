@@ -21,8 +21,8 @@ const Navbar = () => {
             <Link href={"/"} className={"cursor-pointer"}>
               <img
                 alt="logo"
-                src="https://cdn.shopify.com/s/files/1/0061/7929/1200/files/ephones_250x.png?v=1638106517"
-                className="lg:w-1/2 cursor-pointer"
+                src="/logo0.jpeg"
+                className="lg:w-1/2 cursor-pointer w-1/2"
               />
             </Link>
           </div>
@@ -44,11 +44,11 @@ const Navbar = () => {
               </div>
             </Link>
             <Link href={"/cart"}>
-              <div className="flex flex-col justify-center items-center pt-2">
-                <h1 className="sticky text-center -mb-9 lg:-mb-10">
+              <div className="flex flex-col justify-center items-center">
+                <h1 className="absolute flex items-center text-center -mt-[1.1rem] md:-mt-4 text-sm">
                   {totalQuantity}
                 </h1>
-                <BsBag className="text-2xl lg:text-4xl mt-2" />
+                <BsBag className="text-2xl lg:text-4xl" />
                 <h1>Panier</h1>
               </div>
             </Link>

@@ -33,7 +33,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       const unencrypt = `MerchantID=${process.env.NEXT_PUBLIC_MERCHANT_ID}&MsgVer=2.0&TransID=${TransactionId}&RefNr=${ReferenceId}&Amount=${Amount}&Currency=EUR&URLSuccess=https://www.yourshop.info/success.php&URLFailure=https://www.yourshop.info/failure.php&URLNotify=https://www.yourshop.info/notify.php&Response=encrypt&MAC=${mac_result}&Language=en`;
       const blowfish = new BlowfishTranslation(unencrypt);
       const encrypt_result = blowfish.encryptBlowfish();
-      console.log("DATA", encrypt_result);
 
       const queryParams = querystring.stringify({
         MerchantID: process.env.NEXT_PUBLIC_MERCHANT_ID,

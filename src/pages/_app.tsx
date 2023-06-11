@@ -14,10 +14,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
       <StateContext>
-        <Head>
-          <title>XPHONES</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-        </Head>
         <div
           className="flex flex-col h-screen justify-between"
           id="outer-container"

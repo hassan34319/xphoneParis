@@ -1,10 +1,4 @@
-'use client';
-
-import { 
-  FieldErrors, 
-  FieldValues, 
-  UseFormRegister 
-} from "react-hook-form";
+import { FieldErrors, FieldValues, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { BiDollar } from "react-icons/bi";
 
 interface InputProps {
@@ -15,24 +9,32 @@ interface InputProps {
   formatPrice?: boolean;
   required?: boolean;
   register: UseFormRegister<FieldValues>,
-  errors: FieldErrors
+  watch: UseFormWatch<FieldValues>,
+  errors: FieldErrors;
 }
 
 const Input: React.FC<InputProps> = ({
   id,
   label,
-  type = "text", 
-  disabled, 
+  type = "text",
+  disabled,
   formatPrice,
   register,
+  watch,
   required,
   errors,
 }) => {
+  const isEmail = type === "email";
+  const isPassword = type === "password";
+  const isConfirmPassword = id === "confirmPassword";
+
+  const errorMessage = errors[id]?.message;
+
   return (
     <div className="w-full relative">
       {formatPrice && (
         <BiDollar
-          size={24}  
+          size={24}
           className="
             text-neutral-700
             absolute
@@ -44,7 +46,20 @@ const Input: React.FC<InputProps> = ({
       <input
         id={id}
         disabled={disabled}
-        {...register(id, { required })}
+        {...register(id, {
+          required,
+          ...(isEmail && {
+            pattern: {
+              value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+              message: "Email address must be a valid address",
+            },
+          }),
+          ...(isConfirmPassword && {
+            validate: (value) =>
+              value === watch("password") ||
+              "Confirm password must be the same as the password",
+          }),
+        })}
         placeholder=" "
         type={type}
         className={`
@@ -65,7 +80,7 @@ const Input: React.FC<InputProps> = ({
           ${errors[id] ? 'focus:border-rose-500' : 'focus:border-black'}
         `}
       />
-      <label 
+      <label
         className={`
           absolute 
           text-md
@@ -85,8 +100,11 @@ const Input: React.FC<InputProps> = ({
       >
         {label}
       </label>
+      {errorMessage && (
+        <span className="text-red-500 text-sm">{errorMessage.toString()}</span>
+      )}
     </div>
-   );
-}
- 
+  );
+};
+
 export default Input;
