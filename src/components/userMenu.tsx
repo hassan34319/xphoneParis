@@ -68,7 +68,7 @@ const UserMenu: React.FC<UserMenuProps> = ({}) => {
           "
         >
           <BiUser className="text-2xl lg:text-4xl" />
-          <h1>utilisatrice</h1>
+          <h1>Espace Client</h1>
         </div>
       </div>
       {isOpen && (

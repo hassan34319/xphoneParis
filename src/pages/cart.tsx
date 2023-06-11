@@ -115,7 +115,7 @@ const Cart: NextPage = () => {
                   className="text-xl text-center px-4 py-2 text-white bg-black rounded w-full mt-8"
                   hidden={cartItems.length == 0}
                 >
-                  payer
+                  Payer
                 </button>
                 <button
                   className="text-md text-blue-700 cursor-pointer transition hover:underline "
