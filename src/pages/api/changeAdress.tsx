@@ -15,7 +15,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { shippingAdress, postalCode, email,phoneNumber } = req.body;
+      const { shippingAdress, postalCode, email,phoneNumber, country } = req.body;
     //   const session = await getSession();
     //   console.log(session)
 
@@ -30,7 +30,8 @@ export default async function handler(
         data: {
           shippingAdress: shippingAdress,
           postalCode: postalCode,
-          phoneNumber : phoneNumber
+          phoneNumber : phoneNumber,
+          country : country
         },
       });
 

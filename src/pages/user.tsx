@@ -15,7 +15,8 @@ const UserPage = () => {
   const [lastName, setLastName] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const sessionMain = useSession()
+  const [country, setCountry] = useState("");
+  const sessionMain = useSession();
   useEffect(() => {
     setError("");
     const fetchData = async () => {
@@ -32,6 +33,7 @@ const UserPage = () => {
           setLastName(response.data.lastName);
           setPostalCode(response.data.postalCode);
           setPhoneNumber(response.data.phoneNumber);
+          setCountry(response.data.country);
         } catch (error) {
           setError(JSON.stringify(error));
         }
@@ -95,6 +97,7 @@ const UserPage = () => {
               <p>Adresse e-mail : {email}</p>
               <p>Adresse de livraison : {shippingAdress}</p>
               <p>Code postal : {postalCode}</p>
+              <p>Country : {country}</p>
             </section>
 
             {/* Section 3: Adresse de livraison */}
@@ -113,7 +116,8 @@ const UserPage = () => {
               <p>Adresse e-mail : {email}</p>
               <p>Adresse de livraison : {shippingAdress} </p>
               <p>Code postal : {postalCode}</p>
-              <p>numéro de téléphone : {phoneNumber}</p>
+              <p>Country : {country}</p>
+              <p>Numéro de téléphone : {phoneNumber}</p>
             </section>
 
             {/* Section 4: Mes préférences */}
@@ -136,9 +140,11 @@ const UserPage = () => {
                 </label>
               </div>
             </section>
+          </div>
+          <div className="flex flex-row justify-center items-center space-x-4">
             <button
               onClick={() => signOut()}
-              className="relative w-max  inline-flex items-center px-5 py-3 text-base font-semibold text-white bg-blue-600 border border-transparent rounded-md cursor-pointer select-none hover:bg-blue-700 focus-within:bg-blue-700"
+              className="relative w-max text-center mt-4  inline-flex items-center px-5 py-3 text-base font-semibold text-white bg-red-600 border border-transparent rounded-md cursor-pointer select-none hover:bg-red-700 focus-within:bg-red-700"
             >
               Se déconnecter
               <svg

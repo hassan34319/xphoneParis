@@ -10,7 +10,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { email, firstName,lastName, password, confirmPassword, shippingAdress, postalCode, phoneNumber } = req.body;
+      const { email, firstName,lastName, password, confirmPassword, shippingAdress, postalCode, phoneNumber,country } = req.body;
 
       const hashedPassword = await bcrypt.hash(password, 12);
       const existingUser = await prisma.user.findUnique({
@@ -33,6 +33,7 @@ export default async function handler(
           phoneNumber,
           shippingAdress,
           postalCode,
+          country
         },
       });
       console.log(user)

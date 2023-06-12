@@ -27,6 +27,7 @@ const ChangeAdressModal = () => {
       shippingAdress: "",
       postalCode: "",
       phoneNumber : "",
+      country : ""
     },
   });
 
@@ -60,7 +61,7 @@ const ChangeAdressModal = () => {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading
-        title="Bienvenue chez Xphones"
+        title="Mettre à jour l'adresse"
         subtitle="Modifier l'adresse de livraison !"
       />
       <Input
@@ -75,6 +76,15 @@ const ChangeAdressModal = () => {
       <Input
         id="postalCode"
         label="Code postal"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        watch={watch}
+        required
+      />
+      <Input
+        id="country"
+        label="Pays"
         disabled={isLoading}
         register={register}
         errors={errors}

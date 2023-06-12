@@ -50,6 +50,7 @@ model User {
   phoneNumber     String?
   shippingAdress  String?
   postalCode      String?
+  country         String?
   accounts Account[]
 }
 

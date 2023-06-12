@@ -33,6 +33,7 @@ const RegisterModal = () => {
       confirmPassword: "",
       shippingAdress: "",
       postalCode: "",
+      country : ""
     },
   });
 
@@ -133,6 +134,15 @@ const RegisterModal = () => {
       <Input
         id="postalCode"
         label="Code postal"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        watch={watch}
+        required
+      />
+      <Input
+        id="country"
+        label="Pays"
         disabled={isLoading}
         register={register}
         errors={errors}
