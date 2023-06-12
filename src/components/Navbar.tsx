@@ -7,9 +7,14 @@ import { useStateContext } from "../../context/stateContext";
 import TopMenu from "./TopMenu";
 import BurgerMenu from "./BurgerMenu";
 import UserMenu from "./userMenu";
-
+import { BiUser } from "react-icons/bi";
+import { useSession } from "next-auth/react";
+import useLoginModal from "../hooks/useLoginModal";
 const Navbar = () => {
   const { totalQuantity } = useStateContext();
+  const { data: session } = useSession();
+  const currentUser = session?.user;
+  const loginModal = useLoginModal()
 
   return (
     // fixed top-0 left-0 w-full z-10
@@ -29,7 +34,21 @@ const Navbar = () => {
           <Search />
           <div className="flex flex-row order-2 lg:order-3  items-center gap-8 lg:gap-0 justify-around my-4 lg:my-0 cursor-pointer flex-1">
             <div className="w-auto md:w-1/4">
-              <UserMenu />
+              {currentUser ? (
+                <Link href={"/user"}>
+                  <div className="flex flex-col justify-center items-center">
+                    <BiUser className="text-2xl lg:text-4xl " />
+                    <h1>Espace Client</h1>
+                  </div>
+                </Link>
+              ) : (
+                <button onClick={loginModal.onOpen}>
+                  <div className="flex flex-col justify-center items-center">
+                    <BiUser className="text-2xl lg:text-4xl " />
+                    <h1>Espace Client</h1>
+                  </div>
+                </button>
+              )}
             </div>
             <Link href={"/"}>
               <div className="flex flex-col justify-center items-center">

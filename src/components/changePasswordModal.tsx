@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import useLoginModal from "../hooks/useLoginModal";
-import useChangeAdressModal from "../hooks/useChangeAdressModal";
+import useChangePasswordModal from "../hooks/useChangePasswordModal";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 
 import Modal from "./Modal";
@@ -12,8 +12,8 @@ import Input from "./Input";
 import Heading from "./Heading";
 import Button from "./Button";
 
-const ChangeAdressModal = () => {
-  const changeAdressModal = useChangeAdressModal();
+const ChangePasswordModal = () => {
+  const changePasswordModal = useChangePasswordModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -24,9 +24,8 @@ const ChangeAdressModal = () => {
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      shippingAdress: "",
-      postalCode: "",
-      phoneNumber : "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -38,13 +37,13 @@ const ChangeAdressModal = () => {
     getSession().then((session) => {
       if (session) {
         const currentUser = session.user;
-        const email = currentUser?.email;
-        console.log(email);
+        const email = currentUser?.email
+        console.log(email)
         axios
-          .post("/api/changeAdress", { ...data, email })
+          .post("/api/changePassword", { ...data, email })
           .then(() => {
-            toast.success("Adresse modifiée !");
-            changeAdressModal.onClose();
+            toast.success("Mot de passe modifié avec succès !");
+            changePasswordModal.onClose();
             reset();
           })
           .catch((error) => {
@@ -59,13 +58,11 @@ const ChangeAdressModal = () => {
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading
-        title="Bienvenue chez Xphones"
-        subtitle="Modifier l'adresse de livraison !"
-      />
+      <Heading title="Changer le mot de passe" subtitle="Mettez à jour votre mot de passe !" />
       <Input
-        id="shippingAdress"
-        label="Adresse de livraison"
+        id="password"
+        label="Nouveau mot de passe"
+        type="password"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -73,23 +70,14 @@ const ChangeAdressModal = () => {
         required
       />
       <Input
-        id="postalCode"
-        label="Code postal"
+        id="confirmPassword"
+        label="Confirmer le mot de passe"
+        type="password"
         disabled={isLoading}
         register={register}
         errors={errors}
         watch={watch}
         required
-      />
-      <Input
-        id="phoneNumber"
-        label="Numéro de téléphone"
-        type="number"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-        watch={watch}
       />
     </div>
   );
@@ -106,9 +94,9 @@ const ChangeAdressModal = () => {
         "
       >
         <p>
-          Ne souhaitez pas modifier ?
+          Pas prêt à changer ?
           <span
-            onClick={changeAdressModal.onClose}
+            onClick={changePasswordModal.onClose}
             className="
               text-neutral-800
               cursor-pointer 
@@ -116,7 +104,7 @@ const ChangeAdressModal = () => {
             "
           >
             {" "}
-            Retourner en arrière
+            Retour
           </span>
         </p>
       </div>
@@ -126,10 +114,10 @@ const ChangeAdressModal = () => {
   return (
     <Modal
       disabled={isLoading}
-      isOpen={changeAdressModal.isOpen}
-      title="Modifier l'adresse"
+      isOpen={changePasswordModal.isOpen}
+      title="Changer le mot de passe"
       actionLabel="Continuer"
-      onClose={changeAdressModal.onClose}
+      onClose={changePasswordModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
@@ -137,4 +125,4 @@ const ChangeAdressModal = () => {
   );
 };
 
-export default ChangeAdressModal;
+export default ChangePasswordModal;

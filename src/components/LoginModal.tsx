@@ -29,6 +29,7 @@ const LoginModal = () => {
     register, 
     handleSubmit,
     watch,
+    reset,
     formState: {
       errors,
     },
@@ -51,8 +52,9 @@ const LoginModal = () => {
       setIsLoading(false);
 
       if (callback?.ok) {
-        toast.success('Logged in');
+        toast.success('Connecté');
         loginModal.onClose();
+        reset();
       }
       
       if (callback?.error) {
@@ -69,8 +71,8 @@ const LoginModal = () => {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading
-        title="Welcome back"
-        subtitle="Login to your account!"
+        title="Bienvenue de retour"
+        subtitle="Connectez-vous à votre compte !"
       />
       <Input
         id="email"
@@ -83,7 +85,7 @@ const LoginModal = () => {
       />
       <Input
         id="password"
-        label="Password"
+        label="Mot de passe"
         type="password"
         disabled={isLoading}
         watch={watch}
@@ -98,7 +100,7 @@ const LoginModal = () => {
     <div className="flex flex-col gap-4 mt-3">
       <div className="
       text-neutral-500 text-center mt-4 font-light">
-        <p>First time using Xphones?
+        <p>Première utilisation de Xphones ?
           <span 
             onClick={onToggle} 
             className="
@@ -106,7 +108,7 @@ const LoginModal = () => {
               cursor-pointer 
               hover:underline
             "
-            > Create an account</span>
+            > Créez un compte</span>
         </p>
       </div>
     </div>
@@ -116,8 +118,8 @@ const LoginModal = () => {
     <Modal
       disabled={isLoading}
       isOpen={loginModal.isOpen}
-      title="Login"
-      actionLabel="Continue"
+      title="Connexion"
+      actionLabel="Continuer"
       onClose={loginModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}

@@ -10,6 +10,7 @@ import LoginModal from "../components/LoginModal";
 import RegisterModal from "../components/RegisterModal";
 import ChangeAdressModal from "../components/ChangeAdressModal";
 import { SessionProvider } from "next-auth/react";
+import ChangePasswordModal from "../components/changePasswordModal";
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
@@ -19,6 +20,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           id="outer-container"
         >
           <Toaster />
+          <ChangePasswordModal/>
           <ChangeAdressModal />
           <LoginModal />
           <RegisterModal />

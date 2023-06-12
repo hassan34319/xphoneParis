@@ -2,11 +2,7 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
-import { 
-  FieldValues, 
-  SubmitHandler,
-  useForm
-} from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import useLoginModal from "../hooks/useLoginModal";
 import useRegisterModal from "../hooks/useRegisterModal";
@@ -16,58 +12,57 @@ import Input from "./Input";
 import Heading from "./Heading";
 import Button from "./Button";
 
-const RegisterModal= () => {
+const RegisterModal = () => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { 
-    register, 
+  const {
+    register,
     handleSubmit,
-    formState: {
-      errors,
-    },
+    reset,
+    formState: { errors },
     watch,
   } = useForm<FieldValues>({
     defaultValues: {
-      firstName: '',
-      lastName : '',
-      email: '',
-      password: '',
-      confirmPassword:'',
-      shippingAdress : '',
-      postalCode: ''
+      firstName: "",
+      lastName: "",
+      phoneNumber : "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      shippingAdress: "",
+      postalCode: "",
     },
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
-    axios.post('/api/register', data)
-    .then(() => {
-      toast.success('Registered!');
-      registerModal.onClose();
-      loginModal.onOpen();
-    })
-    .catch((error) => {
-      toast.error(error);
-    })
-    .finally(() => {
-      setIsLoading(false);
-    })
-  }
+    axios
+      .post("/api/register", data)
+      .then(() => {
+        toast.success("Inscrit !");
+        registerModal.onClose();
+        loginModal.onOpen();
+        reset();
+      })
+      .catch((error) => {
+        toast.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   const onToggle = useCallback(() => {
     registerModal.onClose();
     loginModal.onOpen();
-  }, [registerModal, loginModal])
+  }, [registerModal, loginModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading
-        title="Welcome to Xphones"
-        subtitle="Create an account!"
-      />
+      <Heading title="Bienvenue sur Xphones" subtitle="Créez un compte !" />
       <Input
         id="email"
         label="Email"
@@ -80,7 +75,7 @@ const RegisterModal= () => {
       />
       <Input
         id="firstName"
-        label="First Name"
+        label="Prénom"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -89,7 +84,7 @@ const RegisterModal= () => {
       />
       <Input
         id="lastName"
-        label="Last-Name"
+        label="Nom de famille"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -98,7 +93,7 @@ const RegisterModal= () => {
       />
       <Input
         id="password"
-        label="Password"
+        label="Mot de passe"
         type="password"
         disabled={isLoading}
         register={register}
@@ -108,7 +103,7 @@ const RegisterModal= () => {
       />
       <Input
         id="confirmPassword"
-        label="Confirm Password"
+        label="Confirmez le mot de passe"
         type="password"
         disabled={isLoading}
         register={register}
@@ -117,8 +112,18 @@ const RegisterModal= () => {
         required
       />
       <Input
+        id="phoneNumber"
+        label="Numéro de téléphone"
+        type="number"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+        watch={watch}
+      />
+      <Input
         id="shippingAdress"
-        label="Shipping Adress"
+        label="Adresse de livraison"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -127,21 +132,20 @@ const RegisterModal= () => {
       />
       <Input
         id="postalCode"
-        label="Postal Code"
+        label="Code postal"
         disabled={isLoading}
         register={register}
         errors={errors}
         watch={watch}
         required
       />
-
     </div>
-  )
+  );
 
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      <div 
+      <div
         className="
           text-neutral-500 
           text-center 
@@ -149,32 +153,36 @@ const RegisterModal= () => {
           font-light
         "
       >
-        <p>Already have an account?
-          <span 
-            onClick={onToggle} 
+        <p>
+          Déjà un compte ?
+          <span
+            onClick={onToggle}
             className="
               text-neutral-800
               cursor-pointer 
               hover:underline
             "
-            > Log in</span>
+          >
+            {" "}
+            Connectez-vous
+          </span>
         </p>
       </div>
     </div>
-  )
+  );
 
   return (
     <Modal
       disabled={isLoading}
       isOpen={registerModal.isOpen}
-      title="Register"
-      actionLabel="Continue"
+      title="Inscription"
+      actionLabel="Continuer"
       onClose={registerModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
     />
   );
-}
+};
 
 export default RegisterModal;

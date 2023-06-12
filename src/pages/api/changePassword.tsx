@@ -15,28 +15,27 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { shippingAdress, postalCode, email,phoneNumber } = req.body;
-    //   const session = await getSession();
-    //   console.log(session)
+      const { password, confirmPassword, email } = req.body;
+      const hashedPassword = await bcrypt.hash(password, 12);
+      //   const session = await getSession();
+      //   console.log(session)
 
-    // //   if (!session?.user?.email) {
-    // //     return null;
-    // //   }
-    // //   const emailAdress = session?.user?.email;
+      // //   if (!session?.user?.email) {
+      // //     return null;
+      // //   }
+      // //   const emailAdress = session?.user?.email;
       const updateUser = await prisma.user.update({
         where: {
           email: email,
         },
         data: {
-          shippingAdress: shippingAdress,
-          postalCode: postalCode,
-          phoneNumber : phoneNumber
+          hashedPassword,
         },
       });
 
       return res.status(200).json(updateUser);
     } catch {
-        res.status(500).json({ success: false, error: "Internal Server Error" });
+      res.status(500).json({ success: false, error: "Internal Server Error" });
     }
   }
 }
