@@ -97,7 +97,7 @@ const UserPage = () => {
               <p>Adresse e-mail : {email}</p>
               <p>Adresse de livraison : {shippingAdress}</p>
               <p>Code postal : {postalCode}</p>
-              <p>Country : {country}</p>
+              <p>Pays : {country}</p>
             </section>
 
             {/* Section 3: Adresse de livraison */}
@@ -116,7 +116,7 @@ const UserPage = () => {
               <p>Adresse e-mail : {email}</p>
               <p>Adresse de livraison : {shippingAdress} </p>
               <p>Code postal : {postalCode}</p>
-              <p>Country : {country}</p>
+              <p>Pays : {country}</p>
               <p>Numéro de téléphone : {phoneNumber}</p>
             </section>
 
