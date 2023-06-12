@@ -6,6 +6,7 @@ import ChangePasswordModal from "../components/changePasswordModal";
 import { getSession, useSession } from "next-auth/react";
 import axios from "axios";
 import { signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const UserPage = () => {
   const [error, setError] = useState("");
@@ -17,6 +18,11 @@ const UserPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [country, setCountry] = useState("");
   const sessionMain = useSession();
+  const router = useRouter()
+
+  function changePage () {
+    router.push('/')
+  }
   useEffect(() => {
     setError("");
     const fetchData = async () => {
@@ -46,6 +52,12 @@ const UserPage = () => {
   const changePasswordModal = useChangePasswordModal();
   const { data: session } = useSession();
   const currentUser = session?.user;
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push("/");
+    }
+  }, [currentUser, router]);
 
   return (
     <main className="w-full ">
@@ -165,7 +177,7 @@ const UserPage = () => {
           </div>
         </>
       ) : (
-        <h1>YOU ARE NOT LOGGED IN</h1>
+        <></>
       )}
     </main>
   );

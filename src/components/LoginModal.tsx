@@ -71,7 +71,7 @@ const LoginModal = () => {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading
-        title="Bienvenue de retour"
+        title="Bienvenue chez Xphones"
         subtitle="Connectez-vous à votre compte !"
       />
       <Input
