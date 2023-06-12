@@ -32,8 +32,7 @@ const Navbar = () => {
             </Link>
           </div>
           <Search />
-          <div className="flex flex-row order-2 lg:order-3  items-center gap-8 lg:gap-0 justify-around my-4 lg:my-0 cursor-pointer flex-1">
-            <div className="w-auto md:w-1/4">
+          <div className="flex flex-row order-2 lg:order-3  items-center gap-4 lg:gap-0 justify-around my-4 lg:my-0 cursor-pointer flex-1">
               {currentUser ? (
                 <Link href={"/user"}>
                   <div className="flex flex-col justify-center items-center">
@@ -49,7 +48,6 @@ const Navbar = () => {
                   </div>
                 </button>
               )}
-            </div>
             <Link href={"/"}>
               <div className="flex flex-col justify-center items-center">
                 <BsHouseDoor className="text-2xl lg:text-4xl " />

@@ -138,7 +138,7 @@ const UserPage = () => {
             </section>
             <button
               onClick={() => signOut()}
-              className="relative w-1/3  inline-flex items-center px-5 py-3 text-base font-semibold text-white bg-blue-600 border border-transparent rounded-md cursor-pointer select-none hover:bg-blue-700 focus-within:bg-blue-700"
+              className="relative w-max  inline-flex items-center px-5 py-3 text-base font-semibold text-white bg-blue-600 border border-transparent rounded-md cursor-pointer select-none hover:bg-blue-700 focus-within:bg-blue-700"
             >
               Se déconnecter
               <svg
