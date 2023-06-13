@@ -14,7 +14,12 @@ function Failure({}: Props) {
   console.log(blowfish.encryptBlowfish());
   
   // Example of how to unencrypt blowfish string
+  if (Data) {
   blowfish.string = Data?.toString();
+  }
+  else {
+    blowfish.string = ""
+  }
   console.log(blowfish.decryptBlowfish());
   const result = blowfish.decryptBlowfish()
   const res = new ParseResponse(
