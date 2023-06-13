@@ -50,7 +50,7 @@ const Cart: NextPage = () => {
       return [item.name, item.color].join(" ") + " × " + item.quantity + "|";
     }
     const items = cartItems.map(getFullItem);
-    const unique_id = uuid().slice(0, 6);
+    const unique_id = Date.now().toString();
     const session = await getSession();
     const currentUser = session?.user;
     const form = document.createElement("form");
