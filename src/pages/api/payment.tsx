@@ -3,6 +3,7 @@ import querystring from "querystring";
 import BlowfishTranslation from "../../utils/blowfishTranslation";
 import MacGeneration from "../../utils/hmacGeneration";
 import { v4 as uuid } from "uuid";
+import MACGeneration from "../../utils/hmacGeneration";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
@@ -25,13 +26,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       const TransactionId = unique_id;
       const ReferenceId = "RG2023" + "-" + unique_id;
       console.log(items);
-      const macunencrypt = `*${TransactionId}*${process.env.NEXT_PUBLIC_MERCHANT_ID}*${Amount}*EUR`
+      const macunencrypt = `*${TransactionId}*${process.env.NEXT_PUBLIC_MERCHANT_ID}*${Amount*100}*EUR`
       console.log(macunencrypt)
       const mac = new MacGeneration(
         macunencrypt
       );
       const mac_result = mac.generateMAC();
+      const mac_2 = new MACGeneration(
+        "74CBF6166E123CE9F8ADF3EC1D704E5D369434A0F0E452040BAD74DFBE88046A"       
+      )
       console.log(mac_result);
+      console.log(mac_2.generateMAC())
       const unencrypt = `MerchantID=${process.env.NEXT_PUBLIC_MERCHANT_ID}&MsgVer=2.0&TransID=${TransactionId}&Amount=${Amount*100}&Currency=EUR&URLSuccess=https://xphones.fr/success&URLFailure=https://xphones.fr/failure&URLNotify=https://xphones.fr/&Response=encrypt&MAC=${mac_result}&Language=en`;
       console.log(unencrypt)
       const blowfish = new BlowfishTranslation(unencrypt);
