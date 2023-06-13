@@ -32,7 +32,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       );
       const mac_result = mac.generateMAC();
       console.log(mac_result);
-      const unencrypt = `MerchantID=${process.env.NEXT_PUBLIC_MERCHANT_ID}&MsgVer=2.0&TransID=${TransactionId}&Amount=${Amount}&Currency=EUR&URLSuccess=https://xphones.fr/success&URLFailure=https://xphones.fr/failure&URLNotify=https://www.yourshop.info/notify.php&Response=encrypt&MAC=${mac_result}&Language=en`;
+      const unencrypt = `MerchantID=${process.env.NEXT_PUBLIC_MERCHANT_ID}&MsgVer=2.0&TransID=${TransactionId}&Amount=${Amount*100}&Currency=EUR&URLSuccess=https://xphones.fr/success&URLFailure=https://xphones.fr/failure&URLNotify=https://xphones.fr/&Response=encrypt&MAC=${mac_result}&Language=en`;
       console.log(unencrypt)
       const blowfish = new BlowfishTranslation(unencrypt);
       const encrypt_result = blowfish.encryptBlowfish();
