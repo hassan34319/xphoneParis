@@ -3,7 +3,7 @@ import { useStateContext } from "../../context/stateContext";
 import CartItem from "../components/CartItem";
 import getStripe from "../../lib/getStripe";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MyForm from "../components/ShippingForm";
 import Layout from "../components/Layout";
 import useChangeAdressModal from "../hooks/useChangeAdressModal";
@@ -11,6 +11,9 @@ import { uuid } from "uuidv4";
 import { getSession, useSession } from "next-auth/react";
 import RegisterModal from "../components/RegisterModal";
 import useRegisterModal from "../hooks/useRegisterModal";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { count } from "console";
 
 const Cart: NextPage = () => {
   const { cartItems, totalPrice } = useStateContext();
@@ -20,6 +23,42 @@ const Cart: NextPage = () => {
   console.log(cartItems, totalPrice);
   const { data: session } = useSession();
   const currentUser = session?.user;
+  const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [shippingAdress, setShippingAdress] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [country, setCountry] = useState("");
+  const sessionMain = useSession();
+  const router = useRouter()
+
+  useEffect(() => {
+    setError("");
+    const fetchData = async () => {
+      const session = await getSession();
+      const currentUser = session?.user;
+      if (session) {
+        const email = currentUser?.email;
+
+        try {
+          const response = await axios.get(`/api/user?email=${email}`);
+          setEmail(response.data.email);
+          setShippingAdress(response.data.shippingAdress);
+          setFirstName(response.data.firstName);
+          setLastName(response.data.lastName);
+          setPostalCode(response.data.postalCode);
+          setPhoneNumber(response.data.phoneNumber);
+          setCountry(response.data.country);
+        } catch (error) {
+          setError(JSON.stringify(error));
+        }
+      }
+    };
+
+    fetchData();
+  }, [sessionMain]);
 
   // const checkoutHandler = async () => {
   //   if (cartItems.length == 0) {
@@ -61,13 +100,13 @@ const Cart: NextPage = () => {
       Amount: totalPrice,
       items,
       CustomField1: totalPrice + "EUR",
-      CustomField2: "Xphones",
+      CustomField2: `TR-${unique_id}`,
       CustomField3:
         "https://cdn.shopify.com/s/files/1/0061/7929/1200/files/ephones_250x.png?v=1638106517",
       CustomField4: items,
-      CustomField5: `${currentUser?.name}|${currentUser?.email}`,
-      CustomField6: `${currentUser?.name}|Shipping Details Are Safe | In Our Records `,
-      CustomField7: `TR-${unique_id}`,
+      CustomField5: `${firstName}|${lastName}|${email}|`,
+      CustomField6: `${firstName}|${lastName}|${phoneNumber}|${shippingAdress}|${country}|${postalCode}`,
+      CustomField7: `${firstName}|${lastName}|${phoneNumber}|${shippingAdress}|${country}|${postalCode}`,
       PayType: "0",
     };
 

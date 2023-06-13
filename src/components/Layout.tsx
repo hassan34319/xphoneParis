@@ -42,8 +42,11 @@ const Layout = ({ children }: LayoutProps) => {
 
   useEffect(() => {
     // Serialize the cart data to a string
+    if (!cartItems) {
+      localStorage.setItem('hMac Generation', '')
+    }
     const serializedData = JSON.stringify(cartItems);
-
+    console.log(serializedData)
     // Encrypt the serialized data
     const blowfish = new BlowfishTranslation(serializedData);
     const encryptedData = blowfish.encryptBlowfish();

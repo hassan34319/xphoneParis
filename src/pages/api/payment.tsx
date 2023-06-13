@@ -22,7 +22,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         CustomField9,
         PayType,
       } = req.body;
-      const TransactionId = unique_id.slice(0,2);
+      const TransactionId = unique_id;
       const ReferenceId = "RG2023" + "-" + unique_id;
       console.log(items);
       const macunencrypt = `*${TransactionId}*${process.env.NEXT_PUBLIC_MERCHANT_ID}*${Amount}*EUR`
