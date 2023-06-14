@@ -55,15 +55,17 @@ export default async function handler(
       let defaultClient = SibApiV3Sdk.ApiClient.instance;
 
       let apiKey = defaultClient.authentications["api-key"];
-      apiKey.apiKey = "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";
+      apiKey.apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
       let apiInstance = new SibApiV3Sdk.ContactsApi();
 
       let createContact = new SibApiV3Sdk.CreateContact();
       console.log(email)
       createContact.email = email ;
-      createContact.firstName =  firstName ;
-      createContact.lastName =  lastName ;
+      createContact.attributes = {
+        FIRSTNAME : firstName,
+        LASTNAME : lastName
+      }
       createContact.listIds = [2];
 
       const res_cont = await apiInstance.createContact(createContact).then(
@@ -102,7 +104,7 @@ export default async function handler(
         headers: {
           "X-Mailin-custom":
             "custom_header_1:custom_value_1|custom_header_2:custom_value_2",
-          "api-key": "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",
+          "api-key": process.env.NEXT_PUBLIC_API_KEY,
           "content-type": "application/json",
           accept: "application/json",
         },
@@ -117,7 +119,10 @@ export default async function handler(
         }
       );
       console.log(res3)
-      return res.status(200).json("success");
+      if (!user) {
+        return res.status(200).json("No user Registered")
+      }
+      return res.status(200).json(user);
     } catch {
       res.status(404).send("An error occured");
     }
