@@ -8,7 +8,7 @@ function Success() {
   const { setCartItems, setTotalPrice, setTotalQuantity } = useStateContext();
 
   useEffect(() => {
-    // runFireworks();
+    runFireworks();
     setCartItems([]);
     setTotalPrice(0);
     setTotalQuantity(0);

@@ -26,7 +26,7 @@ function Failure({}: Props) {
     result
   );
   const res_final = res.parse()
-  console.log(res.parse());
+  console.log(res_final);
   console.log(router.query);
   return (
     <div className="flex flex-row align-center ">
