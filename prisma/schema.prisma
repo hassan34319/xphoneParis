@@ -13,15 +13,9 @@ datasource db {
 
 // schema.prisma
 
-model Cart {
-  id        String       @id 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  items     CartItem[]
-}
 
 model CartItem {
-  id         String      @id
+  id         String       @id @default(uuid())
   image      String
   name       String
   productId  String
@@ -30,10 +24,9 @@ model CartItem {
   grade      String
   price      Float
   quantity   Int
-  cart       Cart     @relation(fields: [cartId], references: [id])
-  cartId     String
-
-  @@index([cartId])
+  order     Order     @relation(fields: [orderId], references: [id])
+  orderId    String
+  @@index([orderId])
 }
 
 
@@ -51,7 +44,21 @@ model User {
   shippingAdress  String?
   postalCode      String?
   country         String?
+  city            String?
   accounts Account[]
+  orders Order[]
+}
+
+model Order {
+  id   String @id
+    createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  items           CartItem[]
+  userId          String
+  total           Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status         String?
+  @@index([userId])
 }
 
 model Account {

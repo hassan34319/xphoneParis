@@ -92,6 +92,15 @@ const ChangeAdressModal = () => {
         required
       />
       <Input
+        id="city"
+        label="Ville"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        watch={watch}
+        required
+      />
+      <Input
         id="phoneNumber"
         label="Numéro de téléphone"
         type="number"

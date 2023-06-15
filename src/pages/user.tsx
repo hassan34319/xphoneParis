@@ -7,8 +7,50 @@ import { getSession, useSession } from "next-auth/react";
 import axios from "axios";
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { getServerSession } from "next-auth";
+import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { ParsedUrlQuery } from "querystring";
+import { prisma } from "./api/client";
+import Image from "next/image";
 
-const UserPage = () => {
+interface CartItem {
+  id: string;
+  image: string;
+  name: string;
+  productId: string;
+  color: string;
+  capacity: number;
+  grade: string;
+  price: number;
+  quantity: number;
+}
+
+interface Order {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  items: CartItem[];
+  userId: string;
+  user: {
+    email: string;
+    shippingAdress: string;
+    postalCode: string;
+    city: string;
+    country: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+  };
+  status?: string;
+  total: number;
+}
+
+interface UserPageProps {
+  orders: Order[];
+}
+
+const UserPage: React.FC<UserPageProps> = ({ orders }) => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [shippingAdress, setShippingAdress] = useState("");
@@ -18,10 +60,10 @@ const UserPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [country, setCountry] = useState("");
   const sessionMain = useSession();
-  const router = useRouter()
+  const router = useRouter();
 
-  function changePage () {
-    router.push('/')
+  function changePage() {
+    router.push("/");
   }
   useEffect(() => {
     setError("");
@@ -153,7 +195,69 @@ const UserPage = () => {
               </div>
             </section>
           </div>
-          <div className="flex flex-row justify-center items-center space-x-4">
+
+          <div className="container mx-auto p-4">
+            <h1 className="text-2xl font-bold mb-4">Order History</h1>
+            <div className="overflow-x-auto">
+              <table className="w-full border">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="py-2 px-4 border-b">Cart Items</th>
+                    <th className="py-2 px-4 border-b">Total Price</th>
+                    <th className="py-2 px-4 border-b">Order ID</th>
+                    <th className="py-2 px-4 border-b">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order.id}>
+                      <td className="py-4 px-4 border-b text-center border-gray-500 ">
+                        {order.items.map((item) => (
+                          <div
+                            key={item.id}
+                            className="mb-4 flex items-center justify-center"
+                          >
+                            <div className="w-20 h-20 mr-4">
+                              <Image
+                                src={item.image}
+                                alt={item.name}
+                                width={80}
+                                height={80}
+                              />
+                            </div>
+                            <div>
+                              <p className="text-lg font-bold mb-2">
+                                {item.name}
+                              </p>
+                              <p className="text-gray-600 mb-2">
+                                Color: {item.color}
+                              </p>
+                              <p className="text-gray-600 mb-2">
+                                Capacity: {item.capacity}
+                              </p>
+                              <p className="mb-2">
+                                Quantity: {item.quantity} | Price: {item.price}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </td>
+                      <td className="py-2 px-4 border-b text-center border-gray-500">
+                        {order.total} €
+                      </td>
+                      <td className="py-2 px-4 border-b text-center border-gray-500">
+                        {order.id}
+                      </td>
+                      <td className="py-2 px-4 border-b text-center border-gray-500">
+                        {order.status}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="flex flex-row justify-center items-center space-x-4 ">
             <button
               onClick={() => signOut()}
               className="relative w-max text-center mt-4  inline-flex items-center px-5 py-3 text-base font-semibold text-white bg-red-600 border border-transparent rounded-md cursor-pointer select-none hover:bg-red-700 focus-within:bg-red-700"
@@ -182,5 +286,62 @@ const UserPage = () => {
     </main>
   );
 };
+
+export async function getServerSideProps({
+  req,
+  res,
+  query,
+}: {
+  req: NextApiRequest;
+  res: NextApiResponse;
+  query: ParsedUrlQuery;
+}) {
+  const session = await getServerSession(req, res, authOptions);
+  const email = session?.user?.email;
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/", // Replace with the login page URL
+        permanent: false,
+      },
+    };
+  }
+  // Check if user is authenticated and has the allowed email address
+
+  // Fetch all orders from the database, including associated CartItems and User details
+  const orders = await prisma.order.findMany({
+    where: {
+      user: {
+        email: email
+      }
+    },
+    include: {
+      items: true,
+      user: {
+        select: {
+          email: true,
+          shippingAdress: true,
+          postalCode: true,
+          city: true,
+          country: true,
+          firstName: true,
+          lastName: true,
+          phoneNumber: true,
+        },
+      },
+    },
+  });
+
+  return {
+    props: {
+      orders: orders.map((order) => ({
+        ...order,
+        createdAt: order.createdAt.toISOString(),
+        updatedAt: order.createdAt.toISOString(),
+      })),
+    },
+  };
+}
 
 export default UserPage;

@@ -27,13 +27,13 @@ const RegisterModal = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      phoneNumber : "",
+      phoneNumber: "",
       email: "",
       password: "",
       confirmPassword: "",
       shippingAdress: "",
       postalCode: "",
-      country : ""
+      country: "",
     },
   });
 
@@ -134,6 +134,15 @@ const RegisterModal = () => {
       <Input
         id="postalCode"
         label="Code postal"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        watch={watch}
+        required
+      />
+      <Input
+        id="city"
+        label="Ville"
         disabled={isLoading}
         register={register}
         errors={errors}

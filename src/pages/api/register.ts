@@ -23,6 +23,7 @@ export default async function handler(
         shippingAdress,
         postalCode,
         phoneNumber,
+        city,
         country,
       } = req.body;
 
@@ -48,6 +49,7 @@ export default async function handler(
           phoneNumber,
           shippingAdress,
           postalCode,
+          city,
           country,
         },
       });
@@ -64,7 +66,11 @@ export default async function handler(
       createContact.email = email ;
       createContact.attributes = {
         FIRSTNAME : firstName,
-        LASTNAME : lastName
+        LASTNAME : lastName,
+        ADDRESS : shippingAdress,
+        CITY : city,
+        COUNTRY : country,
+        POSTALCODE : postalCode
       }
       createContact.listIds = [2];
 
@@ -124,7 +130,7 @@ export default async function handler(
       }
       return res.status(200).json(user);
     } catch {
-      res.status(404).send("An error occured");
+      console.log("error");
     }
   }
 }
