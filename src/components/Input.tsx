@@ -1,5 +1,11 @@
-import { FieldErrors, FieldValues, UseFormRegister, UseFormWatch } from "react-hook-form";
-import { BiDollar } from "react-icons/bi";
+import { useState } from "react";
+import {
+  FieldErrors,
+  FieldValues,
+  UseFormRegister,
+  UseFormWatch,
+} from "react-hook-form";
+import { BiDollar, BiHide, BiShow } from "react-icons/bi";
 
 interface InputProps {
   id: string;
@@ -8,8 +14,8 @@ interface InputProps {
   disabled?: boolean;
   formatPrice?: boolean;
   required?: boolean;
-  register: UseFormRegister<FieldValues>,
-  watch: UseFormWatch<FieldValues>,
+  register: UseFormRegister<FieldValues>;
+  watch: UseFormWatch<FieldValues>;
   errors: FieldErrors;
 }
 
@@ -25,11 +31,16 @@ const Input: React.FC<InputProps> = ({
   errors,
 }) => {
   const isEmail = type === "email";
-  const isPassword = type === "password";
+  const isPassword = id === "password";
   const isConfirmPassword = id === "confirmPassword";
-
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const errorMessage = errors[id]?.message;
-
+  const getInputType = () => {
+    if ((isPassword || isConfirmPassword) && !isPasswordVisible) {
+      return "password";
+    }
+    return type;
+  };
   return (
     <div className="w-full relative">
       {formatPrice && (
@@ -61,7 +72,7 @@ const Input: React.FC<InputProps> = ({
           }),
         })}
         placeholder=" "
-        type={type}
+        type={getInputType()}
         className={`
           peer
           w-full
@@ -75,9 +86,9 @@ const Input: React.FC<InputProps> = ({
           transition
           disabled:opacity-70
           disabled:cursor-not-allowed
-          ${formatPrice ? 'pl-9' : 'pl-4'}
-          ${errors[id] ? 'border-rose-500' : 'border-neutral-300'}
-          ${errors[id] ? 'focus:border-rose-500' : 'focus:border-black'}
+          ${formatPrice ? "pl-9" : "pl-4"}
+          ${errors[id] ? "border-rose-500" : "border-neutral-300"}
+          ${errors[id] ? "focus:border-rose-500" : "focus:border-black"}
         `}
       />
       <label
@@ -90,16 +101,24 @@ const Input: React.FC<InputProps> = ({
           top-5 
           z-10 
           origin-[0] 
-          ${formatPrice ? 'left-9' : 'left-4'}
+          ${formatPrice ? "left-9" : "left-4"}
           peer-placeholder-shown:scale-100 
           peer-placeholder-shown:translate-y-0 
           peer-focus:scale-75
           peer-focus:-translate-y-4
-          ${errors[id] ? 'text-rose-500' : 'text-zinc-400'}
+          ${errors[id] ? "text-rose-500" : "text-zinc-400"}
         `}
       >
         {label}
       </label>
+      {(isPassword || isConfirmPassword)  && (
+        <span
+          className="absolute top-5 right-2 cursor-pointer"
+          onClick={() => setIsPasswordVisible((prev) => !prev)}
+        >
+          {isPasswordVisible ? <BiHide /> : <BiShow />}
+        </span>
+      )}
       {errorMessage && (
         <span className="text-red-500 text-sm">{errorMessage.toString()}</span>
       )}

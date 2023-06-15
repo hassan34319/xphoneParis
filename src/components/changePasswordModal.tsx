@@ -62,7 +62,7 @@ const ChangePasswordModal = () => {
       <Input
         id="password"
         label="Nouveau mot de passe"
-        type="password"
+        type="text"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -72,7 +72,7 @@ const ChangePasswordModal = () => {
       <Input
         id="confirmPassword"
         label="Confirmer le mot de passe"
-        type="password"
+        type="text"
         disabled={isLoading}
         register={register}
         errors={errors}

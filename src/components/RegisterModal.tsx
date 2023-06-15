@@ -95,7 +95,7 @@ const RegisterModal = () => {
       <Input
         id="password"
         label="Mot de passe"
-        type="password"
+        type="text"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -105,7 +105,7 @@ const RegisterModal = () => {
       <Input
         id="confirmPassword"
         label="Confirmez le mot de passe"
-        type="password"
+        type="text"
         disabled={isLoading}
         register={register}
         errors={errors}
