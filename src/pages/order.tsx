@@ -199,7 +199,7 @@ export async function getServerSideProps({
     !session ||
     ![
       "xphonesparis@gmail.com",
-      "contaxt@xphones.com",
+      "contact@xphones.com",
       "Hassaniqbal19343@gmail.com",
     ].includes(session.user?.email ?? "")
   ) {
