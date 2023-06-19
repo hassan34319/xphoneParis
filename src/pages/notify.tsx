@@ -54,7 +54,9 @@ export async function getServerSideProps({
     query: ParsedUrlQuery;
   }) {
     console.log("URL", req.url)
+
     const hmacQuery = query.hMac
+
     const hMac = hmacQuery?.toString().split('?', 1)[0]
     console.log(hmacQuery)
     const dataQuery = query.Data;
@@ -110,10 +112,10 @@ export async function getServerSideProps({
           return totalPrice + item.price * item.quantity;
         }, 0);
       };
+      
+      const dateObject = new Date(Date.now());
   
-      const dateObject = new Date();
-  
-      let date = dateObject.toUTCString();
+      let date = dateObject.toISOString();
   
       console.log(date);
   

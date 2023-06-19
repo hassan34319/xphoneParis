@@ -251,6 +251,7 @@ const UserPage: React.FC<UserPageProps> = ({ orders }) => {
                       <th className="py-2 px-4 border-b">Cart Items</th>
                       <th className="py-2 px-4 border-b">Total Price</th>
                       <th className="py-2 px-4 border-b">Order ID</th>
+                      <th className="py-2 px-4 border-b">Order Date</th>
                       <th className="py-2 px-4 border-b">Status</th>
                     </tr>
                   </thead>
@@ -294,6 +295,9 @@ const UserPage: React.FC<UserPageProps> = ({ orders }) => {
                         </td>
                         <td className="py-2 px-4 border-b text-center border-gray-500">
                           {order.id}
+                        </td>
+                        <td className="py-2 px-4 border-b text-center border-gray-500">
+                          {new Date(order.createdAt).toLocaleDateString()}
                         </td>
                         <td className="py-2 px-4 border-b text-center border-gray-500">
                           {order.status}

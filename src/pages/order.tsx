@@ -40,6 +40,8 @@ interface Order {
   status?: string;
   editableStatus?: Boolean;
   total: number;
+  calculated: number;
+  discount: number;
   updatedStatus: string;
 }
 
@@ -110,6 +112,8 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ orders }) => {
               <th className="py-2 px-4 border-b">Last Name</th>
               <th className="py-2 px-4 border-b">Phone Number</th>
               <th className="py-2 px-4 border-b">Status</th>
+              <th className="py-2 px-4 border-b">Calculated Price</th>
+              <th className="py-2 px-4 border-b">Discount</th>
               <th className="py-2 px-4 border-b">Total Price</th>
               <th className="py-2 px-4 border-b">Cart Items</th>
             </tr>
@@ -162,6 +166,8 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ orders }) => {
                   )}
                 </td>
 
+                <td className="py-2 px-4 border-b">{order.calculated} €</td>
+                <td className="py-2 px-4 border-b">{order.discount} €</td>
                 <td className="py-2 px-4 border-b">{order.total} €</td>
                 <td className="py-2 px-4 border-b">
                   {order.items.map((item) => (
