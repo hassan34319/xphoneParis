@@ -122,7 +122,7 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ orders }) => {
             {ordersState.map((order) => (
               <tr key={order.id}>
                 <td className="py-2 px-4 border-b">{order.id}</td>
-                <td className="py-2 px-4 border-b">{order.createdAt}</td>
+                <td className="py-2 px-4 border-b">{(new Date(order.createdAt)).toLocaleDateString()}</td>
                 <td className="py-2 px-4 border-b">{order.updatedAt}</td>
                 <td className="py-2 px-4 border-b">{order.user.email}</td>
                 <td className="py-2 px-4 border-b">
@@ -238,13 +238,15 @@ export async function getServerSideProps({
 
   return {
     props: {
-      orders: orders.map((order) => ({
-        ...order,
-        createdAt: order.createdAt.toISOString(),
-        updatedAt: order.createdAt.toISOString(),
-      })),
-    },
-  };
+      orders: orders
+        .map((order) => ({
+          ...order,
+          createdAt: new Date(order.createdAt).toISOString(),
+          updatedAt: new Date(order.createdAt).toISOString(),
+        }))
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+    }
+}
 }
 
 export default OrdersPage;
