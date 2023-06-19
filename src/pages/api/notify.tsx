@@ -95,11 +95,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let date = dateObject.toUTCString();
 
     console.log(date);
-
-    if (email) {
-      return "User not found";
-    }
-
+    console.log(email)
     sendSmtpEmail = {
       to: [
         {
@@ -163,7 +159,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const user = await prisma.user.findUnique({
       where: {
-        email: email.toLowerCase(),
+        email: email,
       },
     });
 
