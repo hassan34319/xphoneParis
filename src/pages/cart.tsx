@@ -99,6 +99,7 @@ const Cart: NextPage = () => {
     console.log(serializedData);
     const params: Record<string, string> = {
       serializedData,
+      email,
       unique_id,
       Amount: totalPrice,
       items,

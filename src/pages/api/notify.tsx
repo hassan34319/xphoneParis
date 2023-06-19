@@ -33,7 +33,7 @@ interface ResponseData {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(req.query,req.body)
-  const { hMac } = req.query;
+  const { hMac,email } = req.query;
   const { Data } = req.body;
 
   const blowfish = new BlowfishTranslation(Data);
@@ -44,8 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.log("pRINTING FROM HERE", res_final);
   const TransID = res_final.TransID
   console.log(TransID)
-  const session = await getServerSession(req, res, authOptions);
-  console.log(session?.user)
+
 
   // Check if localStorage.hMac matches the hmacQuery
   if (hMac) {
@@ -94,14 +93,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log(date);
 
-    if (!session?.user?.email) {
+    if (!email) {
       return "User not found";
     }
 
     sendSmtpEmail = {
       to: [
         {
-          email: session?.user?.email,
+          email: email,
         },
       ],
       templateId: 3,
@@ -161,7 +160,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const user = await prisma.user.findUnique({
       where: {
-        email: session?.user?.email.toLowerCase(),
+        email: email.toString().toLowerCase(),
       },
     });
 
