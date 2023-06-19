@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Parse the decrypted data as JSON
     const cart = JSON.parse(decryptedData2);
     console.log(cart)
-    const email = cart.shift() 
+    const email = cart.pop().email 
     console.log(email, "New cart", cart)
 
     console.log("cart",cart);
