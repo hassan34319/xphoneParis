@@ -124,7 +124,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/api/payment";
-    cartItems.push({ email: email });
+    cartItems.push({ email: email, total: totalPrice, discount : discountPercentage });
     const serializedData = JSON.stringify(cartItems);
     console.log(serializedData);
     const params: Record<string, string> = {

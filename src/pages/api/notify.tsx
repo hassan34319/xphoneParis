@@ -72,7 +72,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Parse the decrypted data as JSON
     const cart = JSON.parse(decryptedData2);
     console.log(cart)
-    const email = cart.pop().email 
+    const obj_ = cart.pop()
+    console.log(obj_)
+    const email = obj_.email
+    const totalPrice = obj_.total
+    const discountPercentage = obj_.discount
     console.log(email, "New cart", cart)
 
     console.log("cart",cart);
@@ -104,9 +108,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ],
       templateId: 3,
       params: {
-        Total: calculateTotalPrice(cart),
+        Total: totalPrice,
         ORDERID: Date.now().toString(),
         ORDERDATE: date,
+        calculated : calculateTotalPrice(cart),
+        discount : calculateTotalPrice(cart) * discountPercentage/100,
         itemName1: cart[0].name,
         itemPrice1: cart[0].price * cart[0].quantity,
         itemQuantity1: cart[0].quantity,
@@ -175,7 +181,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         id: TransID!,
         userId: activeUserId,
         status: "Received",
-        total : calculateTotalPrice(cart),
+        calculated : calculateTotalPrice(cart),
+        total : totalPrice,
+        discount : calculateTotalPrice(cart) * discountPercentage/100,
         items: {
           create: cart,
         },
