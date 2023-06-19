@@ -389,11 +389,16 @@ export async function getServerSideProps({
 
   return {
     props: {
-      orders: orders.map((order) => ({
-        ...order,
-        createdAt: order.createdAt.toISOString(),
-        updatedAt: order.createdAt.toISOString(),
-      })),
+      orders: orders
+        .map((order) => ({
+          ...order,
+          createdAt: new Date(order.createdAt).toISOString(),
+          updatedAt: new Date(order.createdAt).toISOString(),
+        }))
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        ),
     },
   };
 }

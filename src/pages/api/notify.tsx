@@ -94,9 +94,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }, 0);
     };
 
-    const dateObject = new Date();
-
-    let date = dateObject.toUTCString();
+    const dateObject = new Date(Date.now());
+  
+    let date = dateObject.toISOString();
 
     console.log(date);
     console.log(email)
@@ -115,30 +115,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         discount : parseFloat((totalPrice * discountPercentage / 100).toFixed(2)),
         itemName1: cart[0].name,
         itemPrice1: cart[0].price * cart[0].quantity,
+        itemUnitPrice1: cart[0].price,
         itemQuantity1: cart[0].quantity,
         itemColor1: cart[0].color,
         itemCapacity1: cart[0].capacity,
         itemImage1: cart[0].image,
         itemName2: cart[1]?.name || null,
         itemPrice2: cart[1]?.price * cart[1]?.quantity || null,
+        itemUnitPrice2: cart[1]?.price || null,
         itemQuantity2: cart[1]?.quantity || null,
         itemColor2: cart[1]?.color || null,
         itemCapacity2: cart[1]?.capacity || null,
         itemImage2: cart[1]?.image || null,
         itemName3: cart[2]?.name || null,
         itemPrice3: cart[2]?.price * cart[2]?.quantity || null,
+        itemUnitPrice3: cart[2]?.price || null,
         itemQuantity3: cart[2]?.quantity || null,
         itemColor3: cart[2]?.color || null,
         itemCapacity3: cart[2]?.capacity || null,
         itemImage3: cart[2]?.image || null,
         itemName4: cart[3]?.name || null,
         itemPrice4: cart[3]?.price * cart[3]?.quantity || null,
+        itemUnitPrice4: cart[3]?.price || null,
         itemQuantity4: cart[3]?.quantity || null,
         itemColor4: cart[3]?.color || null,
         itemCapacity4: cart[3]?.capacity || null,
         itemImage4: cart[3]?.image || null,
         itemName5: cart[4]?.name || null,
         itemPrice5: cart[4]?.price * cart[4]?.quantity || null,
+        itemUnitPrice5: cart[5]?.price || null,
         itemQuantity5: cart[4]?.quantity || null,
         itemColor5: cart[4]?.color || null,
         itemCapacity5: cart[5]?.capacity || null,
