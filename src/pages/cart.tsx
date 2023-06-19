@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useStateContext } from "../../context/stateContext";
 import CartItem from "../components/CartItem";
 import getStripe from "../../lib/getStripe";
@@ -14,12 +14,36 @@ import useRegisterModal from "../hooks/useRegisterModal";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { count } from "console";
+import { sanityClient } from "../../lib/sanityClient";
 
-const Cart: NextPage = () => {
-  const { cartItems, totalPrice } = useStateContext();
+interface PromoCode {
+  code: string;
+  discountPercentage: number;
+}
+
+interface Props {
+  promoCodes: PromoCode[];
+}
+
+interface Item {
+  image: string;
+  name: string;
+  productId: string;
+  color: string;
+  capacity: number;
+  grade: string;
+  price: number;
+  quantity: number;
+}
+
+const Cart: React.FC<Props> = ({ promoCodes }) => {
+  const [enteredPromoCode, setEnteredPromoCode] = useState("");
+  const [discountPercentage, setDiscountPercentage] = useState(0);
+  console.log(promoCodes);
+  const { cartItems, totalPrice, setTotalPrice} = useStateContext();
   const [openForm, setOpenForm] = useState(false);
   const changeAdressModal = useChangeAdressModal();
-  const registerModal = useRegisterModal()
+  const registerModal = useRegisterModal();
   console.log(cartItems, totalPrice);
   const { data: session } = useSession();
   const currentUser = session?.user;
@@ -31,9 +55,15 @@ const Cart: NextPage = () => {
   const [postalCode, setPostalCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [country, setCountry] = useState("");
+  const [promoCodeError, setPromoCodeError] = useState("");
   const sessionMain = useSession();
-  const router = useRouter()
-
+  const router = useRouter();
+  const calculateTotalPrice = (cart: Item[]) => {
+    return cart.reduce((totalPrice: number, item: Item) => {
+      return totalPrice + item.price * item.quantity;
+    }, 0);
+  };
+  const calculatedPrice = calculateTotalPrice(cartItems)
   useEffect(() => {
     setError("");
     const fetchData = async () => {
@@ -41,9 +71,9 @@ const Cart: NextPage = () => {
       const currentUser = session?.user;
       if (session) {
         const email = currentUser?.email;
-        setEmail(email!.toString())
+        setEmail(email!.toString());
         try {
-          const response = await axios.get(`/api/user?email=${email}`);;
+          const response = await axios.get(`/api/user?email=${email}`);
           setShippingAdress(response.data.shippingAdress);
           setFirstName(response.data.firstName);
           setLastName(response.data.lastName);
@@ -94,7 +124,7 @@ const Cart: NextPage = () => {
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/api/payment";
-    cartItems.push({email : email})
+    cartItems.push({ email: email });
     const serializedData = JSON.stringify(cartItems);
     console.log(serializedData);
     const params: Record<string, string> = {
@@ -126,6 +156,29 @@ const Cart: NextPage = () => {
     form.submit();
   };
 
+  const handlePromoCodeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setEnteredPromoCode(event.target.value);
+    setDiscountPercentage(0);
+    setTotalPrice(calculatedPrice) // Reset discount percentage
+    setPromoCodeError(""); // Reset promo code error
+  };
+
+  const applyPromoCode = () => {
+    const promoCode = promoCodes.find((code) => code.code === enteredPromoCode);
+
+    if (promoCode) {
+      const discountedPrice =
+        totalPrice - (totalPrice * promoCode.discountPercentage) / 100;
+      setDiscountPercentage(promoCode.discountPercentage);
+      setTotalPrice(discountedPrice);
+      setPromoCodeError("");
+    } else {
+      setPromoCodeError("Invalid code"); // Display error message
+    }
+  };
+
   return (
     <Layout>
       <div className="w-11/12 mx-auto h-full vh-full">
@@ -149,8 +202,46 @@ const Cart: NextPage = () => {
             <h1 className="text-xl">{cartItems.length} articles</h1>
             <h1 className="flex flex-row justify-between text-xl mt-8">
               Total panier
-              <span className="text-xl font-bold">{totalPrice} &euro;</span>
+              <span className="text-xl font-bold">{calculatedPrice} &euro;</span>
             </h1>
+            <h1 className="flex flex-row justify-between text-xl mt-4">
+              Montant de réduction
+              <span className="text-xl font-bold">{(calculatedPrice * discountPercentage/100)} &euro;</span>
+            </h1>
+            <h1 className="flex flex-row justify-between text-2xl mt-8">
+              Montant final
+              <span className="text-2xl font-bold">
+                {totalPrice} &euro;
+              </span>
+            </h1>
+            <div className="flex flex-col lg:flex-row items-center mt-4">
+              <label htmlFor="promoCode" className="mr-2 mb-2 lg:mb-0">
+                Entrez un code promo:
+              </label>
+              <div className="flex flex-row items-center w-full">
+                <input
+                  type="text"
+                  id="promoCode"
+                  className="border border-gray-300 rounded px-2 py-1 w-full lg:w-auto"
+                  value={enteredPromoCode}
+                  onChange={handlePromoCodeChange}
+                />
+                <button
+                  className="ml-2 px-4 py-1 bg-gray-500 text-white rounded"
+                  onClick={applyPromoCode}
+                >
+                  Appliquer
+                </button>
+              </div>
+            </div>
+            {promoCodeError && (
+              <p className="text-red-500 mt-2">{promoCodeError}</p>
+            )}
+            {discountPercentage > 0 && (
+              <p className="text-green-500 mt-2">
+                Réduction appliquée: {discountPercentage}%
+              </p>
+            )}
             {currentUser ? (
               <>
                 <button
@@ -184,3 +275,27 @@ const Cart: NextPage = () => {
 };
 
 export default Cart;
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  try {
+    // Fetch promo codes from Sanity
+    const query = `*[_type == "promoCode"]{
+      code,
+      discountPercentage
+    }`;
+    const promoCodes = await sanityClient.fetch<PromoCode[]>(query);
+
+    return {
+      props: {
+        promoCodes,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching promo codes:", error);
+    return {
+      props: {
+        promoCodes: [],
+      },
+    };
+  }
+};

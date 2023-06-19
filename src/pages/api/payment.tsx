@@ -26,6 +26,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         PayType,
       } = req.body;
       console.log("passed Cart",serializedData)
+      
+
       // Encrypt the serialized data
       const blowfish2 = new BlowfishTranslation(serializedData);
       const hMacKey = blowfish2.encryptBlowfish();

@@ -55,7 +55,7 @@ model Order {
   updatedAt       DateTime @updatedAt
   items           CartItem[]
   userId          String
-  total           Int
+  total           Float
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   status         String?
   @@index([userId])
