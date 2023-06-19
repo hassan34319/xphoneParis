@@ -40,7 +40,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
   const [enteredPromoCode, setEnteredPromoCode] = useState("");
   const [discountPercentage, setDiscountPercentage] = useState(0);
   console.log(promoCodes);
-  const { cartItems, totalPrice, setTotalPrice} = useStateContext();
+  const { cartItems, totalPrice} = useStateContext();
   const [openForm, setOpenForm] = useState(false);
   const changeAdressModal = useChangeAdressModal();
   const registerModal = useRegisterModal();
@@ -56,6 +56,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [country, setCountry] = useState("");
   const [promoCodeError, setPromoCodeError] = useState("");
+  const [total, setTotalPrice] = useState(totalPrice)
   const sessionMain = useSession();
   const router = useRouter();
   const calculateTotalPrice = (cart: Item[]) => {

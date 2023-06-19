@@ -108,11 +108,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ],
       templateId: 3,
       params: {
-        Total: Number(totalPrice.toFixed(2)),
+        Total: Math.round(totalPrice),
         ORDERID: Date.now().toString(),
         ORDERDATE: date,
         calculated : calculateTotalPrice(cart),
-        discount : Number((totalPrice * discountPercentage / 100).toFixed(2)),
+        discount : Math.round((totalPrice * discountPercentage / 100)),
         itemName1: cart[0].name,
         itemPrice1: cart[0].price * cart[0].quantity,
         itemUnitPrice1: cart[0].price,
