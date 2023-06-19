@@ -35,7 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { hMac } = req.query;
   const { Data } = req.body;
   const hMacQuery = hMac?.toString().split('?', 1)[0]
-  const email = hMac?.toString().split('?', 1)[1]
   const blowfish = new BlowfishTranslation(Data);
   const decryptedData = blowfish.decryptBlowfish();
 
