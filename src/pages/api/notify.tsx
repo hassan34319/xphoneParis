@@ -44,8 +44,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.log("pRINTING FROM HERE", res_final);
   const TransID = res_final.TransID
   console.log(TransID)
-//   const session = await getServerSession(req, res, authOptions);
-//   console.log(session?.user)
+  const session = await getServerSession(req, res, authOptions);
+  console.log(session?.user)
 
   // Check if localStorage.hMac matches the hmacQuery
   if (hMac) {
@@ -94,14 +94,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log(date);
 
-    if (email) {
+    if (!session?.user?.email) {
       return "User not found";
     }
 
     sendSmtpEmail = {
       to: [
         {
-          email: email,
+          email: session?.user?.email,
         },
       ],
       templateId: 3,
@@ -161,7 +161,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const user = await prisma.user.findUnique({
       where: {
-        email: email!.toLowerCase(),
+        email: session?.user?.email.toLowerCase(),
       },
     });
 
