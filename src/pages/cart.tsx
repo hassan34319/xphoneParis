@@ -44,7 +44,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
   const [openForm, setOpenForm] = useState(false);
   const changeAdressModal = useChangeAdressModal();
   const registerModal = useRegisterModal();
-  console.log(cartItems, totalPrice);
+  // console.log(cartItems, totalPrice);
   const { data: session } = useSession();
   const currentUser = session?.user;
   const [error, setError] = useState("");
@@ -125,16 +125,16 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/api/payment";
-    cartItems.push({ email: email, total: totalPrice, discount : discountPercentage });
+    cartItems.push({ email: email, total: total, discount : discountPercentage });
     const serializedData = JSON.stringify(cartItems);
     console.log(serializedData);
     const params: Record<string, string> = {
       serializedData,
       email,
       unique_id,
-      Amount: totalPrice,
+      Amount: total,
       items,
-      CustomField1: totalPrice + "EUR",
+      CustomField1: total + "EUR",
       CustomField2: `TR-${unique_id}`,
       CustomField3:
         "https://cdn.shopify.com/s/files/1/0061/7929/1200/files/ephones_250x.png?v=1638106517",
