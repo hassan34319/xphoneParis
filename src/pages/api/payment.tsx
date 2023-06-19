@@ -41,7 +41,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       console.log(mac_result);
       const unencrypt = `MerchantID=${
         process.env.NEXT_PUBLIC_MERCHANT_ID
-      }&MsgVer=2.0&TransID=${TransactionId}&Amount=${
+      }&MsgVer=2.0&TransID=${TransactionId}&OrderDesc=Test:0000&Amount=${
         Amount * 100
       }&Currency=EUR&URLSuccess=https://xphones.fr/success?hMac=${hMacKey}&URLFailure=https://xphones.fr/failure&URLNotify=https://xphones.fr/&Response=encrypt&MAC=${mac_result}&Language=en`;
       console.log(unencrypt);
