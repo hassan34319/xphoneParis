@@ -45,6 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const TransID = res_final.TransID
   console.log(TransID)
   const session = await getServerSession(req, res, authOptions);
+  console.log(session?.user)
 
   // Check if localStorage.hMac matches the hmacQuery
   if (hMac) {
