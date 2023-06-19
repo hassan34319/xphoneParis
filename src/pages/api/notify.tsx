@@ -32,6 +32,7 @@ interface ResponseData {
   };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    console.log(req.query,req.body)
   const { hMac } = req.query;
   const { data } = req.body;
 
