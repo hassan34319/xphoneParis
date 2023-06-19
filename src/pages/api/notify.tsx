@@ -34,9 +34,9 @@ interface ResponseData {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(req.query,req.body)
   const { hMac } = req.query;
-  const { data } = req.body;
+  const { Data } = req.body;
 
-  const blowfish = new BlowfishTranslation(data);
+  const blowfish = new BlowfishTranslation(Data);
   const decryptedData = blowfish.decryptBlowfish();
 
   const obj_data = new ParseResponse(decryptedData);
