@@ -203,16 +203,16 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
             <h1 className="text-xl">{cartItems.length} articles</h1>
             <h1 className="flex flex-row justify-between text-xl mt-8">
               Total panier
-              <span className="text-xl font-bold">{calculatedPrice} &euro;</span>
+              <span className="text-xl font-bold">{totalPrice} &euro;</span>
             </h1>
             <h1 className="flex flex-row justify-between text-xl mt-4">
               Montant de réduction
-              <span className="text-xl font-bold">{(calculatedPrice * discountPercentage/100)} &euro;</span>
+              <span className="text-xl font-bold">{(totalPrice * discountPercentage/100)} &euro;</span>
             </h1>
             <h1 className="flex flex-row justify-between text-2xl mt-8">
               Montant final
               <span className="text-2xl font-bold">
-                {totalPrice} &euro;
+                {total} &euro;
               </span>
             </h1>
             <div className="flex flex-col lg:flex-row items-center mt-4">
