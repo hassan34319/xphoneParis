@@ -33,6 +33,7 @@ interface ResponseData {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(req.query,req.body)
   const { hMac } = req.query;
+  console.log(hMac)
   const { Data } = req.body;
   const blowfish = new BlowfishTranslation(Data);
   const decryptedData = blowfish.decryptBlowfish();
@@ -70,7 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log("decrypted", decryptedData2)
     // Parse the decrypted data as JSON
     const cart = JSON.parse(decryptedData2);
-
+    console.log(cart)
     const email = cart.shift() 
     console.log(email, "New cart", cart)
 
