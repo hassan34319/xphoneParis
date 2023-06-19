@@ -53,10 +53,12 @@ export async function getServerSideProps({
     res: NextApiResponse;
     query: ParsedUrlQuery;
   }) {
+    console.log("URL", req.url)
     const hmacQuery = query.hMac
     const hMac = hmacQuery?.toString().split('?', 1)[0]
     console.log(hmacQuery)
     const dataQuery = query.Data;
+    console.log(query.data)
   
     const blowfish = new BlowfishTranslation(dataQuery);
     const decryptedData = blowfish.decryptBlowfish();
