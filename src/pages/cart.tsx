@@ -41,10 +41,9 @@ const Cart: NextPage = () => {
       const currentUser = session?.user;
       if (session) {
         const email = currentUser?.email;
-
+        setEmail(email!.toString())
         try {
-          const response = await axios.get(`/api/user?email=${email}`);
-          setEmail(response.data.email);
+          const response = await axios.get(`/api/user?email=${email}`);;
           setShippingAdress(response.data.shippingAdress);
           setFirstName(response.data.firstName);
           setLastName(response.data.lastName);
