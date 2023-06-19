@@ -94,9 +94,8 @@ const Cart: NextPage = () => {
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/api/payment";
-    const cartItemsNew = cartItems.push({email : email})
-    console.log(cartItemsNew)
-    const serializedData = JSON.stringify(cartItemsNew);
+    cartItems.push({email : email})
+    const serializedData = JSON.stringify(cartItems);
     console.log(serializedData);
     const params: Record<string, string> = {
       serializedData,
