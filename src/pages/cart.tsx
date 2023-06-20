@@ -38,13 +38,12 @@ interface Item {
 
 const Cart: React.FC<Props> = ({ promoCodes }) => {
   const [enteredPromoCode, setEnteredPromoCode] = useState("");
-  const [discountPercentage, setDiscountPercentage] = useState(0);
   console.log(promoCodes);
-  const { cartItems, totalPrice} = useStateContext();
+  const { cartItems, totalPrice, setTotalPrice,discountPercentage, setDiscountPercentage} = useStateContext();
   const [openForm, setOpenForm] = useState(false);
   const changeAdressModal = useChangeAdressModal();
   const registerModal = useRegisterModal();
-  // console.log(cartItems, totalPrice);
+  console.log(cartItems, totalPrice);
   const { data: session } = useSession();
   const currentUser = session?.user;
   const [error, setError] = useState("");
@@ -56,7 +55,6 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [country, setCountry] = useState("");
   const [promoCodeError, setPromoCodeError] = useState("");
-  const [total, setTotalPrice] = useState(totalPrice)
   const sessionMain = useSession();
   const router = useRouter();
   const calculateTotalPrice = (cart: Item[]) => {
@@ -125,16 +123,16 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/api/payment";
-    cartItems.push({ email: email, total: total, discount : discountPercentage });
+    cartItems.push({ email: email, total: totalPrice, discount : discountPercentage });
     const serializedData = JSON.stringify(cartItems);
     console.log(serializedData);
     const params: Record<string, string> = {
       serializedData,
       email,
       unique_id,
-      Amount: total,
+      Amount: totalPrice,
       items,
-      CustomField1: total + "EUR",
+      CustomField1: totalPrice + "EUR",
       CustomField2: `TR-${unique_id}`,
       CustomField3:
         "https://cdn.shopify.com/s/files/1/0061/7929/1200/files/ephones_250x.png?v=1638106517",
@@ -203,16 +201,16 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
             <h1 className="text-xl">{cartItems.length} articles</h1>
             <h1 className="flex flex-row justify-between text-xl mt-8">
               Total panier
-              <span className="text-xl font-bold">{totalPrice} &euro;</span>
+              <span className="text-xl font-bold">{calculatedPrice} &euro;</span>
             </h1>
             <h1 className="flex flex-row justify-between text-xl mt-4">
               Montant de réduction
-              <span className="text-xl font-bold">{(totalPrice * discountPercentage/100)} &euro;</span>
+              <span className="text-xl font-bold">{(calculatedPrice * discountPercentage/100)} &euro;</span>
             </h1>
             <h1 className="flex flex-row justify-between text-2xl mt-8">
               Montant final
               <span className="text-2xl font-bold">
-                {total} &euro;
+                {totalPrice} &euro;
               </span>
             </h1>
             <div className="flex flex-col lg:flex-row items-center mt-4">
@@ -300,3 +298,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
     };
   }
 };
+

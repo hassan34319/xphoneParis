@@ -7,10 +7,11 @@ export const StateContext = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQuantity, setTotalQuantity] = useState(0);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
 
 
   const addToCart = (product) => {
-    setTotalPrice((prevTotalPrice) => prevTotalPrice + product.price);
+    setTotalPrice((prevTotalPrice) => prevTotalPrice + Math.round(product.price - (product.price * discountPercentage/100)));
 
     const itemInCart = cartItems.find(
       (cartItem) =>
@@ -69,7 +70,7 @@ export const StateContext = ({ children }) => {
           )
       );
       setCartItems(newCart);
-      setTotalPrice((prevTotalPrice) => prevTotalPrice - itemInCart.price);
+      setTotalPrice((prevTotalPrice) => prevTotalPrice - Math.round(itemInCart.price - (itemInCart.price * discountPercentage/100)));
       setTotalQuantity((prevQty) => prevQty - 1);
       toast.error(`${product.name} retiré du panier.`);
     } else if (itemInCart && itemInCart.quantity > 1) {
@@ -87,7 +88,7 @@ export const StateContext = ({ children }) => {
       });
       setCartItems(newCart);
       setTotalQuantity((prevQty) => prevQty - 1);
-      setTotalPrice((prevTotalPrice) => prevTotalPrice - itemInCart.price);
+      setTotalPrice((prevTotalPrice) => prevTotalPrice -  Math.round(itemInCart.price - (itemInCart.price * discountPercentage/100)));
       toast.error(`${product.name} retiré du panier.`);
     } else {
       return;
@@ -125,7 +126,9 @@ export const StateContext = ({ children }) => {
         removeFromCart,
         setCartItems,
         setTotalPrice,
-        setCart
+        setCart,
+        discountPercentage,
+        setDiscountPercentage
       }}
     >
       {children}
