@@ -132,7 +132,7 @@ const UserPage: React.FC<UserPageProps> = ({ orders }) => {
                 className={`${
                   activeTab === "disconnect" ? "text-blue-500" : "text-black"
                 } md:px-4 px-2 py-2 rounded border-b-2 border-transparent hover:border-blue-500`}
-                onClick={() => handleTabChange("disconnect")}
+                onClick={() => signOut()}
               >
                 Déconnexion
               </button>

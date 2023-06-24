@@ -116,7 +116,7 @@ const Input: React.FC<InputProps> = ({
           className="absolute top-5 right-2 cursor-pointer"
           onClick={() => setIsPasswordVisible((prev) => !prev)}
         >
-          {isPasswordVisible ? <BiHide /> : <BiShow />}
+          {isPasswordVisible ? <BiHide className="text-2xl lg:text-3xl " /> : <BiShow  className="text-2xl lg:text-3xl "/>}
         </span>
       )}
       {errorMessage && (

@@ -73,13 +73,14 @@ const Modal: React.FC<ModalProps> = ({
           items-center 
           flex 
           overflow-x-hidden 
-          overflow-y-auto 
+          overflow-y-scroll
           fixed 
           inset-0 
           z-50 
           outline-none 
           focus:outline-none
-          bg-neutral-800/70
+          bg-white
+          md:bg-neutral-800/70
         "
       >
         <div className="
@@ -92,7 +93,6 @@ const Modal: React.FC<ModalProps> = ({
           mx-auto 
           h-full 
           lg:h-[100vh]
-          md:h-auto
           "
         >
           {/*content*/}

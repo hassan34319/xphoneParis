@@ -41,18 +41,25 @@ const RegisterModal = () => {
     setIsLoading(true);
 
     axios
-      .post("/api/register", data)
-      .then(() => {
+    .post("/api/register", data)
+    .then((response) => {
+      const userExists = response.data && response.data.exists;
+      if (userExists) {
+        toast.error("E-mail déjà enregistré");
+        registerModal.onClose();
+        loginModal.onOpen();
+      } else {
         toast.success("Inscrit !");
         registerModal.onClose();
         loginModal.onOpen();
         reset();
-      })
-      .catch((error) => {
-        toast.error(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
+      }
+    })
+    .catch((error) => {
+      toast.error(error.message);
+    })
+    .finally(() => {
+      setIsLoading(false);
       });
   };
 

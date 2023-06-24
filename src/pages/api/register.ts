@@ -35,8 +35,7 @@ export default async function handler(
       });
       console.log(existingUser);
       if (existingUser) {
-        console.log("I WAS HERE");
-        return res.status(200).json(existingUser);
+        return res.status(200).json({ exists: true });
       }
       console.log("I WAS ON CREATE");
 

@@ -48,11 +48,12 @@ const LoginModal = () => {
       ...data, 
       redirect: false,
     })
-    .then((callback) => {
+    .then(async (callback) => {
       setIsLoading(false);
 
       if (callback?.ok) {
-        toast.success('Connecté');
+        await router.push('/user')
+        toast.success('Connecté');        
         loginModal.onClose();
         reset();
       }
