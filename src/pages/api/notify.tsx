@@ -12,7 +12,7 @@ import { prisma } from ".././api/client";
 import parseGatewayResponse from "../../utils/keyValueParser";
 interface ResponseData {
     TransID?: string;
-    STATUS? : string
+    Status? : string
     // Include other properties as needed
   }
 
@@ -41,9 +41,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const obj_data = new ParseResponse(decryptedData);
   const res_final: ResponseData = obj_data.parse();
   console.log("pRINTING FROM HERE", res_final);
-  if (res_final.STATUS == 'FAILED') {
+
+  if (res_final.Status == 'FAILED') {
     console.log("FAILED")
-    return
+    return res.status(200).json({ exists: true });
   }
   const TransID = res_final.TransID
 //   const session = await getServerSession(req, res, authOptions);
