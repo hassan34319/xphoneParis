@@ -38,7 +38,6 @@ interface Item {
 
 const Cart: React.FC<Props> = ({ promoCodes }) => {
   const [enteredPromoCode, setEnteredPromoCode] = useState("");
-  console.log(promoCodes);
   const { cartItems, totalPrice, setTotalPrice,discountPercentage, setDiscountPercentage} = useStateContext();
   const [openForm, setOpenForm] = useState(false);
   const changeAdressModal = useChangeAdressModal();

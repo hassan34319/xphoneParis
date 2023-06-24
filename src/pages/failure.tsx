@@ -7,7 +7,6 @@ type Props = {};
 
 function Failure({}: Props) {
 
-  
   // Example of how to unencrypt blowfish string
   return (
     <div className="flex items-center justify-center h-screen">

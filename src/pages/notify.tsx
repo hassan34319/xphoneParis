@@ -69,7 +69,6 @@ export async function getServerSideProps({
     const res_final: ResponseData = obj_data.parse();
     console.log("pRINTING FROM HERE", res_final);
     const TransID = res_final.TransID
-    console.log(TransID)
     const session = await getServerSession(req, res, authOptions);
   
     // Check if localStorage.hMac matches the hmacQuery
@@ -91,14 +90,11 @@ export async function getServerSideProps({
           },
         };
       }
-      console.log("hmac", hMac)
       const blowfish2 = new BlowfishTranslation(hMac);
       const decryptedData2 = blowfish2.decryptBlowfish();
-      console.log("decrypted", decryptedData2)
       // Parse the decrypted data as JSON
       const cart = JSON.parse(decryptedData2);
   
-      console.log("cart",cart);
       let defaultClient = SibApiV3Sdk.ApiClient.instance;
   
       let apiKey = defaultClient.authentications["api-key"];
@@ -117,7 +113,6 @@ export async function getServerSideProps({
   
       let date = dateObject.toISOString();
   
-      console.log(date);
   
       if (!session?.user?.email) {
         return "User not found";
