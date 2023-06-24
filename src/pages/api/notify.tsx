@@ -33,7 +33,6 @@ interface ResponseData {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(req.query,req.body)
   const { hMac } = req.query;
-  console.log(hMac)
   const { Data } = req.body;
   const blowfish = new BlowfishTranslation(Data);
   const decryptedData = blowfish.decryptBlowfish();
@@ -42,7 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const res_final: ResponseData = obj_data.parse();
   console.log("pRINTING FROM HERE", res_final);
   const TransID = res_final.TransID
-  console.log(TransID)
 //   const session = await getServerSession(req, res, authOptions);
 //   console.log(session?.user)
 
@@ -65,13 +63,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       };
     }
-    console.log("hmac", hMac)
     const blowfish2 = new BlowfishTranslation(hMac);
     const decryptedData2 = blowfish2.decryptBlowfish();
-    console.log("decrypted", decryptedData2)
     // Parse the decrypted data as JSON
     const cart = JSON.parse(decryptedData2);
-    console.log(cart)
     const obj_ = cart.pop()
     console.log(obj_)
     const email = obj_.email
@@ -79,7 +74,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const discountPercentage = obj_.discount
     console.log(email, "New cart", cart)
 
-    console.log("cart",cart);
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
 
     let apiKey = defaultClient.authentications["api-key"];
@@ -194,6 +188,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       },
     });
+    console.log(res_final)
     // Create new items in the database for the cart
 
     console.log("CART UPDATED SUCCESSFULLY");;
