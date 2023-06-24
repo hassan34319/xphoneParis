@@ -57,6 +57,7 @@ model Order {
   userId          String
   total           Float
   discount        Float?
+  promo           String?
   calculated      Float?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   status         String?

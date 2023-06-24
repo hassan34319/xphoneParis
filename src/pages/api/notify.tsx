@@ -78,6 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const email = obj_.email
     const totalPrice = obj_.total
     const discountPercentage = obj_.discount
+    const promoCode = obj_.promo
     console.log(email, "New cart", cart)
 
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
@@ -189,6 +190,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         calculated : calculateTotalPrice(cart),
         total : totalPrice,
         discount : calculateTotalPrice(cart) * discountPercentage/100,
+        promo : promoCode,
         items: {
           create: cart,
         },
@@ -199,5 +201,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log("CART UPDATED SUCCESSFULLY");;
 
-  res.status(200).end();
+    return res.status(200).json({ exists: true });
   }}
