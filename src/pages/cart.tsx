@@ -164,7 +164,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
   };
 
   const applyPromoCode = () => {
-    const promoCode = promoCodes.find((code) => code.code === enteredPromoCode);
+    const promoCode = promoCodes.find((code) => code.code.toLowerCase() === enteredPromoCode.toLowerCase());
 
     if (promoCode) {
       const discountedPrice =

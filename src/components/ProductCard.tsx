@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.variants[0].price * 1.2}&euro;
           </h1>
           <h1 className="font-semibold text-2xl mt-2">
-            {product.variants[0].price}&euro;
+          (Math.round(({product.variants[0].price}+ Number.EPSILON) * 100) / 100)&euro;
           </h1>
         </div>
       </div>
