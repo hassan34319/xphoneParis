@@ -44,6 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (res_final.Status == 'FAILED') {
     console.log("FAILED")
+    console.log(res_final)
     return res.status(200).json({ exists: true });
   }
   const TransID = res_final.TransID
