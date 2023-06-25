@@ -42,11 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const res_final: ResponseData = obj_data.parse();
   console.log("pRINTING FROM HERE", res_final);
 
-  if (res_final.Status == 'FAILED') {
-    console.log("FAILED")
-    console.log(res_final)
-    return res.status(200).json({ exists: true });
-  }
+
   const TransID = res_final.TransID
 //   const session = await getServerSession(req, res, authOptions);
 //   console.log(session?.user)
@@ -80,6 +76,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const totalPrice = obj_.total
     const discountPercentage = obj_.discount
     const promoCode = obj_.promo
+    if (res_final.Status == 'FAILED') {
+      console.log("FAILED")
+      console.log(obj_)
+      return res.status(200).json({ exists: true });
+    }
     console.log(email, "New cart", cart)
 
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
