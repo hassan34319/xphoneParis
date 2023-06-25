@@ -36,7 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <h1 className="text-gray-600">A partir de:</h1>
         <div className="flex flex-row gap-4">
           <h1 className="font-semibold text-2xl mt-2 text-gray-400 line-through">
-            {Math.round((product.variants[0].price+ Number.EPSILON) * 100) / 100}&euro;
+          {Math.round((product.variants[0].price*1.2+ Number.EPSILON) * 100) / 100}&euro;
           </h1>
           <h1 className="font-semibold text-2xl mt-2">
           {Math.round((product.variants[0].price+ Number.EPSILON) * 100) / 100}&euro;
