@@ -46,7 +46,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         process.env.NEXT_PUBLIC_MERCHANT_ID
       }&MsgVer=2.0&TransID=${TransactionId}&Amount=${
         Amount * 100
-      }&Currency=EUR&URLSuccess=https://xphones.fr/success&URLFailure=https://xphones.fr/failure&URLNotify=https://xphones.fr/api/notify?hMac=${hMacKey}&Response=encrypt&MAC=${mac_result}&Language=en`;
+      }&Currency=EUR&URLSuccess=https://xphones.fr/api/success&URLFailure=https://xphones.fr/api/failure&URLNotify=https://xphones.fr/api/notify?hMac=${hMacKey}&Response=encrypt&MAC=${mac_result}&Language=en`;
       console.log(unencrypt);
       const blowfish = new BlowfishTranslation(unencrypt);
       const encrypt_result = blowfish.encryptBlowfish();
