@@ -132,7 +132,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
               <h1 className="text-2xl text-gray-500 line-through">
               {Math.round((price*1.2+ Number.EPSILON) * 100) / 100}&euro;
               </h1>
-              <h1 className="text-2xl font-bold">{Math.round((price+ Number.EPSILON) * 100) / 100}&euro;&euro;</h1>
+              <h1 className="text-2xl font-bold">{Math.round((price+ Number.EPSILON) * 100) / 100}&euro;</h1>
             </div>
           </div>
         </div>
