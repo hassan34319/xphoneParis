@@ -192,7 +192,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         calculated : calculateTotalPrice(cart),
         total : totalPrice,
         discount : calculateTotalPrice(cart) * discountPercentage/100,
-        promo : promoCode,
+        promo : obj_.promo,
         items: {
           create: cart,
         },
