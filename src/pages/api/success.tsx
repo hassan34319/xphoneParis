@@ -9,7 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader("Expires", "0");
 
     // Redirect to the failure URL using a GET request
-    res.writeHead(307, {
+    res.writeHead(302, {
       Location: "https://xphones.fr/success",
     });
     res.end();
@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader("Expires", "0");
 
     // Redirect to the failure URL using a GET request
-    res.writeHead(307, {
+    res.writeHead(302, {
       Location: "https://xphones.fr/success",
     });
     res.end();
