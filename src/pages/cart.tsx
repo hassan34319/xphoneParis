@@ -54,6 +54,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [country, setCountry] = useState("");
   const [promoCodeError, setPromoCodeError] = useState("");
+  const [applied, setApplied] = useState(false)
   const sessionMain = useSession();
   const router = useRouter();
   const calculateTotalPrice = (cart: Item[]) => {
@@ -157,6 +158,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
   const handlePromoCodeChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setApplied(false)
     setEnteredPromoCode(event.target.value);
     setDiscountPercentage(0);
     setTotalPrice(calculatedPrice) // Reset discount percentage
@@ -167,10 +169,14 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
     const promoCode = promoCodes.find((code) => code.code.toLowerCase() === enteredPromoCode.toLowerCase());
 
     if (promoCode) {
+      if (applied) {
+        return
+      }
       const discountedPrice =
         totalPrice - (totalPrice * promoCode.discountPercentage) / 100;
       setDiscountPercentage(promoCode.discountPercentage);
       setTotalPrice(discountedPrice);
+      setApplied(true)
       setPromoCodeError("");
     } else {
       setPromoCodeError("Invalid code"); // Display error message
