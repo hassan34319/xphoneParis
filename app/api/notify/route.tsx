@@ -9,6 +9,7 @@ import { uuid } from "uuidv4";
 import { prisma } from "../client/route";
 import parseGatewayResponse from "../../utils/keyValueParser";
 import { NextResponse } from 'next/server';
+import { sanityClient } from "../../../lib/sanityClient";
 interface ResponseData {
     TransID?: string;
     Status? : string
@@ -81,6 +82,7 @@ interface ResponseData {
         return NextResponse.error();
       }
       console.log(email, "New cart", cart);
+
   
       // let defaultClient = SibApi.ApiClient.instance;
   
@@ -200,6 +202,28 @@ interface ResponseData {
       console.log(res_final);
       // Create new items in the database for the cart
   
+      console.log("CART UPDATED SUCCESSFULLY");
+      const updateProductInventory = async (productId:string, quantity:number) => {
+        // Fetch the current product data from Sanity
+        const product = await sanityClient.getDocument(productId);
+      
+        // Calculate the new inventory quantity
+        const updatedQuantity = product?.inventoryQuantity - quantity;
+      
+        // Update the product with the new inventory quantity
+        await sanityClient
+          .patch(productId)
+          .set({ inventoryQuantity: updatedQuantity })
+          .commit();
+      };
+
+      cart.forEach(async (item : Item) => {
+        const { productId, quantity } = item;
+      
+        // Update the product inventory using the defined function
+        await updateProductInventory(productId, quantity);
+      });
+      
       console.log("CART UPDATED SUCCESSFULLY");
   
       return NextResponse.json({ exists: true });
