@@ -3,7 +3,7 @@ import { prisma } from "../client/route";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-export default async function POST(request: Request) {
+export  async function POST(request: Request) {
   const body = await request.json();
     const { orderId, status } = body
 
