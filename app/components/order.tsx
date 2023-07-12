@@ -67,7 +67,7 @@ const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
       if (!order) return;
 
       // Send the request to the backend API to update the order status
-      const response = await axios.put(`/api/order`, {
+      const response = await axios.post(`/api/order`, {
         orderId: orderId,
         status: order.updatedStatus,
       });
