@@ -1,7 +1,6 @@
 import "dotenv/config";
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 import SibApiV3Sdk from "sib-api-v3-sdk";
-var Brevo = require('@getbrevo/brevo')
 import { ApiClient } from "@getbrevo/brevo";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
