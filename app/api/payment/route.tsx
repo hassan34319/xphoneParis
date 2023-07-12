@@ -68,7 +68,7 @@ export async function POST(request: Request) {
         process.env.NEXT_PUBLIC_MERCHANT_ID
       }&MsgVer=2.0&TransID=${TransactionId}&Amount=${
         Amount! * 100
-      }&Currency=EUR&URLSuccess=http://xphones.fr/api/success&URLFailure=https://xphones.fr/api/failure&URLNotify=https://xphones.fr/api/notify?hMac=${hMacKey}&Response=encrypt&MAC=${mac_result}&Language=en`;
+      }&Currency=EUR&URLSuccess=https://test-xphones.vercel.app/api/success&URLFailure=https://test-xphones.vercel.app/api/failure&URLNotify=https://test-xphones.vercel.app/api/notify?hMac=${hMacKey}&Response=encrypt&MAC=${mac_result}&Language=en`;
       console.log(unencrypt);
       const blowfish = new BlowfishTranslation(unencrypt);
       const encrypt_result = blowfish.encryptBlowfish();
