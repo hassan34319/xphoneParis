@@ -32,203 +32,202 @@ interface ResponseData {
   };
 
   export async function POST(request: Request, { params }: { params: {hMac : string} }) {
-    const body = await request.formData();
-    console.log(params, body);
-    // const { hMac } = params;
-    // const { Data } = body;
-    // const blowfish = new BlowfishTranslation(Data);
-    // const decryptedData = blowfish.decryptBlowfish();
+    const formData  = await request.formData();
+    const { hMac } = params;
+    const Data = formData.get('Data') as string ;
+    const blowfish = new BlowfishTranslation(Data);
+    const decryptedData = blowfish.decryptBlowfish();
   
-    // const obj_data = new ParseResponse(decryptedData);
-    // const res_final: ResponseData = obj_data.parse();
-    // console.log("PRINTING FROM HERE", res_final);
+    const obj_data = new ParseResponse(decryptedData);
+    const res_final: ResponseData = obj_data.parse();
+    console.log("PRINTING FROM HERE", res_final);
   
-    // const TransID = res_final.TransID;
-    // //   const session = await getServerSession(req, res, authOptions);
-    // //   console.log(session?.user)
+    const TransID = res_final.TransID;
+    //   const session = await getServerSession(req, res, authOptions);
+    //   console.log(session?.user)
   
-    // // Check if localStorage.hMac matches the hmacQuery
-    // if (hMac) {
-    //   const TransId = TransID;
+    // Check if localStorage.hMac matches the hmacQuery
+    if (hMac) {
+      const TransId = TransID;
   
-    //   const existingOrder = await prisma.order.findUnique({
-    //     where: {
-    //       id: TransID,
-    //     },
-    //   });
+      const existingOrder = await prisma.order.findUnique({
+        where: {
+          id: TransID,
+        },
+      });
   
-    //   if (existingOrder) {
-    //     // Order already exists in the database, redirect the user to the home page
-    //     return {
-    //       redirect: {
-    //         destination: "/", // Replace with the desired home page URL
-    //         permanent: false, // Set to true if the redirect is permanent
-    //       },
-    //     };
-    //   }
-    //   const blowfish2 = new BlowfishTranslation(hMac);
-    //   const decryptedData2 = blowfish2.decryptBlowfish();
-    //   // Parse the decrypted data as JSON
-    //   const cart = JSON.parse(decryptedData2);
-    //   const obj_ = cart.pop();
-    //   console.log(obj_);
-    //   const email = obj_.email;
-    //   const totalPrice = obj_.total;
-    //   const discountPercentage = obj_.discount;
-    //   const promoCode = obj_.promo;
-    //   if (res_final.Status == "FAILED") {
-    //     console.log("FAILED");
-    //     console.log(obj_);
-    //     return NextResponse.error();
-    //   }
-    //   console.log(email, "New cart", cart);
+      if (existingOrder) {
+        // Order already exists in the database, redirect the user to the home page
+        return {
+          redirect: {
+            destination: "/", // Replace with the desired home page URL
+            permanent: false, // Set to true if the redirect is permanent
+          },
+        };
+      }
+      const blowfish2 = new BlowfishTranslation(hMac);
+      const decryptedData2 = blowfish2.decryptBlowfish();
+      // Parse the decrypted data as JSON
+      const cart = JSON.parse(decryptedData2);
+      const obj_ = cart.pop();
+      console.log(obj_);
+      const email = obj_.email;
+      const totalPrice = obj_.total;
+      const discountPercentage = obj_.discount;
+      const promoCode = obj_.promo;
+      if (res_final.Status == "FAILED") {
+        console.log("FAILED");
+        console.log(obj_);
+        return NextResponse.error();
+      }
+      console.log(email, "New cart", cart);
 
   
-    //   // let defaultClient = SibApi.ApiClient.instance;
+      // let defaultClient = SibApi.ApiClient.instance;
   
-    //   // let apiKey = defaultClient.authentications["api-key"];
-    //   // apiKey.apiKey = process.env.NEXT_PUBLIC_API_KEY;
+      // let apiKey = defaultClient.authentications["api-key"];
+      // apiKey.apiKey = process.env.NEXT_PUBLIC_API_KEY;
   
-    //   // let apiInstance = new SibApi.TransactionalEmailsApi();
-    //   // var sendSmtpEmail = new SibApi.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
+      // let apiInstance = new SibApi.TransactionalEmailsApi();
+      // var sendSmtpEmail = new SibApi.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
   
-    //   const calculateTotalPrice = (cart: Item[]) => {
-    //     return cart.reduce((totalPrice: number, item: Item) => {
-    //       return totalPrice + item.price * item.quantity;
-    //     }, 0);
-    //   };
+      const calculateTotalPrice = (cart: Item[]) => {
+        return cart.reduce((totalPrice: number, item: Item) => {
+          return totalPrice + item.price * item.quantity;
+        }, 0);
+      };
   
-    //   const dateObject = new Date(Date.now());
+      const dateObject = new Date(Date.now());
   
-    //   let date = dateObject.toISOString();
+      let date = dateObject.toISOString();
   
-    //   console.log(date);
-    //   console.log(email);
-    //   // sendSmtpEmail = {
-    //   //   to: [
-    //   //     {
-    //   //       email: email,
-    //   //     },
-    //   //   ],
-    //   //   templateId: 3,
-    //   //   params: {
-    //   //     Total: Math.round(totalPrice),
-    //   //     ORDERID: Date.now().toString(),
-    //   //     ORDERDATE: date,
-    //   //     calculated: calculateTotalPrice(cart),
-    //   //     discount: Math.round((totalPrice * discountPercentage) / 100),
-    //   //     itemName1: cart[0].name,
-    //   //     itemPrice1: cart[0].price * cart[0].quantity,
-    //   //     itemUnitPrice1: cart[0].price,
-    //   //     itemQuantity1: cart[0].quantity,
-    //   //     itemColor1: cart[0].color,
-    //   //     itemCapacity1: cart[0].capacity,
-    //   //     itemImage1: cart[0].image,
-    //   //     itemName2: cart[1]?.name || null,
-    //   //     itemPrice2: cart[1]?.price * cart[1]?.quantity || null,
-    //   //     itemUnitPrice2: cart[1]?.price || null,
-    //   //     itemQuantity2: cart[1]?.quantity || null,
-    //   //     itemColor2: cart[1]?.color || null,
-    //   //     itemCapacity2: cart[1]?.capacity || null,
-    //   //     itemImage2: cart[1]?.image || null,
-    //   //     itemName3: cart[2]?.name || null,
-    //   //     itemPrice3: cart[2]?.price * cart[2]?.quantity || null,
-    //   //     itemUnitPrice3: cart[2]?.price || null,
-    //   //     itemQuantity3: cart[2]?.quantity || null,
-    //   //     itemColor3: cart[2]?.color || null,
-    //   //     itemCapacity3: cart[2]?.capacity || null,
-    //   //     itemImage3: cart[2]?.image || null,
-    //   //     itemName4: cart[3]?.name || null,
-    //   //     itemPrice4: cart[3]?.price * cart[3]?.quantity || null,
-    //   //     itemUnitPrice4: cart[3]?.price || null,
-    //   //     itemQuantity4: cart[3]?.quantity || null,
-    //   //     itemColor4: cart[3]?.color || null,
-    //   //     itemCapacity4: cart[3]?.capacity || null,
-    //   //     itemImage4: cart[3]?.image || null,
-    //   //     itemName5: cart[4]?.name || null,
-    //   //     itemPrice5: cart[4]?.price * cart[4]?.quantity || null,
-    //   //     itemUnitPrice5: cart[5]?.price || null,
-    //   //     itemQuantity5: cart[4]?.quantity || null,
-    //   //     itemColor5: cart[4]?.color || null,
-    //   //     itemCapacity5: cart[5]?.capacity || null,
-    //   //     itemImage5: cart[4]?.image || null,
-    //   //   },
-    //   //   headers: {
-    //   //     "X-Mailin-custom":
-    //   //       "custom_header_1:custom_value_1|custom_header_2:custom_value_2",
-    //   //     "api-key": process.env.NEXT_PUBLIC_API_KEY,
-    //   //     "content-type": "application/json",
-    //   //     accept: "application/json",
-    //   //   },
-    //   // };
+      console.log(date);
+      console.log(email);
+      // sendSmtpEmail = {
+      //   to: [
+      //     {
+      //       email: email,
+      //     },
+      //   ],
+      //   templateId: 3,
+      //   params: {
+      //     Total: Math.round(totalPrice),
+      //     ORDERID: Date.now().toString(),
+      //     ORDERDATE: date,
+      //     calculated: calculateTotalPrice(cart),
+      //     discount: Math.round((totalPrice * discountPercentage) / 100),
+      //     itemName1: cart[0].name,
+      //     itemPrice1: cart[0].price * cart[0].quantity,
+      //     itemUnitPrice1: cart[0].price,
+      //     itemQuantity1: cart[0].quantity,
+      //     itemColor1: cart[0].color,
+      //     itemCapacity1: cart[0].capacity,
+      //     itemImage1: cart[0].image,
+      //     itemName2: cart[1]?.name || null,
+      //     itemPrice2: cart[1]?.price * cart[1]?.quantity || null,
+      //     itemUnitPrice2: cart[1]?.price || null,
+      //     itemQuantity2: cart[1]?.quantity || null,
+      //     itemColor2: cart[1]?.color || null,
+      //     itemCapacity2: cart[1]?.capacity || null,
+      //     itemImage2: cart[1]?.image || null,
+      //     itemName3: cart[2]?.name || null,
+      //     itemPrice3: cart[2]?.price * cart[2]?.quantity || null,
+      //     itemUnitPrice3: cart[2]?.price || null,
+      //     itemQuantity3: cart[2]?.quantity || null,
+      //     itemColor3: cart[2]?.color || null,
+      //     itemCapacity3: cart[2]?.capacity || null,
+      //     itemImage3: cart[2]?.image || null,
+      //     itemName4: cart[3]?.name || null,
+      //     itemPrice4: cart[3]?.price * cart[3]?.quantity || null,
+      //     itemUnitPrice4: cart[3]?.price || null,
+      //     itemQuantity4: cart[3]?.quantity || null,
+      //     itemColor4: cart[3]?.color || null,
+      //     itemCapacity4: cart[3]?.capacity || null,
+      //     itemImage4: cart[3]?.image || null,
+      //     itemName5: cart[4]?.name || null,
+      //     itemPrice5: cart[4]?.price * cart[4]?.quantity || null,
+      //     itemUnitPrice5: cart[5]?.price || null,
+      //     itemQuantity5: cart[4]?.quantity || null,
+      //     itemColor5: cart[4]?.color || null,
+      //     itemCapacity5: cart[5]?.capacity || null,
+      //     itemImage5: cart[4]?.image || null,
+      //   },
+      //   headers: {
+      //     "X-Mailin-custom":
+      //       "custom_header_1:custom_value_1|custom_header_2:custom_value_2",
+      //     "api-key": process.env.NEXT_PUBLIC_API_KEY,
+      //     "content-type": "application/json",
+      //     accept: "application/json",
+      //   },
+      // };
   
-    //   // const res3 = await apiInstance.sendTransacEmail(sendSmtpEmail).then(
-    //   //   function (data: any) {
-    //   //     console.log("API called successfully. Returned data: " + data);
-    //   //   },
-    //   //   function (error: any) {
-    //   //     console.error(error);
-    //   //   }
-    //   // );
-    //   // console.log(res3);
+      // const res3 = await apiInstance.sendTransacEmail(sendSmtpEmail).then(
+      //   function (data: any) {
+      //     console.log("API called successfully. Returned data: " + data);
+      //   },
+      //   function (error: any) {
+      //     console.error(error);
+      //   }
+      // );
+      // console.log(res3);
   
-    //   const user = await prisma.user.findUnique({
-    //     where: {
-    //       email: email,
-    //     },
-    //   });
+      const user = await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      });
   
-    //   if (!user) {
-    //     // Handle the case when the user is not found
-    //     return NextResponse.error();
-    //   }
+      if (!user) {
+        // Handle the case when the user is not found
+        return NextResponse.error();
+      }
   
-    //   const activeUserId = user.id;
+      const activeUserId = user.id;
   
-    //   const createdOrder = await prisma.order.create({
-    //     data: {
-    //       id: TransID!,
-    //       userId: activeUserId,
-    //       status: "Received",
-    //       calculated: calculateTotalPrice(cart),
-    //       total: totalPrice,
-    //       discount: calculateTotalPrice(cart) * discountPercentage / 100,
-    //       promo: obj_.promo,
-    //       items: {
-    //         create: cart,
-    //       },
-    //     },
-    //   });
-    //   console.log(res_final);
-    //   // Create new items in the database for the cart
+      const createdOrder = await prisma.order.create({
+        data: {
+          id: TransID!,
+          userId: activeUserId,
+          status: "Received",
+          calculated: calculateTotalPrice(cart),
+          total: totalPrice,
+          discount: calculateTotalPrice(cart) * discountPercentage / 100,
+          promo: obj_.promo,
+          items: {
+            create: cart,
+          },
+        },
+      });
+      console.log(res_final);
+      // Create new items in the database for the cart
   
-    //   console.log("CART UPDATED SUCCESSFULLY");
-    //   const updateProductInventory = async (productId:string, quantity:number) => {
-    //     // Fetch the current product data from Sanity
-    //     const product = await sanityClient.getDocument(productId);
+      console.log("CART UPDATED SUCCESSFULLY");
+      const updateProductInventory = async (productId:string, quantity:number) => {
+        // Fetch the current product data from Sanity
+        const product = await sanityClient.getDocument(productId);
       
-    //     // Calculate the new inventory quantity
-    //     const updatedQuantity = product?.inventoryQuantity - quantity;
+        // Calculate the new inventory quantity
+        const updatedQuantity = product?.inventoryQuantity - quantity;
       
-    //     // Update the product with the new inventory quantity
-    //     await sanityClient
-    //       .patch(productId)
-    //       .set({ inventoryQuantity: updatedQuantity })
-    //       .commit();
-    //   };
+        // Update the product with the new inventory quantity
+        await sanityClient
+          .patch(productId)
+          .set({ inventoryQuantity: updatedQuantity })
+          .commit();
+      };
 
-    //   cart.forEach(async (item : Item) => {
-    //     const { productId, quantity } = item;
+      cart.forEach(async (item : Item) => {
+        const { productId, quantity } = item;
       
-    //     // Update the product inventory using the defined function
-    //     await updateProductInventory(productId, quantity);
-    //   });
+        // Update the product inventory using the defined function
+        await updateProductInventory(productId, quantity);
+      });
       
-    //   console.log("CART UPDATED SUCCESSFULLY");
+      console.log("CART UPDATED SUCCESSFULLY");
   
-    //   return NextResponse.json({ exists: true });
-    // } else {
-    //   return NextResponse.error();
-    // }
+      return NextResponse.json({ exists: true });
+    } else {
+      return NextResponse.error();
+    }
   }
   
