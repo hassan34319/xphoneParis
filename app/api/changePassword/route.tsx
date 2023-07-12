@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 
 export async function POST(request: NextApiRequest, response: NextApiResponse) {
-  if (request.method === "POST") {
+
     try {
       const { password, confirmPassword, email } = request.body;
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -24,9 +24,6 @@ export async function POST(request: NextApiRequest, response: NextApiResponse) {
     } catch {
       return response.status(500).json({ success: false, error: "Internal Server Error" });
     }
-  }
-
-  return NextResponse.error();
 }
 
-export default POST;
+
