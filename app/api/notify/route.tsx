@@ -33,7 +33,7 @@ interface ResponseData {
 
   export async function POST(request: Request, { params }: { params: {hMac : string} }) {
     const body = await request.json();
-    console.log(params, request.body);
+    console.log(params, body);
     const { hMac } = params;
     const { Data } = body;
     const blowfish = new BlowfishTranslation(Data);
