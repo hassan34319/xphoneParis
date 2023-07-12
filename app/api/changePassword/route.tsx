@@ -5,10 +5,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 
-export async function POST(request: NextApiRequest, response: NextApiResponse) {
+export async function POST(request: Request) {
 
     try {
-      const { password, confirmPassword, email } = request.body;
+      const body = await request.json()
+      const { password, confirmPassword, email } = body;
       const hashedPassword = await bcrypt.hash(password, 12);
 
       const updateUser = await prisma.user.update({
@@ -20,9 +21,9 @@ export async function POST(request: NextApiRequest, response: NextApiResponse) {
         },
       });
 
-      return response.status(200).json(updateUser);
+      return NextResponse.json(updateUser);
     } catch {
-      return response.status(500).json({ success: false, error: "Internal Server Error" });
+      return NextResponse.json({ success: false, error: "Internal Server Error" });
     }
 }
 
