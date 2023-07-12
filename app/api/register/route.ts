@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 import { prisma } from "../client/route";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function POST(request: Request) {
+export async function POST(request: Request) {
   console.log("I entered")
   const body = await request.json();
     try {
