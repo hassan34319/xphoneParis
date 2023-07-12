@@ -3,7 +3,7 @@ import { prisma } from "../client/route";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-export default async function PUT(request: Request) {
+export default async function PATCH(request: Request) {
   const body = await request.json();
     const { orderId, status } = body
 
