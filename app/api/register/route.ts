@@ -52,14 +52,14 @@ export default async function POST(request: Request) {
         },
       });
 
-      let defaultClient = ApiClient.instance;
-      console.log("I passed check 1")
+      let defaultClient = SibApiV3Sdk.ApiClient.instance;
+
       let apiKey = defaultClient.authentications["api-key"];
       apiKey.apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
-      let apiInstance = new Brevo.ContactsApi();
+      let apiInstance = new SibApiV3Sdk.ContactsApi();
 
-      let createContact = new Brevo.CreateContact();
+      let createContact = new SibApiV3Sdk.CreateContact();
       console.log(email)
       createContact.email = email ;
       createContact.attributes = {
@@ -89,8 +89,8 @@ export default async function POST(request: Request) {
       // Uncomment below two lines to configure authorization using: partner-key
       // var partnerKey = defaultClient.authentications['partner-key'];
       // partnerKey.apiKey = 'YOUR API KEY';
-      apiInstance = new Brevo.TransactionalEmailsApi();
-      var sendSmtpEmail = new Brevo.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
+      apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+      var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
 
       sendSmtpEmail = {
         to: [
