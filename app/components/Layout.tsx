@@ -2,7 +2,6 @@
 import { useEffect, ReactNode, useState } from "react";
 import { StateContext, useStateContext } from "../context/stateContext";
 import { v4 as uuidv4 } from "uuid";
-import { fetchCart } from "../utils/fetchCart";
 import BlowfishTranslation from "../utils/blowfishTranslation";
 import MacGeneration from "../utils/hmacGeneration";
 
