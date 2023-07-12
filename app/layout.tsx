@@ -12,7 +12,7 @@ import RegisterModal from "./components/RegisterModal";
 import ToasterProvider from "./components/ToasterProvider";
 import getCurrentUser from "./utils/getUser";
 import "./globals.css";
-import { NextAuthProvider } from "./providers/page";
+import { NextAuthProvider } from "./components/provider";
 
 export default async function RootLayout({
   // Layouts must accept a children prop.
