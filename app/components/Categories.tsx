@@ -55,7 +55,7 @@ export const categories: Category[] = [
 const Categories: React.FC = () => {
   return (
     <div className="w-11/12 mx-auto rounded-xl my-8">
-      <div className="grid grid-cols-4 rounded-xl gap-4">
+      <div className="grid grid-cols-2 rounded-xl gap-4">
         {categories.map((category) => {
           return (
             <Link
