@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -52,10 +53,13 @@ export const categories: Category[] = [
   },
 ];
 
-const Categories: React.FC = () => {
+// ...
+type Props = {};
+
+function Categories({}: Props) {
   return (
     <div className="w-11/12 mx-auto rounded-xl my-8">
-      <div className="grid grid-cols-2 rounded-xl gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 rounded-xl gap-4">
         {categories.map((category) => {
           return (
             <Link
@@ -66,7 +70,7 @@ const Categories: React.FC = () => {
               }}
             >
               <div
-                className="bg-white rounded-xl p-4 col-span-4 md:col-span-2 shadow-xl hover:shadow-2xl  cursor-pointer"
+                className="bg-white rounded-xl p-4 md:col-start-1 md:col-end-3 col-start-1 col-end-3 md:col-span-2 shadow-xl hover:shadow-2xl cursor-pointer"
                 key={category.title}
               >
                 <img
@@ -83,6 +87,6 @@ const Categories: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Categories;

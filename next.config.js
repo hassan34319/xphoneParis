@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
 
   images: {
-    domains: ["cdn.sanity.io", "fiverr-res.cloudinary.com"],
+    domains: ["cdn.sanity.io", "fiverr-res.cloudinary.com","www.backmarket.be","m.media-amazon.com","www.pngall.com","www.rueducommerce.fr"],
   },
   redirects() {
     return [

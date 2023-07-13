@@ -2,13 +2,13 @@ import BlowfishTranslation from '../../utils/blowfishTranslation';
 import "dotenv/config";
 import ParseResponse from "../../utils/keyValueParser";
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
-import SibApi from "sib-api-v3-sdk";
+import * as SibApiV3Sdk from '@sendinblue/client'
 import { getServerSession } from "next-auth/next";
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 import { uuid } from "uuidv4";
 import { prisma } from "../client/route";
 import parseGatewayResponse from "../../utils/keyValueParser";
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { sanityClient } from "../../../lib/sanityClient";
 interface ResponseData {
     TransID?: string;
@@ -31,9 +31,9 @@ interface ResponseData {
     decodedHmac: String;
   };
 
-  export async function POST(request: Request, { params }: { params: {hMac : string} }) {
+  export async function POST(request: NextRequest) {
     const formData  = await request.formData();
-    const { hMac } = params;
+    const  hMac  = request.nextUrl.searchParams.get("hMac");
     const Data = formData.get('Data') as string ;
     const blowfish = new BlowfishTranslation(Data);
     const decryptedData = blowfish.decryptBlowfish();
@@ -83,13 +83,13 @@ interface ResponseData {
       console.log(email, "New cart", cart);
 
   
-      // let defaultClient = SibApi.ApiClient.instance;
+      // let defaultClient = SibApiV3Sdk.ApiClient.instance;
   
       // let apiKey = defaultClient.authentications["api-key"];
       // apiKey.apiKey = process.env.NEXT_PUBLIC_API_KEY;
   
-      // let apiInstance = new SibApi.TransactionalEmailsApi();
-      // var sendSmtpEmail = new SibApi.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
+      let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+      var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
   
       const calculateTotalPrice = (cart: Item[]) => {
         return cart.reduce((totalPrice: number, item: Item) => {
@@ -103,73 +103,73 @@ interface ResponseData {
   
       console.log(date);
       console.log(email);
-      // sendSmtpEmail = {
-      //   to: [
-      //     {
-      //       email: email,
-      //     },
-      //   ],
-      //   templateId: 3,
-      //   params: {
-      //     Total: Math.round(totalPrice),
-      //     ORDERID: Date.now().toString(),
-      //     ORDERDATE: date,
-      //     calculated: calculateTotalPrice(cart),
-      //     discount: Math.round((totalPrice * discountPercentage) / 100),
-      //     itemName1: cart[0].name,
-      //     itemPrice1: cart[0].price * cart[0].quantity,
-      //     itemUnitPrice1: cart[0].price,
-      //     itemQuantity1: cart[0].quantity,
-      //     itemColor1: cart[0].color,
-      //     itemCapacity1: cart[0].capacity,
-      //     itemImage1: cart[0].image,
-      //     itemName2: cart[1]?.name || null,
-      //     itemPrice2: cart[1]?.price * cart[1]?.quantity || null,
-      //     itemUnitPrice2: cart[1]?.price || null,
-      //     itemQuantity2: cart[1]?.quantity || null,
-      //     itemColor2: cart[1]?.color || null,
-      //     itemCapacity2: cart[1]?.capacity || null,
-      //     itemImage2: cart[1]?.image || null,
-      //     itemName3: cart[2]?.name || null,
-      //     itemPrice3: cart[2]?.price * cart[2]?.quantity || null,
-      //     itemUnitPrice3: cart[2]?.price || null,
-      //     itemQuantity3: cart[2]?.quantity || null,
-      //     itemColor3: cart[2]?.color || null,
-      //     itemCapacity3: cart[2]?.capacity || null,
-      //     itemImage3: cart[2]?.image || null,
-      //     itemName4: cart[3]?.name || null,
-      //     itemPrice4: cart[3]?.price * cart[3]?.quantity || null,
-      //     itemUnitPrice4: cart[3]?.price || null,
-      //     itemQuantity4: cart[3]?.quantity || null,
-      //     itemColor4: cart[3]?.color || null,
-      //     itemCapacity4: cart[3]?.capacity || null,
-      //     itemImage4: cart[3]?.image || null,
-      //     itemName5: cart[4]?.name || null,
-      //     itemPrice5: cart[4]?.price * cart[4]?.quantity || null,
-      //     itemUnitPrice5: cart[5]?.price || null,
-      //     itemQuantity5: cart[4]?.quantity || null,
-      //     itemColor5: cart[4]?.color || null,
-      //     itemCapacity5: cart[5]?.capacity || null,
-      //     itemImage5: cart[4]?.image || null,
-      //   },
-      //   headers: {
-      //     "X-Mailin-custom":
-      //       "custom_header_1:custom_value_1|custom_header_2:custom_value_2",
-      //     "api-key": process.env.NEXT_PUBLIC_API_KEY,
-      //     "content-type": "application/json",
-      //     accept: "application/json",
-      //   },
-      // };
+      sendSmtpEmail = {
+        to: [
+          {
+            email: email,
+          },
+        ],
+        templateId: 3,
+        params: {
+          Total: Math.round(totalPrice),
+          ORDERID: Date.now().toString(),
+          ORDERDATE: date,
+          calculated: calculateTotalPrice(cart),
+          discount: Math.round((totalPrice * discountPercentage) / 100),
+          itemName1: cart[0].name,
+          itemPrice1: cart[0].price * cart[0].quantity,
+          itemUnitPrice1: cart[0].price,
+          itemQuantity1: cart[0].quantity,
+          itemColor1: cart[0].color,
+          itemCapacity1: cart[0].capacity,
+          itemImage1: cart[0].image,
+          itemName2: cart[1]?.name || null,
+          itemPrice2: cart[1]?.price * cart[1]?.quantity || null,
+          itemUnitPrice2: cart[1]?.price || null,
+          itemQuantity2: cart[1]?.quantity || null,
+          itemColor2: cart[1]?.color || null,
+          itemCapacity2: cart[1]?.capacity || null,
+          itemImage2: cart[1]?.image || null,
+          itemName3: cart[2]?.name || null,
+          itemPrice3: cart[2]?.price * cart[2]?.quantity || null,
+          itemUnitPrice3: cart[2]?.price || null,
+          itemQuantity3: cart[2]?.quantity || null,
+          itemColor3: cart[2]?.color || null,
+          itemCapacity3: cart[2]?.capacity || null,
+          itemImage3: cart[2]?.image || null,
+          itemName4: cart[3]?.name || null,
+          itemPrice4: cart[3]?.price * cart[3]?.quantity || null,
+          itemUnitPrice4: cart[3]?.price || null,
+          itemQuantity4: cart[3]?.quantity || null,
+          itemColor4: cart[3]?.color || null,
+          itemCapacity4: cart[3]?.capacity || null,
+          itemImage4: cart[3]?.image || null,
+          itemName5: cart[4]?.name || null,
+          itemPrice5: cart[4]?.price * cart[4]?.quantity || null,
+          itemUnitPrice5: cart[5]?.price || null,
+          itemQuantity5: cart[4]?.quantity || null,
+          itemColor5: cart[4]?.color || null,
+          itemCapacity5: cart[5]?.capacity || null,
+          itemImage5: cart[4]?.image || null,
+        },
+        headers: {
+          "X-Mailin-custom":
+            "custom_header_1:custom_value_1|custom_header_2:custom_value_2",
+          "api-key": process.env.NEXT_PUBLIC_API_KEY,
+          "content-type": "application/json",
+          accept: "application/json",
+        },
+      };
   
-      // const res3 = await apiInstance.sendTransacEmail(sendSmtpEmail).then(
-      //   function (data: any) {
-      //     console.log("API called successfully. Returned data: " + data);
-      //   },
-      //   function (error: any) {
-      //     console.error(error);
-      //   }
-      // );
-      // console.log(res3);
+      const res3 = await apiInstance.sendTransacEmail(sendSmtpEmail).then(
+        function (data: any) {
+          console.log("API called successfully. Returned data: " + data);
+        },
+        function (error: any) {
+          console.error(error);
+        }
+      );
+      console.log(res3);
   
       const user = await prisma.user.findUnique({
         where: {
