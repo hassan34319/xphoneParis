@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       // apiKey.apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
       let apiInstance = new SibApiV3Sdk.ContactsApi();
-
+      apiInstance.setApiKey(SibApiV3Sdk.ContactsApiApiKeys.apiKey, process.env.NEXT_PUBLIC_API_KEY as string)
       let createContact = new SibApiV3Sdk.CreateContact();
       console.log(email)
       createContact.email = email ;
@@ -91,6 +91,7 @@ export async function POST(request: Request) {
       // var partnerKey = defaultClient.authentications['partner-key'];
       // partnerKey.apiKey = 'YOUR API KEY';
       var apiInstance2 = new SibApiV3Sdk.TransactionalEmailsApi();
+      apiInstance2.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, process.env.NEXT_PUBLIC_API_KEY as string)
       var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
 
       sendSmtpEmail = {
