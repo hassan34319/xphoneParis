@@ -10,6 +10,7 @@ import { prisma } from "../client/route";
 import parseGatewayResponse from "../../utils/keyValueParser";
 import { NextRequest, NextResponse } from 'next/server';
 import { sanityClient } from "../../../lib/sanityClient";
+import { variant } from '../../utils/types';
 interface ResponseData {
     TransID?: string;
     Status? : string
@@ -202,25 +203,38 @@ interface ResponseData {
       // Create new items in the database for the cart
   
       console.log("CART UPDATED SUCCESSFULLY");
-      const updateProductInventory = async (productId:string, quantity:number) => {
+      const updateProductInventory = async (productId : string, color : string, grade : string , capacity : number, quantity : number) => {
         // Fetch the current product data from Sanity
         const product = await sanityClient.getDocument(productId);
       
-        // Calculate the new inventory quantity
-        const updatedQuantity = product?.inventoryQuantity - quantity;
+        // Find the variant with matching color, grade, and capacity
+        const variantIndex = product?.variants.findIndex(
+          (variant : variant) =>
+            variant.color === color &&
+            variant.grade === grade &&
+            variant.capacity === capacity
+        );
       
-        // Update the product with the new inventory quantity
+        if (variantIndex === -1) {
+          throw new Error("Variant not found");
+        }
+      
+        // Create a new array with the updated quantity
+        const updatedVariants = [...product?.variants];
+        updatedVariants[variantIndex].quantity -= quantity;
+      
+        // Update the product with the updated variants array
         await sanityClient
           .patch(productId)
-          .set({ inventoryQuantity: updatedQuantity })
+          .set({ variants: updatedVariants })
           .commit();
       };
-
+      
       cart.forEach(async (item : Item) => {
-        const { productId, quantity } = item;
+        const { productId, color, grade, capacity, quantity } = item;
       
         // Update the product inventory using the defined function
-        await updateProductInventory(productId, quantity);
+        await updateProductInventory(productId, color, grade, capacity, quantity);
       });
       
       console.log("CART UPDATED SUCCESSFULLY");
