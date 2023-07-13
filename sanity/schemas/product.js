@@ -79,11 +79,6 @@ export default {
       type: "number",
     },
     {
-      name: "inventoryQuantity",
-      title: "Inventory Quantity",
-      type: "number",
-    },
-    {
       name: "review",
       title: "Review",
       type: "array",
