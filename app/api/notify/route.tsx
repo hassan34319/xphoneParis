@@ -85,10 +85,10 @@ interface ResponseData {
   
       // let defaultClient = SibApiV3Sdk.ApiClient.instance;
   
-      // let apiKey = defaultClient.authentications["api-key"];
-      // apiKey.apiKey = process.env.NEXT_PUBLIC_API_KEY;
+
   
       let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+      apiInstance.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, 'YOUR API KEY')
       var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // SendSmtpEmail | Values to send a transactional email
   
       const calculateTotalPrice = (cart: Item[]) => {
