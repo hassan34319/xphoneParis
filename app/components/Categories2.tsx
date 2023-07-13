@@ -4,12 +4,15 @@ import { sanityClient } from "../../lib/sanityClient";
 import { product } from "../utils/types";
 import ProductCard from "./ProductCard";
 
-const Categories2: React.FC = () => {
+type Props = {
+  phones : product[]
+  televisions : product[]
+  computers : product[]
+  tablets : product[]
+}
+
+const Categories2: React.FC<Props> = ({ phones,televisions,computers,tablets }) =>  {
   const [loading, setLoading] = useState(false);
-  const [phones, setPhones] = useState<product[]>([]);
-  const [televisions, setTelevisions] = useState<product[]>([]);
-  const [tablets, setTablets] = useState<product[]>([]);
-  const [computers, setComputers] = useState<product[]>([]);
   type category = {
     name: string;
     products: product[];
@@ -21,34 +24,34 @@ const Categories2: React.FC = () => {
     { name: "Télévisions", products: televisions },
   ];
 
-  useEffect(() => {
-    const getProducts = async () => {
-      setLoading(true);
-      try {
-        const phonesQuery = '*[_type == "product" && category == "smartphone"]';
-        const televisionsQuery =
-          '*[_type == "product" && category == "television"]';
-        const tabletsQuery = '*[_type == "product" && category == "tablet"]';
-        const computersQuery =
-          '*[_type == "product" && category == "computer"]';
-        const phones: product[] = await sanityClient.fetch(phonesQuery);
-        const televisions: product[] = await sanityClient.fetch(
-          televisionsQuery
-        );
-        const tablets: product[] = await sanityClient.fetch(tabletsQuery);
-        const computers: product[] = await sanityClient.fetch(computersQuery);
-        setPhones(phones);
-        setTelevisions(televisions);
-        setTablets(tablets);
-        setComputers(computers);
-        setLoading(false);
-      } catch (error: any) {
-        console.error(error);
-        setLoading(false);
-      }
-    };
-    getProducts();
-  }, []);
+  // useEffect(() => {
+  //   const getProducts = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const phonesQuery = '*[_type == "product" && category == "smartphone"]';
+  //       const televisionsQuery =
+  //         '*[_type == "product" && category == "television"]';
+  //       const tabletsQuery = '*[_type == "product" && category == "tablet"]';
+  //       const computersQuery =
+  //         '*[_type == "product" && category == "computer"]';
+  //       const phones: product[] = await sanityClient.fetch(phonesQuery);
+  //       const televisions: product[] = await sanityClient.fetch(
+  //         televisionsQuery
+  //       );
+  //       const tablets: product[] = await sanityClient.fetch(tabletsQuery);
+  //       const computers: product[] = await sanityClient.fetch(computersQuery);
+  //       setPhones(phones);
+  //       setTelevisions(televisions);
+  //       setTablets(tablets);
+  //       setComputers(computers);
+  //       setLoading(false);
+  //     } catch (error: any) {
+  //       console.error(error);
+  //       setLoading(false);
+  //     }
+  //   };
+  //   getProducts();
+  // }, []);
 
   if (loading) return <h1>Loading...</h1>;
   return (
