@@ -12,12 +12,12 @@ interface Variant {
   capacity: number;
   color: string;
   quantity: number;
-  productId : string
-  productName : string
+  productId: string;
+  productName: string;
 }
-type Props = {
 
-}
+type Props = {};
+
 async function InventoryPage({}: Props) {
   const query = `*[_type == "product"]{
     _id,
@@ -39,38 +39,41 @@ async function InventoryPage({}: Props) {
       productName: product.name,
     }))
   );
- 
 
   return (
-    <div>
-      <h1>Inventory</h1>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-4">Inventory</h1>
 
-      <table>
+      <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
-            <th>Product ID</th>
-            <th>Product Name</th>
-            <th>Variant Grade</th>
-            <th>Variant Capacity</th>
-            <th>Variant Color</th>
-            <th>Variant Quantity</th>
+            <th className="py-2">Product ID</th>
+            <th className="py-2">Product Name</th>
+            <th className="py-2">Variant Grade</th>
+            <th className="py-2">Variant Capacity</th>
+            <th className="py-2">Variant Color</th>
+            <th className="py-2">Variant Quantity</th>
           </tr>
         </thead>
         <tbody>
-          {variants.map((variant : Variant) => (
-            <tr key={`${variant.productId}-${variant.grade}-${variant.capacity}-${variant.color}`}>
-              <td>{variant.productId}</td>
-              <td>{variant.productName}</td>
-              <td>{variant.grade}</td>
-              <td>{variant.capacity}</td>
-              <td>{variant.color}</td>
-              <td>{variant.quantity}</td>
+          {variants.map((variant: Variant) => (
+            <tr
+              key={`${variant.productId}-${variant.grade}-${variant.capacity}-${variant.color}`}
+              className="hover:bg-gray-50"
+            >
+              <td className="py-3">{variant.productId}</td>
+              <td className="py-3">{variant.productName}</td>
+              <td className="py-3">{variant.grade}</td>
+              <td className="py-3">{variant.capacity}</td>
+              <td className="py-3">{variant.color}</td>
+              <td className="py-3">{variant.quantity}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-};
+}
 
 export default InventoryPage;
+

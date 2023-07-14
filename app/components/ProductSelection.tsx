@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import SelectionButton from "./SelectionButton";
 import { urlFor } from "../../lib/sanityClient";
@@ -14,7 +14,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   product,
   setImage,
 }) => {
-  const { addToCart } = useStateContext();
+  const { addToCart,cartItems } = useStateContext();
   const [productImage, setProductImage] = useState(
     urlFor(product.variants[0].image).url()
   );
@@ -32,6 +32,31 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
         selectedGrade == variant.grade
     )
     .map((variant: any) => variant.price)[0];
+
+  const Availquantity = product.variants
+    .filter(
+      (variant: any) =>
+        selectedColor == variant.color &&
+        selectedCapacity == variant.capacity &&
+        selectedGrade == variant.grade
+    )
+    .map((variant: any) => variant.quantity)[0];
+
+  console.log(Availquantity);
+
+  const cartQuantity = cartItems.reduce((quantity: number, item: any) => {
+    if (
+      item.productId === product._id &&
+      item.color === selectedColor &&
+      item.capacity === selectedCapacity &&
+      item.grade === selectedGrade
+    ) {
+      return quantity + item.quantity;
+    }
+    return quantity;
+  }, 0);
+
+  const quantity = Availquantity - cartQuantity
 
   const uniqueColors = [
     ...new Set(product.variants.map((variant: any) => variant.color)),
@@ -113,7 +138,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
       productId: product._id,
       color: selectedColor,
       capacity: selectedCapacity,
-      grade: selectedGrade, 
+      grade: selectedGrade,
       price,
       quantity: 1,
     };
@@ -123,98 +148,113 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
 
   return (
     <ClientOnly>
-    <div className="mt-8">
-      <div className="flex flex-col">
-        <div className="flex flex-row justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">{product.name}</h1>
-            <h1 className="text-gray-500">{product.desc}</h1>
-          </div>
-          <div className="text-right">
-            <div className="flex flex-col lg:flex-row justify-end lg:gap-4">
-              <h1 className="text-2xl text-gray-500 line-through">
-              {Math.round((price*1.2+ Number.EPSILON) * 100) / 100}&euro;
-              </h1>
-              <h1 className="text-2xl font-bold">{Math.round((price+ Number.EPSILON) * 100) / 100}&euro;</h1>
+      <div className="mt-8">
+        <div className="flex flex-col">
+          <div className="flex flex-row justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">{product.name}</h1>
+              <h1 className="text-gray-500">{product.desc}</h1>
+            </div>
+            <div className="text-right">
+              <div className="flex flex-col lg:flex-row justify-end lg:gap-4">
+                <h1 className="text-2xl text-gray-500 line-through">
+                  {Math.round((price * 1.2 + Number.EPSILON) * 100) / 100}&euro;
+                </h1>
+                <h1 className="text-2xl font-bold">
+                  {Math.round((price + Number.EPSILON) * 100) / 100}&euro;
+                </h1>
+              </div>
+              {quantity <= 0 ? (
+                <h1 className="text-red-500 mt-2">
+                  {quantity <= 0 ? "Out of Stock" : ""}
+                </h1>
+              ) : (
+                <h1 className=" mt-2">
+                  Quantité maximale disponible : {quantity}
+                </h1>
+              )}
             </div>
           </div>
+          <button
+            className={`mt-2 bg-black text-white px-8 py-2 rounded text-xl shadow-xl hover:shadow-2xl lg:w-1/3 lg:self-end ${
+              quantity <= 0 && "bg-gray-400 cursor-not-allowed"
+            }`}
+            onClick={buyHandler}
+            disabled={quantity <= 0}
+          >
+            Ajouter au panier
+          </button>
         </div>
-        <button
-          className="mt-2 bg-black text-white px-8 py-2 rounded text-xl shadow-xl hover:shadow-2xl lg:w-1/3 lg:self-end"
-          onClick={buyHandler}
-        >
-          Ajouter au panier
-        </button>
+
+        <div>
+          <h1 className="lg:text-xl mt-10 mb-2">Condition</h1>
+          <div className="flex flex-row gap-4 mb-12">
+            {uniqueGradesAndPrices.map((gradeAndPrice: any) => {
+              return (
+                <SelectionButton
+                  key={gradeAndPrice[0]}
+                  selected={selectedGrade == gradeAndPrice[0]}
+                >
+                  <input
+                    type={"radio"}
+                    name="grade"
+                    value={gradeAndPrice[0]}
+                    checked={selectedGrade == gradeAndPrice[0]}
+                    onChange={(e) => setSelectedGrade(e.target.value)}
+                    className="hidden"
+                  />
+                  <h1>{gradeAndPrice[0]}</h1>
+                  <h1 className="mt-auto">{gradeAndPrice[1]} &euro;</h1>
+                </SelectionButton>
+              );
+            })}
+          </div>
+
+          <h1 className="lg:text-xl my-2">Stockage</h1>
+          <div className="flex flex-row gap-4 mb-12">
+            {uniqueCapacities.map((capacity: any) => {
+              return (
+                <SelectionButton
+                  key={capacity}
+                  selected={selectedCapacity == capacity}
+                >
+                  <input
+                    type={"radio"}
+                    name="capacity"
+                    value={capacity}
+                    checked={selectedCapacity == capacity}
+                    onChange={(e) =>
+                      capacityChangeHandler(parseInt(e.target.value))
+                    }
+                    className="hidden"
+                  />
+                  {capacity} Go
+                </SelectionButton>
+              );
+            })}
+          </div>
+
+          <h1 className="lg:text-xl my-2">Couleur</h1>
+          <div className="flex flex-row gap-4">
+            {uniqueColors.map((color: any) => {
+              return (
+                <SelectionButton key={color} selected={selectedColor == color}>
+                  <input
+                    type={"radio"}
+                    name="color"
+                    value={color}
+                    checked={selectedColor == color}
+                    onChange={(e) => colorChangeHandler(e.target.value)}
+                    className="hidden"
+                  />
+                  {String(color).charAt(0).toUpperCase() +
+                    String(color).slice(1)}
+                </SelectionButton>
+              );
+            })}
+          </div>
+        </div>
       </div>
-
-      <div>
-        <h1 className="lg:text-xl mt-10 mb-2">Condition</h1>
-        <div className="flex flex-row gap-4 mb-12">
-          {uniqueGradesAndPrices.map((gradeAndPrice: any) => {
-            return (
-              <SelectionButton
-                key={gradeAndPrice[0]}
-                selected={selectedGrade == gradeAndPrice[0]}
-              >
-                <input
-                  type={"radio"}
-                  name="grade"
-                  value={gradeAndPrice[0]}
-                  checked={selectedGrade == gradeAndPrice[0]}
-                  onChange={(e) => setSelectedGrade(e.target.value)}
-                  className="hidden"
-                />
-                <h1>{gradeAndPrice[0]}</h1>
-                <h1 className="mt-auto">{gradeAndPrice[1]} &euro;</h1>
-              </SelectionButton>
-            );
-          })}
-        </div>
-
-        <h1 className="lg:text-xl my-2">Stockage</h1>
-        <div className="flex flex-row gap-4 mb-12">
-          {uniqueCapacities.map((capacity: any) => {
-            return (
-              <SelectionButton
-                key={capacity}
-                selected={selectedCapacity == capacity}
-              >
-                <input
-                  type={"radio"}
-                  name="capacity"
-                  value={capacity}
-                  checked={selectedCapacity == capacity}
-                  onChange={(e) =>
-                    capacityChangeHandler(parseInt(e.target.value))
-                  }
-                  className="hidden"
-                />
-                {capacity} Go
-              </SelectionButton>
-            );
-          })}
-        </div>
-
-        <h1 className="lg:text-xl my-2">Couleur</h1>
-        <div className="flex flex-row gap-4">
-          {uniqueColors.map((color: any) => {
-            return (
-              <SelectionButton key={color} selected={selectedColor == color}>
-                <input
-                  type={"radio"}
-                  name="color"
-                  value={color}
-                  checked={selectedColor == color}
-                  onChange={(e) => colorChangeHandler(e.target.value)}
-                  className="hidden"
-                />
-                {String(color).charAt(0).toUpperCase() + String(color).slice(1)}
-              </SelectionButton>
-            );
-          })}
-        </div>
-      </div>
-    </div>
     </ClientOnly>
   );
 };

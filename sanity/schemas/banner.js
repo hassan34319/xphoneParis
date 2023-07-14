@@ -4,29 +4,19 @@ export default {
     type: "document",
     fields: [
       {
-        name: "title",
-        title: "Title",
-        type: "string",
+        name: "desktopBanner",
+        title: "Desktop Banner",
+        type: "image",
       },
       {
-        name: "description",
-        title: "Description",
-        type: "text",
-      },
-      {
-        name: "image",
-        title: "Image",
+        name: "mobileBanner",
+        title: "Mobile Banner",
         type: "image",
       },
       {
         name: "link",
         title: "Link",
         type: "url",
-      },
-      {
-        name: "button",
-        title: "Button",
-        type: "string",
       },
     ],
   };

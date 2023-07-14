@@ -24,24 +24,25 @@ export default async function RootLayout({
   const currentUser = await getCurrentUser();
   return (
     <html lang="en">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <body>
         <StateContext>
-        <NextAuthProvider>
-          <ClientOnly>
-            <ToasterProvider />
-            <ChangePasswordModal currentUser={currentUser} />
-            <ChangeAdressModal currentUser={currentUser} />
-            <LoginModal currentUser={currentUser} />
-            <RegisterModal currentUser={currentUser} />
-            <Navbar currentUser={currentUser} />
-          </ClientOnly>
-          <div
-            className="flex flex-col h-screen justify-between"
-            id="outer-container"
-          >
-            <div className="mt-6 relative mb-auto">{children}</div>
-          </div>
-        </NextAuthProvider>
+          <NextAuthProvider>
+            <ClientOnly>
+              <ToasterProvider />
+              <ChangePasswordModal currentUser={currentUser} />
+              <ChangeAdressModal currentUser={currentUser} />
+              <LoginModal currentUser={currentUser} />
+              <RegisterModal currentUser={currentUser} />
+              <Navbar currentUser={currentUser} />
+            </ClientOnly>
+            <div
+              className="flex flex-col h-screen justify-between"
+              id="outer-container"
+            >
+              <div className="relative mb-auto">{children}</div>
+            </div>
+          </NextAuthProvider>
         </StateContext>
       </body>
     </html>

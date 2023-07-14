@@ -14,13 +14,16 @@ async function Home({}: Props) {
   const televisionsQuery = '*[_type == "product" && category == "television"]';
   const tabletsQuery = '*[_type == "product" && category == "tablet"]';
   const computersQuery = '*[_type == "product" && category == "computer"]';
+  const bannerQuery = `*[_type == "banner"]`;
+  const banners = await sanityClient.fetch(bannerQuery);
+  console.log(banners)
   const phones: product[] = await sanityClient.fetch(phonesQuery);
   const televisions: product[] = await sanityClient.fetch(televisionsQuery);
   const tablets: product[] = await sanityClient.fetch(tabletsQuery);
   const computers: product[] = await sanityClient.fetch(computersQuery);
   return (
     <div>
-      <Carousel />
+      <Carousel Banners={banners} />
       <h1 className="text-xl md:text-3xl text-center my-4">
         « La meilleure boutique d&apos;électronique de Paris, rien de plus, rien
         de moins... »

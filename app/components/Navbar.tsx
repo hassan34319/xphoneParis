@@ -33,7 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
   return (
     // fixed top-0 left-0 w-full z-10
     <ClientOnly>
-      <nav className="bg-white shadow-lg mb-5 border-b-black border-2 md:border-0 mx-auto ">
+      <nav className="bg-white shadow-lg  border-b-black border-2 md:border-0 mx-auto ">
         <div>
           <div className="flex flex-col lg:flex-row justify-between items-center">
             <div className="flex flex-row lg:mt-0 mt-4 order-1 justify-center w-full md:space-x-8 items-center flex-1">
