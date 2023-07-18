@@ -36,7 +36,7 @@ interface NavbarProps {
   subcategories_categories?: BrandData
   categories_brands?: BrandData
   subcategories_brands?: BrandData
-  products : BrandData
+  products : {[key: string]: {name:string, id:string}[]};
 }
 
 const Navbar: React.FC<NavbarProps> = ({ currentUser,categories,brands,subcategories,brands_categories,subcategories_categories,categories_brands,subcategories_brands,products }) => {
