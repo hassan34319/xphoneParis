@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BsTrash } from "react-icons/bs";
 import { useStateContext } from "../context/stateContext";
 
@@ -39,15 +40,17 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
 
   return (
     <div className=" bg-white rounded p-4 flex flex-row gap-8 mb-4 items-center justify-center">
-      <div className="">
+      <Link href={`/products/${item.productId}`}>
         <img
           alt="product image in cart"
           src={item.image}
           className="w-52 object-contain"
         />
-      </div>
+      </Link>
       <div className="flex-1">
-        <h1 className="text-2xl font-semibold">{item.name}</h1>
+        <Link href={`/products/${item.productId}`} className="cursor-pointer hover:underline">
+          <h1 className="text-2xl font-semibold">{item.name}</h1>
+        </Link>
         <h1>
           {item.name} - {item.capacity}gb - {item.color}
         </h1>
@@ -62,11 +65,17 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
           </button>
           <h1 className="text-xl">{item.quantity}</h1>
           <button
-            className="text-xl border border-black rounded px-2"
+            className={`text-xl border border-black rounded px-2 ${
+              item.quantity >= item.maxQuantity ? "bg-gray-300" : ""
+            }`}
             onClick={addToCartHandler}
+            disabled={item.quantity >= item.maxQuantity}
           >
             +
           </button>
+          {item.quantity >= item.maxQuantity && (
+            <p className="text-sm text-red-500">Stock épuisé</p>
+          )}
         </div>
       </div>
     </div>

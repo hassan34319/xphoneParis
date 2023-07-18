@@ -124,7 +124,32 @@ export async function POST(request: Request) {
       );
       console.log(res3)
       if (!user) {
-        return NextResponse.json("No user Registered");
+        let apiInstance = new SibApiV3Sdk.ContactsApi();
+      apiInstance.setApiKey(SibApiV3Sdk.ContactsApiApiKeys.apiKey, process.env.NEXT_PUBLIC_API_KEY as string)
+      let createContact = new SibApiV3Sdk.CreateContact();
+      console.log(email)
+      createContact.email = email ;
+      createContact.attributes = {
+        FIRSTNAME : firstName,
+        LASTNAME : lastName,
+        ADDRESS : shippingAdress,
+        CITY : city,
+        COUNTRY : country,
+        POSTALCODE : postalCode
+      }
+      createContact.listIds = [2];
+
+      const res_cont = await apiInstance.createContact(createContact).then(
+        function (data: any) {
+          console.log(
+            "API called successfully. Returned data: " + JSON.stringify(data)
+          );
+        },
+        function (error: any) {
+          console.error("ERROR", error);
+        }
+      );
+      console.log("Contact",res_cont);;
       }
       return NextResponse.json(user);
     } catch {

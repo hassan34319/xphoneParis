@@ -13,6 +13,11 @@ import useLoginModal from "../../hooks/useLoginModal";
 import { User } from "@prisma/client";
 import Image from "next/image";
 import ClientOnly from "./ClientOnly";
+import Header from "./Header";
+import SearchBar from "./SearchBar";
+interface BrandData {
+  [key: string]: string[];
+}
 export type SafeUser = Omit<
   User,
   "createdAt" | "updatedAt" | "emailVerified"
@@ -24,66 +29,35 @@ export type SafeUser = Omit<
 
 interface NavbarProps {
   currentUser?: SafeUser | null;
+  categories?: string[]
+  brands?: string[]
+  subcategories?: string[]
+  brands_categories?: BrandData
+  subcategories_categories?: BrandData
+  categories_brands?: BrandData
+  subcategories_brands?: BrandData
+  products : BrandData
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
+const Navbar: React.FC<NavbarProps> = ({ currentUser,categories,brands,subcategories,brands_categories,subcategories_categories,categories_brands,subcategories_brands,products }) => {
   const { totalQuantity } = useStateContext();
   const loginModal = useLoginModal();
+  console.log("From navbar"  , categories,
+    brands,
+    subcategories,
+    brands_categories,
+    subcategories_categories,
+    categories_brands,
+    subcategories_brands,
+    products,)
 
   return (
     // fixed top-0 left-0 w-full z-10
     <ClientOnly>
       <nav className="bg-white shadow-lg  border-b-black border-2 md:border-0 mx-auto ">
-        <div>
-          <div className="flex flex-col lg:flex-row justify-between items-center">
-            <div className="flex flex-row lg:mt-0 mt-4 order-1 justify-center w-full md:space-x-8 items-center flex-1">
-              <BurgerMenu />
-              <Link href={"/"} className={"cursor-pointer"}>
-                <Image alt="logo" src="/logo0.jpeg" width={200} height={200} />
-              </Link>
-            </div>
-            <Search />
-            <div className="flex flex-row order-2 lg:order-3  items-center gap-4 lg:gap-0 justify-around my-4 lg:my-0 cursor-pointer flex-1">
-              {currentUser ? (
-                <Link href={"/user"}>
-                  <div className="flex flex-col justify-center items-center">
-                    <BiUser className="text-2xl lg:text-4xl " />
-                    <h1>Espace Client</h1>
-                  </div>
-                </Link>
-              ) : (
-                <button onClick={loginModal.onOpen}>
-                  <div className="flex flex-col justify-center items-center">
-                    <BiUser className="text-2xl lg:text-4xl " />
-                    <h1>Espace Client</h1>
-                  </div>
-                </button>
-              )}
-              <Link href={"/"}>
-                <div className="flex flex-col justify-center items-center">
-                  <BsHouseDoor className="text-2xl lg:text-4xl " />
-                  <h1>Accueil</h1>
-                </div>
-              </Link>
-              <Link href={"/us"}>
-                <div className="flex flex-col justify-center items-center">
-                  <RiTeamLine className="text-2xl lg:text-4xl" />
-                  <h1>Qui sommes nous</h1>
-                </div>
-              </Link>
-              <Link href={"/cart"}>
-                <div className="flex flex-col justify-center items-center">
-                  <h1 className="absolute flex items-center text-center -mt-[1.1rem] md:-mt-4 text-sm">
-                    {totalQuantity}
-                  </h1>
-                  <BsBag className="text-2xl lg:text-4xl" />
-                  <h1>Panier</h1>
-                </div>
-              </Link>
-            </div>
-          </div>
-        </div>
-        <TopMenu />
+        <Header products={products} categories={categories} brands={brands} subcategories={subcategories} brands_categories ={brands_categories} categories_brands={categories_brands} subcategories_brands={subcategories_brands} subcategories_categories={subcategories_categories}/>
+        <TopMenu products={products} categories={categories} brands={brands} subcategories={subcategories} brands_categories ={brands_categories} categories_brands={categories_brands} subcategories_brands={subcategories_brands} subcategories_categories={subcategories_categories} />
+        <SearchBar/>
       </nav>
     </ClientOnly>
   );

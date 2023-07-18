@@ -141,6 +141,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
       grade: selectedGrade,
       price,
       quantity: 1,
+      maxQuantity : Availquantity
     };
 
     addToCart(item);
@@ -166,7 +167,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
               </div>
               {quantity <= 0 ? (
                 <h1 className="text-red-500 mt-2">
-                  {quantity <= 0 ? "Out of Stock" : ""}
+                  {quantity <= 0 ? "Stock épuisé" : ""}
                 </h1>
               ) : (
                 <h1 className=" mt-2">

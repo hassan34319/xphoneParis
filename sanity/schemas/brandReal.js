@@ -20,5 +20,16 @@ export default {
         maxLength: 96,
       },
     },
-  ],
-};
+    {
+      name: "categoriesReal",
+      title: "Categories",
+      type: "array",
+      of: [{ type: "categoryReal" }],
+    },
+    {
+      name: "subcategories",
+      title: "Sub Categories",
+      type: "array",
+      of: [{ type: "subcategory" }],
+    },
+  ]}

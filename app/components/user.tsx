@@ -79,7 +79,7 @@ const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
   }, [user, router]);
 
   return (
-    <main className="w-full ">
+    <main className="w-full mt-6 ">
       {error && <h1>error</h1>}
       {user ? (
         <>

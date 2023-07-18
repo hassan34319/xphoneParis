@@ -20,5 +20,17 @@ export default {
         maxLength: 96,
       },
     },
+    {
+      name: "brandsReal",
+      title: "Brands",
+      type: "array",
+      of: [{ type: "string" }],
+    },
+    {
+      name: "subcategories",
+      title: "Subcategories",
+      type: "array",
+      of: [{ type: "string" }],
+    },
   ],
-};
+}

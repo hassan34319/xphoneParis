@@ -10,7 +10,8 @@ import comment from "./comment";
 import publication from "./publication";
 import review from "./review";
 import banner from "./banner";
+import subcategory from "./subcategory"
 export default createSchema({
   name: "default",
-  types: schemaTypes.concat([product, variant,code,categoryReal,brandReal, accessories,banner,publication,comment,review ]),
+  types: schemaTypes.concat([product, variant,code,categoryReal,brandReal, accessories,banner,publication,comment,review,subcategory ]),
 });

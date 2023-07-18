@@ -31,7 +31,7 @@ const Carousel: React.FC<Props> = ({ Banners }) => {
     mobileBanner: urlFor(banner.mobileBanner).url(),
     desktopBanner: urlFor(banner.desktopBanner).url(),
   }));
-  const isDesktop = useMediaQuery({ minWidth: 768 });
+  const isDesktop = useMediaQuery({ minWidth: 1020 });
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const Carousel: React.FC<Props> = ({ Banners }) => {
         {mappedBanners.map((banner) => (
           <SwiperSlide key={banner._id} className="">
             <Link href={banner.link}>
-                <div className="h-[22rem] md:h-[20rem] lg:h-[22rem] relative">
+                <div className="h-[50vh] lg:h-[22rem] relative">
                 {hydrated && (
                   <Image
                     src={

@@ -40,7 +40,7 @@ function ProductComponent({product}: Props) {
   return (
     <ClientOnly>
       <div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 bg-white w-11/12 p-4 mx-auto rounded">
+        <div className="grid grid-cols-1 lg:grid-cols-2 bg-white w-11/12 p-4 mx-auto rounded mt-10 mb-10">
           <div className="flex flex-col justify-center items-center">
             {image && (
               // eslint-disable-next-line @next/next/no-img-element

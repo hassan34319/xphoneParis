@@ -47,9 +47,11 @@ interface Item {
   grade: string;
   price: number;
   quantity: number;
+  maxQuantity : number
 }
 
 const Cart: React.FC<Props> = ({ promoCodes,currentUser }) => {
+  
   const [enteredPromoCode, setEnteredPromoCode] = useState("");
   const { cartItems, totalPrice, setTotalPrice,discountPercentage, setDiscountPercentage} = useStateContext();
   const [openForm, setOpenForm] = useState(false);
@@ -64,6 +66,17 @@ const Cart: React.FC<Props> = ({ promoCodes,currentUser }) => {
     }, 0);
   };
   const calculatedPrice = calculateTotalPrice(cartItems)
+  useEffect(() => {
+    // Reset discount-related details when the component mounts
+    setDiscountPercentage(0);
+    setTotalPrice(calculatedPrice);
+    
+    return () => {
+      // Reset discount-related details when the component unmounts or changes
+      setDiscountPercentage(0);
+      setTotalPrice(calculatedPrice);
+    };
+  }, [cartItems, calculatedPrice,setDiscountPercentage,setTotalPrice]);
   
   // const checkoutHandler = async () => {
   //   if (cartItems.length == 0) {
@@ -165,7 +178,7 @@ const Cart: React.FC<Props> = ({ promoCodes,currentUser }) => {
 
   return (
     <ClientOnly>
-      <div className="w-11/12 mx-auto h-full vh-full">
+      <div className="w-11/12 mx-auto h-full vh-full mt-6">
         <h1 className="text-3xl underline-offset-8 underline my-4">
           Votre panier
         </h1>

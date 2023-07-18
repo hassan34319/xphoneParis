@@ -48,6 +48,12 @@ export default {
       to: [{ type: "categoryReal" }],
     },
     {
+      name: "subcategory",
+      title: "Sub Category",
+      type: "reference",
+      to: [{ type: "subcategory" }],
+    },
+    {
       name: "brandReal",
       title: "Brand Real",
       type: "reference",
