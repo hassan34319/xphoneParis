@@ -11,8 +11,9 @@ const SelectionButton: React.FC<SelectionButtonProps> = ({
   selected,
 }) => {
   return (
+
     <label
-      className={`flex flex-col border border-gray-400 shadow px-4 lg:px-12 py-2  rounded text-center w-1/3 ${
+      className={`flex flex-col border border-gray-400 shadow px-2 lg:px-4 py-1  rounded text-center justify-between text-sm w-[33%] ${
         selected && "bg-gray-200 font-semibold"
       }`}
     >

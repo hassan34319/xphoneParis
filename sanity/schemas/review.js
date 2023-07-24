@@ -23,13 +23,7 @@ export default {
       name: "images",
       title: "Images",
       type: "array",
-      of: [{ type: "image" }],
-    },
-    {
-      name: "videos",
-      title: "Videos",
-      type: "array",
-      of: [{ type: "file" }],
+      of: [{ type: "string" }],
     },
     {
       name: "date",

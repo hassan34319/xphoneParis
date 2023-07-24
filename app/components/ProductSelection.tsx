@@ -4,6 +4,7 @@ import SelectionButton from "./SelectionButton";
 import { urlFor } from "../../lib/sanityClient";
 import { useStateContext } from "../context/stateContext";
 import ClientOnly from "./ClientOnly";
+import Image from "next/image";
 
 interface ProductSelectionProps {
   product: any;
@@ -14,7 +15,13 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   product,
   setImage,
 }) => {
-  const { addToCart,cartItems } = useStateContext();
+  const mappedAccessories =
+    product.accessories &&
+    product.accessories.map((acc: any) => ({
+      ...acc,
+      image_new: urlFor(acc.icon).url(),
+    }));
+  const { addToCart, cartItems } = useStateContext();
   const [productImage, setProductImage] = useState(
     urlFor(product.variants[0].image).url()
   );
@@ -56,7 +63,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
     return quantity;
   }, 0);
 
-  const quantity = Availquantity - cartQuantity
+  const quantity = Availquantity - cartQuantity;
 
   const uniqueColors = [
     ...new Set(product.variants.map((variant: any) => variant.color)),
@@ -141,10 +148,40 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
       grade: selectedGrade,
       price,
       quantity: 1,
-      maxQuantity : Availquantity
+      maxQuantity: Availquantity,
     };
 
     addToCart(item);
+  };
+
+  const getColorCode = (colorName: string) => {
+    const extractedColor = colorName.toLowerCase().split(" ")[0];
+    switch (extractedColor) {
+      case "argent":
+        return "#C0C0C0";
+      case "blanc":
+        return "#FFFFFF";
+      case "bleu":
+        return "#0000FF";
+      case "gris":
+        return "#808080";
+      case "jaune":
+        return "#FFFF00";
+      case "marron":
+        return "#800000";
+      case "noir":
+        return "#000000";
+      case "orange":
+        return "#FFA500";
+      case "rose":
+        return "#FFC0CB";
+      case "rouge":
+        return "#FF0000";
+      case "vert":
+        return "#00FF00";
+      default:
+        return extractedColor;
+    }
   };
 
   return (
@@ -189,7 +226,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
 
         <div>
           <h1 className="lg:text-xl mt-10 mb-2">Condition</h1>
-          <div className="flex flex-row gap-4 mb-12">
+          <div className="flex flex-row md:gap-4 gap-2 mb-12">
             {uniqueGradesAndPrices.map((gradeAndPrice: any) => {
               return (
                 <SelectionButton
@@ -204,8 +241,12 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                     onChange={(e) => setSelectedGrade(e.target.value)}
                     className="hidden"
                   />
-                  <h1>{gradeAndPrice[0]}</h1>
-                  <h1 className="mt-auto">{gradeAndPrice[1]} &euro;</h1>
+                  <h1 className="w-full text-xs whitespace-nowrap">
+                    {gradeAndPrice[0]}
+                  </h1>
+                  <h1 className="text-xs whitespace-nowrap">
+                    {gradeAndPrice[1]} &euro;
+                  </h1>
                 </SelectionButton>
               );
             })}
@@ -248,11 +289,43 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                     onChange={(e) => colorChangeHandler(e.target.value)}
                     className="hidden"
                   />
-                  {String(color).charAt(0).toUpperCase() +
-                    String(color).slice(1)}
+                  <div className="flex items-center justify-center">
+                    <span
+                      className="w-4 h-4 rounded-full inline-block mr-2"
+                      style={{ backgroundColor: getColorCode(color) }}
+                    ></span>
+                    {String(color).charAt(0).toUpperCase() +
+                      String(color).split(" ")[0].slice(1)}
+                  </div>
                 </SelectionButton>
               );
             })}
+          </div>
+          {mappedAccessories && (
+            <h1 className="lg:text-xl my-4">Accessories</h1>
+          )}
+          <div className="flex flex-wrap gap-4">
+            {mappedAccessories &&
+              mappedAccessories.map((acc: any) => {
+                return (
+                  <div
+                    key={acc.title}
+                    className=" w-full bg-red-500 flex flex-row  justify-center items-center rounded-lg px-2 md:py-2 whitespace-nowrap md:w-[45%] lg:w-[45%] xl:w-[30%]"
+                  >
+                    <div className="relative md:h-5 w-5 h-10">
+                      <Image
+                        src={acc.image_new}
+                        alt="banner"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    <span className="ml-2 inline-block text-black text-sm font-bold">
+                      {acc.name}
+                    </span>
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>

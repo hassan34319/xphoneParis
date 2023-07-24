@@ -9,6 +9,10 @@ export type variant = {
   image: string;
   quantity: number;
 };
+export type accessories = {
+  title:string
+  image: string;
+};
 export type SafeUser = Omit<
   User,
   "createdAt" | "updatedAt" | "emailVerified"
@@ -21,6 +25,16 @@ export type SafeUser = Omit<
 export interface NavbarProps {
   currentUser?: SafeUser | null;
 }
+export interface Review {
+  _id: string;
+  user: string;
+  rating: number;
+  reviewText: string;
+  date: string;
+  status: string;
+  images : string[]
+}
+
 export type product = {
   _id?: string;
   name: string;
@@ -29,4 +43,6 @@ export type product = {
   tags: string[];
   desc: string;
   variants: variant[];
+  accessories : accessories[]
+  reviews : Review[]
 };

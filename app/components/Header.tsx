@@ -27,19 +27,24 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import SidebarModal from "./SidebarModal";
+import { User } from "@prisma/client";
+import { SafeUser } from "../utils/types";
+import LoginModal from "./LoginModal";
+import useLoginModal from "../../hooks/useLoginModal";
 interface NavbarProps {
-  categories?: string[]
-  brands?: string[]
-  subcategories?: string[]
-  brands_categories?: BrandData
-  subcategories_categories?: BrandData
-  categories_brands?: BrandData
-  subcategories_brands?: BrandData
-  products : {[key: string]: {name:string, id:string}[]};
+  currentUser?: SafeUser | null;
+  categories?: string[];
+  brands?: string[];
+  subcategories?: string[];
+  brands_categories?: BrandData;
+  subcategories_categories?: BrandData;
+  categories_brands?: BrandData;
+  subcategories_brands?: BrandData;
+  products: { [key: string]: { name: string; id: string }[] };
 }
 interface BrandData {
-    [key: string]: string[];
-  }
+  [key: string]: string[];
+}
 // Type rfce to create component and export it with the same name as your page
 // Image component imported by next/image can be used isntead of regular img html tag and is lazy loaded by default.
 type Props = {};
@@ -52,15 +57,19 @@ const Header: React.FC<NavbarProps> = ({
   categories_brands,
   subcategories_brands,
   products,
+  currentUser,
 }) => {
-    console.log("From header"  , categories,
+  console.log(
+    "From header",
+    categories,
     brands,
     subcategories,
     brands_categories,
     subcategories_categories,
     categories_brands,
     subcategories_brands,
-    products,)
+    products
+  );
   const { totalQuantity } = useStateContext();
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -79,7 +88,7 @@ const Header: React.FC<NavbarProps> = ({
       return;
     }
   };
-
+  const loginModal = useLoginModal()
   return (
     <header className="top-0 z-30 flex w-full items-center justify-between bg-white p-4">
       {/* Z Index ( z-index ) is a CSS property that defines the order of overlapping HTML elements. Elements with a higher index will be placed on top of elements with a lower index. */}
@@ -175,9 +184,16 @@ const Header: React.FC<NavbarProps> = ({
         }  */}
       </div>
       <div className="flex w-1/5 items-center justify-center gap-x-4 md:w-1/4 md:gap-x-6 mr-3 ">
-        <Link href="/user">
-          <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
-        </Link>
+        {currentUser && (
+          <Link href="/user">
+            <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
+          </Link>
+        )}
+        {!currentUser && (
+          <button onClick={loginModal.onOpen}>
+            <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
+          </button>
+        )}
         <Link href="/us" className="hidden md:block">
           <GlobeAltIcon className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
         </Link>
@@ -218,7 +234,18 @@ const Header: React.FC<NavbarProps> = ({
           />
         )} */}
       </div>
-      <SidebarModal isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} products={products} categories={categories} brands={brands} subcategories={subcategories} brands_categories ={brands_categories} categories_brands={categories_brands} subcategories_brands={subcategories_brands} subcategories_categories={subcategories_categories} />
+      <SidebarModal
+        isOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+        products={products}
+        categories={categories}
+        brands={brands}
+        subcategories={subcategories}
+        brands_categories={brands_categories}
+        categories_brands={categories_brands}
+        subcategories_brands={subcategories_brands}
+        subcategories_categories={subcategories_categories}
+      />
     </header>
   );
 };

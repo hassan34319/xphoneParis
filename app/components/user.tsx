@@ -10,6 +10,7 @@ import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { User } from "@prisma/client";
+import useLoginModal from "../../hooks/useLoginModal";
 
 interface CartItem {
   id: string;
@@ -71,12 +72,13 @@ const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
   }
   const changeAdressModal = useChangeAdressModal();
   const changePasswordModal = useChangePasswordModal();
+  const loginModal = useLoginModal();
 
   useEffect(() => {
     if (!user) {
-      router.push("/");
+      loginModal.onOpen()
     }
-  }, [user, router]);
+  }, [user, router,loginModal]);
 
   return (
     <main className="w-full mt-6 ">

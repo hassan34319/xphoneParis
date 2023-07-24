@@ -16,6 +16,7 @@ import { NextAuthProvider } from "./components/provider";
 import { Poppins } from "next/font/google";
 import SidebarModal from "./components/SidebarModal";
 import { sanityClient as client } from "../lib/sanityClient";
+import Script from "next/script";
 interface Product {
   _id: string;
   name: string;
@@ -48,7 +49,9 @@ export default async function RootLayout({
             title
           }`;
   const Categories = await client.fetch(categoriesQuery);
-  const fetchedCategories = Categories.map((subcategory : {title:string}) => subcategory.title);
+  const fetchedCategories = Categories.map(
+    (subcategory: { title: string }) => subcategory.title
+  );
   console.log(fetchedCategories);
   // Fetch brands for each category
   const brandsCategoriesQuery = `*[_type == "categoryReal"]{
@@ -88,7 +91,9 @@ export default async function RootLayout({
             title
           }`;
   const Brands = await client.fetch(brandsQuery);
-  const fetchedBrands = Brands.map((subcategory : {title:string}) => subcategory.title);
+  const fetchedBrands = Brands.map(
+    (subcategory: { title: string }) => subcategory.title
+  );
 
   // Fetch categories for each brand
   const categoriesBrandsQuery = `*[_type == "brandReal"]{
@@ -129,7 +134,9 @@ export default async function RootLayout({
             title
           }`;
   const Subcategories = await client.fetch(subcategoriesQuery);
-  const fetchedSubcategories = Subcategories.map((subcategory : {title:string}) => subcategory.title);
+  const fetchedSubcategories = Subcategories.map(
+    (subcategory: { title: string }) => subcategory.title
+  );
   console.log(fetchedSubcategories);
   // Fetch products for each subcategory
   const productsQuery = `*[_type == "product" && defined(subcategory)]{
@@ -139,11 +146,14 @@ export default async function RootLayout({
       title
     }
   }`;
-  
-  const fetchedProducts: Product[] = await client.fetch<Product[]>(productsQuery);
+
+  const fetchedProducts: Product[] = await client.fetch<Product[]>(
+    productsQuery
+  );
   console.log("fetched products", fetchedProducts);
-  
-  const convertedProductsBrands: { [subcategory: string]: ConvertedProduct[] } = {};
+
+  const convertedProductsBrands: { [subcategory: string]: ConvertedProduct[] } =
+    {};
   fetchedProducts.forEach((product) => {
     const subcategoryName = product.subcategory.title;
     const convertedProduct: ConvertedProduct = {
@@ -155,17 +165,6 @@ export default async function RootLayout({
     }
     convertedProductsBrands[subcategoryName].push(convertedProduct);
   });
-  console.log(
-    fetchedBrands,
-    fetchedBrandsCategories,
-    fetchedCategories,
-    fetchedSubcategories,
-    fetchedCategoriesBrands,
-    fetchedProducts,
-    fetchedSubcategoriesBrands,
-    fetchedSubcategoriesCategories,
-    convertedProductsBrands
-  );
 
   return (
     <html lang="en">
@@ -191,6 +190,7 @@ export default async function RootLayout({
                 products={convertedProductsBrands}
               />
             </ClientOnly>
+
             <div
               className="flex flex-col h-screen justify-between"
               id="outer-container"
@@ -200,6 +200,10 @@ export default async function RootLayout({
           </NextAuthProvider>
         </StateContext>
       </body>
+      <Script
+        src="https://widget.cloudinary.com/v2.0/global/all.js"
+        type="text/javascript"
+      ></Script>
     </html>
   );
 }
