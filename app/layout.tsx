@@ -167,6 +167,10 @@ export default async function RootLayout({
     <html lang="en">
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <body className={font.className}>
+        <Script
+          src="//code.tidio.co/ooc6bralufcpukdjj03swqd2tnk19w9k.js"
+          async
+        />
         <StateContext>
           <NextAuthProvider>
             <ClientOnly>

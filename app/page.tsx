@@ -18,12 +18,14 @@ async function Home({}: Props) {
   const tabletsQuery = '*[_type == "product" && category == "tablet"]';
   const computersQuery = '*[_type == "product" && category == "computer"]';
   const bannerQuery = `*[_type == "banner"]`;
+  const exclusiveQuery = `*[_type == 'product' && defined(priority)] | order(priority asc)`
   const banners = await sanityClient.fetch(bannerQuery);
   console.log(banners);
   const phones: product[] = await sanityClient.fetch(phonesQuery);
   const televisions: product[] = await sanityClient.fetch(televisionsQuery);
   const tablets: product[] = await sanityClient.fetch(tabletsQuery);
   const computers: product[] = await sanityClient.fetch(computersQuery);
+  const exclusive: product[] = await sanityClient.fetch(exclusiveQuery);
   const query = `*[_type == 'publication'] {
     _id,
     title,
@@ -52,6 +54,7 @@ async function Home({}: Props) {
           televisions={televisions}
           tablets={tablets}
           computers={computers}
+          exclusive={exclusive}
         />
         <Categories />
       </div>
