@@ -7,6 +7,8 @@ import Layout from "./components/Layout";
 import { product } from "./utils/types";
 import { sanityClient } from "../lib/sanityClient";
 import SubscribeCard from "./components/SubscribeCard";
+import Post from "./components/Post";
+import getCurrentUser from "./utils/getCurrentUser";
 
 type Props = {};
 
@@ -22,6 +24,18 @@ async function Home({}: Props) {
   const televisions: product[] = await sanityClient.fetch(televisionsQuery);
   const tablets: product[] = await sanityClient.fetch(tabletsQuery);
   const computers: product[] = await sanityClient.fetch(computersQuery);
+  const query = `*[_type == 'publication'] {
+    _id,
+    title,
+    content,
+    images,
+    video,
+    likes,
+    comments,
+    _createdAt
+  }`;
+  const publications = await sanityClient.fetch(query);
+  const currentUser = await getCurrentUser();
   return (
     <div className="h-full mb-10">
       <Carousel Banners={banners} />
@@ -41,6 +55,7 @@ async function Home({}: Props) {
         />
         <Categories />
       </div>
+      <Post publications={publications} currentUser={currentUser} />
       <SubscribeCard />
       <Values />
     </div>

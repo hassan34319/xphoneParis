@@ -20,7 +20,6 @@ async function ProductPage({
   const currentUser = await getCurrentUser()
   const query = `*[_type == "product" && _id == "${id}" ][0]`;
   const product: product = await sanityClient.fetch(query);
-  console.log("product",product)
   if (!product) {
     return <p>No product found</p>;
   }

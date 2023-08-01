@@ -55,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser,categories,brands,subcatego
     // fixed top-0 left-0 w-full z-10
     <ClientOnly>
       <nav className="bg-white shadow-lg  border-b-black border-2 md:border-0 mx-auto ">
-        <Header products={products} categories={categories} brands={brands} subcategories={subcategories} brands_categories ={brands_categories} categories_brands={categories_brands} subcategories_brands={subcategories_brands} subcategories_categories={subcategories_categories}/>
+        <Header currentUser={currentUser} products={products} categories={categories} brands={brands} subcategories={subcategories} brands_categories ={brands_categories} categories_brands={categories_brands} subcategories_brands={subcategories_brands} subcategories_categories={subcategories_categories}/>
         <TopMenu products={products} categories={categories} brands={brands} subcategories={subcategories} brands_categories ={brands_categories} categories_brands={categories_brands} subcategories_brands={subcategories_brands} subcategories_categories={subcategories_categories} />
         <SearchBar/>
       </nav>

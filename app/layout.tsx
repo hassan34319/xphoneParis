@@ -52,7 +52,6 @@ export default async function RootLayout({
   const fetchedCategories = Categories.map(
     (subcategory: { title: string }) => subcategory.title
   );
-  console.log(fetchedCategories);
   // Fetch brands for each category
   const brandsCategoriesQuery = `*[_type == "categoryReal"]{
           title,
@@ -61,11 +60,9 @@ export default async function RootLayout({
   const fetchedBrandsCategories = await client.fetch<any[]>(
     brandsCategoriesQuery
   );
-  console.log(fetchedBrandsCategories);
   const convertedBrandsCategories: BrandData = {};
   fetchedBrandsCategories.forEach((category) => {
     const categoryName = category.title;
-    console.log(category.brandsReal);
     const brands = category.brandsReal.map((brand: any) => brand.title);
     convertedBrandsCategories[categoryName] = brands;
   });

@@ -40,9 +40,57 @@ export type product = {
   name: string;
   brand: string;
   category: string;
+  subcategory? : string 
+  brandReal? : string
+  categoryReal? : string
   tags: string[];
   desc: string;
   variants: variant[];
   accessories : accessories[]
-  reviews : Review[]
+  review? : Review[]
 };
+
+interface Block {
+  _key: string;
+  _type: string;
+  style: string;
+  children: {
+    _key: string;
+    _type: string;
+    text: string;
+    marks: string[];
+  }[];
+}
+
+interface ImageAsset {
+  _id: string;
+  url: string;
+  // Add other image asset fields if needed
+}
+
+interface VideoAsset {
+    _ref: string;
+    _type: string;
+  // Add other video asset fields if needed
+}
+
+
+export interface Publication {
+  _id?: string;
+  title: string;
+  content: string;
+  images: string[]
+  video: string[]
+  likes?: string[];
+  comments?: Comment[];
+  _createdAt? : string
+}
+
+export interface Comment {
+  _key: string; // Assuming the comment has a unique ID
+  user: string; // User who posted the comment (You can use the email or name, etc.)
+  content: string; // The content of the comment
+  createdAt?: string; 
+  status? : string// Timestamp for when the comment was created
+  // You can add more fields if needed, like likes, replies, etc.
+}

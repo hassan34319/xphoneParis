@@ -9,28 +9,27 @@ export default {
       type: "string",
     },
     {
-      name: "content",
+      name: "content",    
       title: "Content",
-      type: "array",
-      of: [{ type: "block" }],
+      type: "string",
     },
     {
       name: "images",
       title: "Images",
       type: "array",
-      of: [{ type: "image" }],
+      of: [{ type: "string" }],
     },
     {
       name: "video",
       title: "Video",
       type: "array",
-      of: [{ type: "file" }],
+      of: [{ type: "string" }],
     },
     {
       name: "likes",
       title: "Likes",
       type: "array",
-      of: [{ type: "string" }]
+      of: [{ type: "string" }],
     },
     {
       name: "comments",

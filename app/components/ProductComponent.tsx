@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ProductSelection from "./ProductSelection";
 import { product } from "../utils/types";
 import { renderRatingStars } from "../utils/stars";
-import { urlFor } from "../../lib/sanityClient";
+import { sanityClient, urlFor } from "../../lib/sanityClient";
 import ClientOnly from "./ClientOnly";
 import Image from "next/image";
 import Script from "next/script";
@@ -15,10 +15,11 @@ import { User } from "@prisma/client";
 
 type Props = {
   product: product;
-  currentUser : User | null
+  currentUser: User | null;
 };
 
 function ProductComponent({ product, currentUser }: Props) {
+
 
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<string>(
@@ -56,14 +57,22 @@ function ProductComponent({ product, currentUser }: Props) {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={image} alt="product image" className="w-2/3" />
             )}
-            <ProductReview id={product._id!} currentUser={currentUser} review={product.review}/>
-           </div>
+            <ProductReview
+              id={product._id!}
+              currentUser={currentUser}
+              review={product.review}
+            />
+          </div>
           <div>
             {product && (
               <ProductSelection product={product} setImage={setImage} />
             )}
           </div>
-          <ProductReviewMobile/>
+          <ProductReviewMobile
+            id={product._id!}
+            currentUser={currentUser}
+            review={product.review}
+          />
         </div>
       </div>
       <Script
