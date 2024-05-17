@@ -74,6 +74,10 @@ interface VideoAsset {
   // Add other video asset fields if needed
 }
 
+interface Reference {
+  _ref : string,
+  _type : string
+}
 
 export interface Publication {
   _id?: string;
@@ -84,6 +88,15 @@ export interface Publication {
   likes?: string[];
   comments?: Comment[];
   _createdAt? : string
+  username : string;
+  userImage : string | null | undefined;
+  approved : boolean;
+  buttonText? : string,
+  productReference? : Reference;
+}
+
+export type scrollingReviews = {
+  reviews : string[]
 }
 
 export interface Comment {

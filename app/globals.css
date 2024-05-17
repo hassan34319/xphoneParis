@@ -5,3 +5,12 @@
 body {
   background-color: rgb(240, 240, 240);
 }
+
+.custom-slider {
+  background-color: #000000; /* Change background color as needed */
+}
+
+/* Customize the dot color */
+.slick-dots li button:before {
+  color: #ff0000; /* Change dot color as needed */
+}

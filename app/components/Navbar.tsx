@@ -29,34 +29,19 @@ export type SafeUser = Omit<
 
 interface NavbarProps {
   currentUser?: SafeUser | null;
-  categories?: string[]
-  brands?: string[]
-  subcategories?: string[]
-  brands_categories?: BrandData
-  subcategories_categories?: BrandData
-  categories_brands?: BrandData
-  subcategories_brands?: BrandData
-  products : {[key: string]: {name:string, id:string}[]};
+  menuCategories : { title: string; products: { name: string; _id: string }[] }[];
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentUser,categories,brands,subcategories,brands_categories,subcategories_categories,categories_brands,subcategories_brands,products }) => {
+const Navbar: React.FC<NavbarProps> = ({ currentUser, menuCategories }) => {
   const { totalQuantity } = useStateContext();
   const loginModal = useLoginModal();
-  console.log("From navbar"  , categories,
-    brands,
-    subcategories,
-    brands_categories,
-    subcategories_categories,
-    categories_brands,
-    subcategories_brands,
-    products,)
 
   return (
     // fixed top-0 left-0 w-full z-10
     <ClientOnly>
       <nav className="bg-white shadow-lg  border-b-black border-2 md:border-0 mx-auto ">
-        <Header currentUser={currentUser} products={products} categories={categories} brands={brands} subcategories={subcategories} brands_categories ={brands_categories} categories_brands={categories_brands} subcategories_brands={subcategories_brands} subcategories_categories={subcategories_categories}/>
-        <TopMenu products={products} categories={categories} brands={brands} subcategories={subcategories} brands_categories ={brands_categories} categories_brands={categories_brands} subcategories_brands={subcategories_brands} subcategories_categories={subcategories_categories} />
+        <Header currentUser={currentUser} menuCategories={menuCategories}/>
+        <TopMenu menuCategories={menuCategories} />
         <SearchBar/>
       </nav>
     </ClientOnly>

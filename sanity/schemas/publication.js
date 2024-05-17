@@ -37,5 +37,31 @@ export default {
       type: "array",
       of: [{ type: "comment" }],
     },
+    {
+      name: "username",
+      title: "Username",
+      type: "string",
+    },
+    {
+      name: "userImage",
+      title: "User Image",
+      type: "string", // Assuming user image is stored as a URL
+    },
+    {
+      name: "approved",
+      title: "Approved",
+      type: "boolean",
+    },
+    {
+      name: "buttonText",
+      title: "Button Text",
+      type: "string",
+    },
+    {
+      name: "productReference",
+      title: "Product Reference",
+      type: "reference",
+      to: [{ type: 'product' }]
+    },
   ],
 };

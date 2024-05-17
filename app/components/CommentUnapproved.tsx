@@ -7,46 +7,17 @@ import { Comment, Publication } from "../utils/types";
 type Props = {
   comment: Comment;
   publication : Publication
+  handleCommentApproval : (comment : Comment) =>void
 };
 
-function CommentUnapproved({ comment,publication }: Props) {
+function CommentUnapproved({ comment,publication,handleCommentApproval }: Props) {
+
+
   const handleApprove = async () => {
     // Check if the current user is authenticated before adding the comment
 
     // Create a new comment object
-    const newComment: Comment = {
-      _key: comment._key,
-      user: comment.user,
-      content: comment.content,
-      status : 'approved'
-    };
-
-    const pub = await sanityClient.getDocument(publication._id!);
-    console.log("pub", pub);
-    if (!pub) {
-      console.log("ERROR");
-      throw new Error("Product not found");
-    }
-    // Update the product with the new review
-    const filteredCom = publication.comments!.filter((commenter)=> commenter._key !== comment._key)
-    const updatedPub = {
-        ...pub,
-        comments: filteredCom.length>0 ? filteredCom.concat(newComment) : [newComment], // Assuming your product schema field is named "review"
-      };
-    console.log(pub, "updated");
-
-    // Send the updated product data to Sanity
-    try {
-      const response = await sanityClient
-        .patch(publication._id!)
-        .set(updatedPub)
-        .commit();
-
-      toast.success("Updated");
-      return response;
-    } catch (error) {
-      console.log(error, "ERROR");
-    }
+    handleCommentApproval(comment)
 
     // Send the comment object to the Sanity API
   };

@@ -11,7 +11,9 @@ import publication from "./publication";
 import review from "./review";
 import banner from "./banner";
 import subcategory from "./subcategory"
+import scrollingReviews from "./scrollingReview"
+import menuCategory from "./menuCategory"
 export default createSchema({
   name: "default",
-  types: schemaTypes.concat([product, variant,code,categoryReal,brandReal, accessories,banner,publication,comment,review,subcategory ]),
+  types: schemaTypes.concat([product, variant,code,categoryReal,brandReal, accessories,banner,publication,comment,review,subcategory,scrollingReviews, menuCategory ]),
 });

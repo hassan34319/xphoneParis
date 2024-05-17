@@ -145,7 +145,7 @@ function ProductReview({ id, currentUser, review }: Props) {
       {review
         ? review.map((rev) => {
             return (
-              <article key={rev._key} className="mt-10 w-11/12 hidden md:block">
+              <article key={rev._key} className="mt-10 w-10/12 hidden md:block">
                 <div className="flex items-center mb-4 space-x-4">
                   <Image
                     className="rounded-full"

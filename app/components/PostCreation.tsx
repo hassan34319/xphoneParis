@@ -4,32 +4,40 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { sanityClient } from "../../lib/sanityClient";
 import { Publication } from "../utils/types";
+import { User } from "@prisma/client";
+import { FaImage, FaVideo, FaUserTag, FaMapMarkerAlt } from 'react-icons/fa';
 
-const PostCreation = () => {
+type props = {
+  handleAddPost : (post : Publication) => void
+  currentUser: User | null;
+}
+
+const PostCreation = ({handleAddPost,currentUser} : props) => {
   const [postText, setPostText] = useState("");
   const [uploadedImage, setUploadedImage] = useState([]);
   const [uploadedVideo, setUploadedVideo] = useState([]);
   const [uploadedThumbnail, setThumbnail] = useState([]);
   const [title, setTitle] = useState("");
-  console.log(uploadedThumbnail)
   const handleSubmitChange = async () => {
     try {
       const publicationData = {
+        username : currentUser?.firstName + " " + currentUser?.lastName,
+        userImage : currentUser?.image || undefined,
+        approved : currentUser?.email == "xphonesparis@gmail.com" ? true : false,
         title: title,
         content: postText, // Update the content field to use the postText directly
-        images: uploadedImage,
-        video: uploadedVideo,
-        
+        images: uploadedImage || [],
+        video: uploadedVideo || [] ,
         // Add other fields if needed based on your form inputs
       };
 
-      const createdPublication = await createPublication(publicationData);
+      const createdPublication = await handleAddPost(publicationData);
       setUploadedImage([])
       setUploadedVideo([])
       setThumbnail([])
       setTitle("")
       setPostText("")
-      toast.success("Posted")
+      toast.success("Publication envoyée pour approbation")
       // Handle the successful submission (e.g., show a success message or redirect to the post page)
     } catch (error) {
       // Handle the error (e.g., show an error message)
@@ -61,6 +69,7 @@ const PostCreation = () => {
   };
   const handleImageUpload = () => {
     // Initialize Cloudinary Widget
+    
     const widget = (window as any).cloudinary.createUploadWidget(
       {
         cloudName: "dxu48h2sd",
@@ -107,59 +116,52 @@ const PostCreation = () => {
     widget.open();
   };
   return (
-    <div className="p-4 border mb-4 md:w-10/12">
-      <label className="text-black font-bold text-sm text-bold"> Title</label>
-      <textarea
-        className="w-full h-20 resize-none p-2 rounded border"
-        placeholder="Enter Title Here"
-        onChange={handleTitleTextChange}
-        value={title}
-      />
-      <label className="text-black font-bold text-sm text-bold mt-[6vh]">
-        {" "}
-        Content
-      </label>
-      <textarea
-        className="w-full h-20 resize-none p-2 rounded border"
-        placeholder="What's on your mind?"
-        value={postText}
-        onChange={handlePostTextChange}
-      ></textarea>
-      {uploadedThumbnail && uploadedThumbnail.length > 0 && (
-        <div className="mt-2 flex flex-row space-x-4 ">
+    <div className="bg-white rounded-lg shadow-md p-4 w-11/12 md:w-1/2">
+    <textarea
+      className="w-full border rounded-lg p-2 mb-4"
+      placeholder="Qu'avez-vous à l'esprit ?"
+      value={postText}
+      onChange={handlePostTextChange}
+    ></textarea>
+          {uploadedThumbnail && uploadedThumbnail.length > 0 && (
+        <div className="mt-2 flex flex-row flex-wrap space-x-2 ">
           {uploadedThumbnail.map((imageUrl, index) => (
             <Image
               key={index}
               src={imageUrl}
               alt={`Uploaded ${index + 1}`}
-              width={100}
-              height={100}
+              width={50}
+              height={50}
               className="mr-2" // Averdjust spacing between images if needed
             />
           ))}
         </div>
       )}
-      <div className="flex justify-between items-center mt-2">
+    <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-row gap-x-2">
         <button
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded text-sm md:text-lg"
+          className="bg-gray-200 rounded-lg px-4 py-2 mr-2"
           onClick={handleImageUpload}
         >
-          Upload Image
+          <FaImage />
         </button>
         <button
-          className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded text-sm md:text-lg"
+          className="bg-gray-200 rounded-lg px-4 py-2 mr-2"
           onClick={handleVideoUpload}
         >
-          Upload Video
+          <FaVideo />
         </button>
-        <button
-          className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-          onClick={handleSubmitChange}
-        >
-          Post
-        </button>
-      </div>
+        </div>
+        {/* Add similar buttons for tagging users and adding locations */}
+      <button
+        className="bg-blue-500 text-white rounded-lg px-4 py-2"
+        onClick={handleSubmitChange}
+      >
+        Poste
+      </button>
     </div>
+</div>
+
   );
 };
 

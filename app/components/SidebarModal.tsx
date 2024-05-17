@@ -1,43 +1,35 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-interface BrandData {
-  [key: string]: string[];
-}
 interface NavbarProps {
-    categories?: string[]
-    brands?: string[]
-    subcategories?: string[]
-    brands_categories?: BrandData
-    subcategories_categories?: BrandData
-    categories_brands?: BrandData
-    subcategories_brands?: BrandData
-    products : {[key: string]: {name:string, id:string}[]};
-    isOpen: boolean
-    toggleSidebar : ()=>void
-  }
-const SidebarModal :  React.FC<NavbarProps> = ({ isOpen, toggleSidebar, categories,brands,subcategories,brands_categories,subcategories_categories,categories_brands,subcategories_brands,products })=> {
+  menuCategories: { title: string; products: { name: string; _id: string }[] }[];
+  isOpen: boolean;
+  toggleSidebar: () => void;
+}
+
+const SidebarModal: React.FC<NavbarProps> = ({
+  isOpen,
+  toggleSidebar,
+  menuCategories,
+}) => {
   const [isSubModalOpen, setIsSubModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("");
-  const [activeBrand, setActiveBrand] = useState("");
-  const [activeSubCategory, setActiveSubCategory] = useState("");
+  const [activeProduct, setActiveProduct] = useState("");
 
   const toggleSubModal = () => {
     if (isSubModalOpen) {
       setActiveCategory("");
-      setActiveBrand("");
-      setActiveSubCategory("");
+      setActiveProduct("");
     }
     setIsSubModalOpen(!isSubModalOpen);
   };
 
   const closeSubModal = () => {
-    toggleSubModal()
-    toggleSidebar()
-  }
+    toggleSubModal();
+    toggleSidebar();
+  };
 
   useEffect(() => {
-    // Disable scrolling of the entire page when the sidebar or sub-modal is open
     if (isOpen || isSubModalOpen) {
       document.body.classList.add("overflow-hidden");
     } else {
@@ -45,30 +37,20 @@ const SidebarModal :  React.FC<NavbarProps> = ({ isOpen, toggleSidebar, categori
     }
 
     return () => {
-      // Clean up the effect by removing the class when the component is unmounted
       document.body.classList.remove("overflow-hidden");
     };
   }, [isOpen, isSubModalOpen]);
 
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
-    setActiveBrand("");
-    setActiveSubCategory("");
+    setActiveProduct("");
     toggleSubModal();
   };
 
-  const handleBrandClick = (brand: string) => {
-    setActiveBrand(brand);
-    setActiveCategory("");
-    setActiveSubCategory("");
+  const handleProductClick = (productId: string) => {
+    setActiveProduct(productId);
     toggleSubModal();
-  };
-
-  const handleSubCategoryClick = (subcategory: string) => {
-    setActiveBrand("");
-    setActiveCategory("");
-    setActiveSubCategory(subcategory);
-    toggleSubModal();
+    toggleSidebar();
   };
 
   return (
@@ -92,70 +74,20 @@ const SidebarModal :  React.FC<NavbarProps> = ({ isOpen, toggleSidebar, categori
         </button>
 
         <div className="p-4 h-full overflow-y-auto">
-          <h2 className="font-bold text-sm text-[#AE3033]">Categories</h2>
+          <h2 className="font-bold text-sm text-[#AE3033]">Menu Categories</h2>
           <ul className="pl-4 mt-2">
-            {categories?.map((category) => (
+            {menuCategories.map((category) => (
               <li
-                key={category}
+                key={category.title}
                 className={`flex items-center py-2 border-t border-b border-gray-200 cursor-pointer ${
-                  activeCategory === category ? "bg-gray-100" : ""
+                  activeCategory === category.title ? "bg-gray-100" : ""
                 }`}
-                onClick={() => handleCategoryClick(category)}
+                onClick={() => handleCategoryClick(category.title)}
               >
-                <span className="mr-2">{category}</span>
+                <span className="mr-2">{category.title}</span>
                 <svg
                   className={`w-4 h-4 ml-auto fill-current -rotate-90 ${
-                    activeCategory === category ? "transform rotate-0" : ""
-                  }`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M6 9l6 6 6-6z" />
-                </svg>
-              </li>
-            ))}
-          </ul>
-          <h2 className="font-bold text-sm text-[#AE3033] mt-4">Brands</h2>
-          <ul className="pl-4 mt-2">
-            {brands?.map((brand) => (
-              <li
-                key={brand}
-                className={`flex items-center py-2 border-t border-b border-gray-200 cursor-pointer ${
-                  activeBrand === brand ? "bg-gray-100" : ""
-                }`}
-                onClick={() => handleBrandClick(brand)}
-              >
-                <span className="mr-2">{brand}</span>
-                <svg
-                  className={`w-4 h-4 ml-auto fill-current -rotate-90 ${
-                    activeBrand === brand ? "transform rotate-0" : ""
-                  }`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M6 9l6 6 6-6z" />
-                </svg>
-              </li>
-            ))}
-          </ul>
-          <h2 className="font-bold text-sm text-[#AE3033] mt-4">
-            Most Popular
-          </h2>
-          <ul className="pl-4 mt-2">
-            {subcategories?.map((subcategory) => (
-              <li
-                key={subcategory}
-                className={`flex items-center py-2 border-t border-b border-gray-200 cursor-pointer ${
-                  activeSubCategory === subcategory ? "bg-gray-100" : ""
-                }`}
-                onClick={() => handleSubCategoryClick(subcategory)}
-              >
-                <span className="mr-2">{subcategory}</span>
-                <svg
-                  className={`w-4 h-4 ml-auto fill-current -rotate-90 ${
-                    activeSubCategory === subcategory
-                      ? "transform rotate-0"
-                      : ""
+                    activeCategory === category.title ? "transform rotate-0" : ""
                   }`}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -183,127 +115,35 @@ const SidebarModal :  React.FC<NavbarProps> = ({ isOpen, toggleSidebar, categori
           </button>
 
           <div className="p-4 h-full overflow-y-auto mt-10">
-            {activeBrand && (
-              <>
-                <h2 className="font-bold text-sm text-[#AE3033]">
-                  Categories for {activeBrand}
-                </h2>
-                <ul className="pl-4 mt-2">
-                  {categories_brands && categories_brands[activeBrand]?.map((category) => (
-                    <Link
-                      href={`/${activeBrand}/${category}`}
-                      key={category}
-                      className="flex items-center py-2 border-t border-b border-gray-200 cursor-pointer"
-                      onClick={closeSubModal}
-                    >
-                      <span className="mr-2">{category}</span>
-                      <svg
-                        className="w-4 h-4 ml-auto fill-current -rotate-90"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M6 9l6 6 6-6z" />
-                      </svg>
-                    </Link>
-                  ))}
-                </ul>
-                <h2 className="font-bold text-sm text-[#AE3033] mt-4">
-                  Most Popular for {activeBrand}
-                </h2>
-                <ul className="pl-4 mt-2">
-                  {subcategories_brands && subcategories_brands[activeBrand]?.map((subcategory) => (
-                    <Link
-                      href={`/subcategory/${subcategory}`}
-                      key={subcategory}
-                      className="flex items-center py-2 border-t border-b border-gray-200 cursor-pointer"
-                      onClick={closeSubModal}
-                    >
-                      <span className="mr-2">{subcategory}</span>
-                      <svg
-                        className="w-4 h-4 ml-auto fill-current -rotate-90"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M6 9l6 6 6-6z" />
-                      </svg>
-                    </Link>
-                  ))}
-                </ul>
-              </>
-            )}
             {activeCategory && (
               <>
                 <h2 className="font-bold text-sm text-[#AE3033]">
-                  Brands for {activeCategory}
+                  Products for {activeCategory}
                 </h2>
                 <ul className="pl-4 mt-2">
-                  {brands_categories && brands_categories[activeCategory]?.map((brand) => (
-                    <Link
-                      href={`/${brand}/${activeCategory}`}
-                      key={brand}
-                      className="flex items-center py-2 border-t border-b border-gray-200 cursor-pointer"
-                      onClick={closeSubModal}
-                    >
-                      <span className="mr-2">{brand}</span>
-                      <svg
-                        className="w-4 h-4 ml-auto fill-current -rotate-90"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M6 9l6 6 6-6z" />
-                      </svg>
-                    </Link>
-                  ))}
-                </ul>
-                <h2 className="font-bold text-sm text-[#AE3033] mt-4">
-                  Most Popular for {activeCategory}
-                </h2>
-                <ul className="pl-4 mt-2">
-                  {subcategories_categories && subcategories_categories[activeCategory]?.map(
-                    (subcategory) => (
+                  {menuCategories
+                    .find((category) => category.title === activeCategory)
+                    ?.products.map((product) => (
                       <Link
-                        href={`/subcategory/${subcategory}`}
-                        key={subcategory}
-                        className="flex items-center py-2 border-t border-b border-gray-200 cursor-pointer"
-                        onClick={closeSubModal}
+                        key={product._id}
+                        href={`/products/${product._id}`}
+                        className={`flex items-center py-2 border-t border-b border-gray-200 cursor-pointer ${
+                          activeProduct === product._id ? "bg-gray-100" : ""
+                        }`}
+                        onClick={() => handleProductClick(product._id)}
                       >
-                        <span className="mr-2">{subcategory}</span>
+                        <span className="mr-2">{product.name}</span>
                         <svg
-                          className="w-4 h-4 ml-auto fill-current -rotate-90"
+                          className={`w-4 h-4 ml-auto fill-current -rotate-90 ${
+                            activeProduct === product._id ? "transform rotate-0" : ""
+                          }`}
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
                         >
                           <path d="M6 9l6 6 6-6z" />
                         </svg>
                       </Link>
-                    )
-                  )}
-                </ul>
-              </>
-            )}
-            {activeSubCategory && (
-              <>
-                <h2 className="mt-4 font-bold text-sm text-[#AE3033]">
-                  Products for {activeSubCategory}
-                </h2>
-                <ul className="pl-4 mt-2">
-                  {products[activeSubCategory]?.map((product) => (
-                    <Link
-                      key={product.id}
-                      href={`/products/${product.id}`}
-                      className="flex items-center py-2 border-t border-b border-gray-200 cursor-pointer"
-                      onClick={closeSubModal}
-                    >
-                      <span className="mr-2">{product.name}</span>
-                      <svg
-                        className="w-4 h-4 ml-auto fill-current -rotate-90"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M6 9l6 6 6-6z" />
-                      </svg>
-                    </Link>
-                  ))}
+                    ))}
                 </ul>
               </>
             )}
@@ -315,5 +155,4 @@ const SidebarModal :  React.FC<NavbarProps> = ({ isOpen, toggleSidebar, categori
 };
 
 export default SidebarModal;
-
 

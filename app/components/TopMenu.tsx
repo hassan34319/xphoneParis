@@ -6,33 +6,11 @@ interface BrandData {
   [key: string]: string[];
 }
 interface NavbarProps {
-  categories?: string[]
-  brands?: string[]
-  subcategories?: string[]
-  brands_categories?: BrandData
-  subcategories_categories?: BrandData
-  categories_brands?: BrandData
-  subcategories_brands?: BrandData
-  products : {[key: string]: {name:string, id:string}[]};
+  menuCategories : { title: string; products: { name: string; _id: string }[] }[];
 }
 const TopMenu: React.FC<NavbarProps> = ({
-  categories,
-  brands,
-  subcategories,
-  brands_categories,
-  subcategories_categories,
-  categories_brands,
-  subcategories_brands,
-  products,
+  menuCategories
 }) => {
-  console.log("From component"  , categories,
-    brands,
-    subcategories,
-    brands_categories,
-    subcategories_categories,
-    categories_brands,
-    subcategories_brands,
-    products,)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -73,14 +51,7 @@ const TopMenu: React.FC<NavbarProps> = ({
       <SidebarModal
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
-        products={products}
-        categories={categories}
-        brands={brands}
-        subcategories={subcategories}
-        brands_categories={brands_categories}
-        categories_brands={categories_brands}
-        subcategories_brands={subcategories_brands}
-        subcategories_categories={subcategories_categories}
+        menuCategories={menuCategories}
       />
     </div>
   );

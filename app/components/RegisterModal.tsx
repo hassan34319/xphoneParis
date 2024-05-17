@@ -46,11 +46,10 @@ const RegisterModal :  React.FC<NavbarProps> = ({
     axios
     .post("/api/register", data)
     .then((response) => {
+      console.log(response)
       const userExists = response.data && response.data.exists;
       if (userExists) {
         toast.error("E-mail déjà enregistré");
-        registerModal.onClose();
-        loginModal.onOpen();
       } else {
         toast.success("Inscrit !");
         registerModal.onClose();

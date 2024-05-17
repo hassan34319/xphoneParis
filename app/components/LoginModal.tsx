@@ -45,16 +45,17 @@ const LoginModal: React.FC<NavbarProps> = ({}) => {
     }).then(async (callback) => {
       setIsLoading(false);
 
-      if (callback?.ok) {
+      if (callback?.error) {
+        return toast.error(callback.error);
+      }
+
+      if (callback?.ok && !callback.error) {
         router.push('/user')
         toast.success("Connecté");
         router.refresh();
         loginModal.onClose();
       }
 
-      if (callback?.error) {
-        toast.error(callback.error);
-      }
     });
   };
 

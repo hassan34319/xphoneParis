@@ -19,8 +19,6 @@ type Props = {
 };
 
 function ProductComponent({ product, currentUser }: Props) {
-
-
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<string>(
     urlFor(product.variants[0].image).url()
@@ -53,10 +51,26 @@ function ProductComponent({ product, currentUser }: Props) {
       <div>
         <div className="grid grid-cols-1 lg:grid-cols-2 bg-white w-11/12 p-4 mx-auto rounded mt-10 mb-10">
           <div className="flex flex-col justify-center items-center">
-            {image && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={image} alt="product image" className="w-2/3" />
-            )}
+            <div className="w-full h-full relative flex items-center justify-center">
+              <div className="w-2/3 relative h-[24rem]">
+                <Image
+                  src={image}
+                  alt="Image"
+                  className="object-contain"
+                  fill
+                />
+              </div>
+              <div className="w-[30%] h-full flex flex-col reltive items-center justify-center">
+                <div className="w-full h-32 relative">
+                  <Image className="object-contain" fill src="/Verified.png" alt="Verified"/>
+                </div>
+                <div className="w-full h-24 relative">
+                  <Image className="object-contain" fill src="https://image.noelshack.com/fichiers/2024/17/7/1714333874-rreerreer.png" alt="Verified"/>
+                </div>
+                <h3 className="text-center font-bold text-xl md:text-2xl xl:text-3xl">Chargeur</h3>
+                <h3 className="text-center font-bold text-xl md:text-2xl xl:text-3xl">+ Cable</h3>
+              </div>
+            </div>
             <ProductReview
               id={product._id!}
               currentUser={currentUser}

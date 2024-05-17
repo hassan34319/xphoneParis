@@ -19,7 +19,7 @@ const Categories2: React.FC<Props> = ({ phones,televisions,computers,tablets,exc
     products: product[];
   };
   const categories: category[] = [
-    {name : "Offre spéciale exclusive", products : exclusive},
+    {name : "Promotion du Moment", products : exclusive},
     { name: "Téléphones", products: phones },
     { name: "Ordinateurs", products: computers },
     { name: "Tablettes", products: tablets },

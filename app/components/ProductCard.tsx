@@ -24,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <ClientOnly>
       <div
-        className="bg-white rounded-xl p-2 flex flex-col  cursor-pointer shadow-lg  w-72 lg:h-[26rem] mb-6 hover:shadow-xl"
+        className="bg-white rounded-xl p-2 flex flex-col  cursor-pointer shadow-lg  w-72 lg:h-[26rem] xl:h-[30rem] mb-6 hover:shadow-xl"
         onClick={() => router.push(`/products/${product._id}`)}
       >
         <img

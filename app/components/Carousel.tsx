@@ -62,7 +62,7 @@ const Carousel: React.FC<Props> = ({ Banners }) => {
                     }
                     alt="banner"
                     fill
-                    className="object-cover"
+                    className="object-fill"
                   />
                 )}
                 </div>

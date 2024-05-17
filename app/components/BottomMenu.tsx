@@ -4,7 +4,7 @@ import { AiOutlineMail } from "react-icons/ai";
 
 const BottomMenu = () => {
   return (
-    <div className="w-full bg-black py-4 flex flex-col lg:flex-row lg:items-start justify-center gap-8 mt-10 px-20 text-white">
+    <div className="w-full h-max bg-black py-4 flex flex-col lg:flex-row lg:items-start justify-center gap-8 mt-10 px-20 text-white">
       <div className="flex flex-col items-center justify-center">
         <h1>Service client</h1>
         <div>

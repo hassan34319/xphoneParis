@@ -33,14 +33,7 @@ import LoginModal from "./LoginModal";
 import useLoginModal from "../../hooks/useLoginModal";
 interface NavbarProps {
   currentUser?: SafeUser | null;
-  categories?: string[];
-  brands?: string[];
-  subcategories?: string[];
-  brands_categories?: BrandData;
-  subcategories_categories?: BrandData;
-  categories_brands?: BrandData;
-  subcategories_brands?: BrandData;
-  products: { [key: string]: { name: string; id: string }[] };
+  menuCategories : { title: string; products: { name: string; _id: string }[] }[];
 }
 interface BrandData {
   [key: string]: string[];
@@ -49,27 +42,9 @@ interface BrandData {
 // Image component imported by next/image can be used isntead of regular img html tag and is lazy loaded by default.
 type Props = {};
 const Header: React.FC<NavbarProps> = ({
-  categories,
-  brands,
-  subcategories,
-  brands_categories,
-  subcategories_categories,
-  categories_brands,
-  subcategories_brands,
-  products,
+  menuCategories,
   currentUser,
 }) => {
-  console.log(
-    "From header",
-    categories,
-    brands,
-    subcategories,
-    brands_categories,
-    subcategories_categories,
-    categories_brands,
-    subcategories_brands,
-    products
-  );
   const { totalQuantity } = useStateContext();
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -88,7 +63,7 @@ const Header: React.FC<NavbarProps> = ({
       return;
     }
   };
-  const loginModal = useLoginModal()
+  const loginModal = useLoginModal();
   return (
     <header className="top-0 z-30 flex w-full items-center justify-between bg-white p-4">
       {/* Z Index ( z-index ) is a CSS property that defines the order of overlapping HTML elements. Elements with a higher index will be placed on top of elements with a lower index. */}
@@ -109,12 +84,23 @@ const Header: React.FC<NavbarProps> = ({
           )}
         </svg>
       </button>
+      <Link href="/#post-main" className="w-1/6 md:w-1/5 relative flex flex-col items-center justify-center">
+        <div className="w-full h-6 md:h-8 relative">
+          <Image
+            src="/community.png"
+            alt="abc"
+            className="object-contain"
+            fill
+          />
+        </div>
+        <h3 className="text-[0.6rem] md:text-xs">Communite</h3>
+      </Link>
       <div className="items-center justify-center flex flex-1 md:w-1/5">
         {/* So by default it is in center and when md screen comes ot goes to 20% width of the total width of page */}
         {/*Tailwind Styles are mobile first so whatever we style is for mobile and then we add breakpoints for changes for bigger screens like md means for screen sizes greater than md*/}
         <Link href="/">
           {/*Adds a Link to the apple tag to homepage */}
-          <div className="relative h-5 w-40 cursor-pointer opacity-100 transition hover:opacity-80">
+          <div className="relative h-6 w-40 md:h-8 md:w-[14rem] xl:h-12 xl:w-[20rem] cursor-pointer opacity-100 transition hover:opacity-80">
             {/* //Tailwind by default has no margins so content starts right from top left, h and w are height and width */}
             {/* //Relative must be added when using layout=fill for the image so that div is relative to the size of image.  */}
             <Image
@@ -183,27 +169,34 @@ const Header: React.FC<NavbarProps> = ({
           }
         }  */}
       </div>
-      <div className="flex w-1/5 items-center justify-center gap-x-4 md:w-1/4 md:gap-x-6 mr-3 ">
+      <div className="flex w-1/4 items-center justify-center gap-x-4 md:w-1/4 md:gap-x-6 mr-3 ">
         {currentUser && (
-          <Link href="/user">
+          <Link href="/user" className="flex flex-col items-center">
             <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
+            <h3 className="text-[0.6rem]">Espace Client</h3>
           </Link>
         )}
         {!currentUser && (
-          <button onClick={loginModal.onOpen}>
+          <button
+            className="flex flex-col items-center"
+            onClick={loginModal.onOpen}
+          >
             <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
+            <h3 className="text-[0.6rem]">Espace Client</h3>
           </button>
         )}
-        <Link href="/us" className="hidden md:block">
+        <Link href="/us" className="hidden lg:flex flex-col items-center">
           <GlobeAltIcon className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
+          <h3 className="text-[0.6rem]">Accueil</h3>
         </Link>
-        <Link href="/faq" className="hidden md:block">
+        <Link href="/faq" className="hidden lg:flex flex-col items-center">
           <QuestionMarkCircleIcon className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
+          <h3 className="text-[0.6rem]">FAQ</h3>
         </Link>
         {/* https://heroicons.com/ */}
         {/* //See Global Css FIle Must Give height and width to the icons for them to be seen. */}
         <Link href="/cart">
-          <div className="relative cursor-pointer">
+          <div className="relative cursor-pointer md:flex flex-col items-center">
             {totalQuantity > 0 && (
               <span className="absolute -right-1 -top-1 z-50 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r  from-[#AE3033] to-[#751A21] text-xs text-[white]">
                 {totalQuantity}
@@ -212,6 +205,7 @@ const Header: React.FC<NavbarProps> = ({
             )}
             {/* -top-1 -right-1 means it will negative margin to right and top so moves towards that side. z-index-50 means top priority so on top of evrything */}
             <BiShoppingBag className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
+            <h3 className="text-[0.6rem]">Panier</h3>
           </div>
         </Link>
 
@@ -237,14 +231,7 @@ const Header: React.FC<NavbarProps> = ({
       <SidebarModal
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
-        products={products}
-        categories={categories}
-        brands={brands}
-        subcategories={subcategories}
-        brands_categories={brands_categories}
-        categories_brands={categories_brands}
-        subcategories_brands={subcategories_brands}
-        subcategories_categories={subcategories_categories}
+        menuCategories={menuCategories}
       />
     </header>
   );
