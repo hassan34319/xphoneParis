@@ -31,14 +31,21 @@ async function InventoryPage({}: Props) {
   }`;
   const results = await sanityClient.fetch(query);
 
+  console.log(results)
+
   // Flatten the variants array
-  const variants = results && results.length > 0 && results.flatMap((product: Product) =>
-    product.variants.map((variant: Variant) => ({
-      ...variant,
-      productId: product._id,
-      productName: product.name,
-    }))
-  );
+  const variants = results && results.length > 0
+  ? results.flatMap((product: Product) =>
+      product.variants && product.variants.length > 0
+        ? product.variants.map((variant: Variant) => ({
+            ...variant,
+            productId: product._id,
+            productName: product.name,
+          }))
+        : []
+    )
+  : [];
+  console.log(variants)
 
   return (
     <div className="p-8">
