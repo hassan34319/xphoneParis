@@ -32,7 +32,7 @@ async function InventoryPage({}: Props) {
   const results = await sanityClient.fetch(query);
 
   // Flatten the variants array
-  const variants = results && results.flatMap((product: Product) =>
+  const variants = results && results.length > 0 && results.flatMap((product: Product) =>
     product.variants.map((variant: Variant) => ({
       ...variant,
       productId: product._id,
@@ -56,7 +56,7 @@ async function InventoryPage({}: Props) {
           </tr>
         </thead>
         <tbody>
-          {variants && variants.map((variant: Variant) => (
+          {variants && variants.length > 0 &&  variants.map((variant: Variant) => (
             <tr
               key={`${variant.productId}-${variant.grade}-${variant.capacity}-${variant.color}`}
               className="hover:bg-gray-50"
