@@ -312,7 +312,7 @@ function PostContent({ publication, currentUser }: Props) {
           {!publication.userImage && publication.username != "Xphones" && (
             <Image
               className="rounded-full"
-              src="/Prof.png"
+              src="/prof.png"
               width={60}
               height={60}
               alt="Xphones"
