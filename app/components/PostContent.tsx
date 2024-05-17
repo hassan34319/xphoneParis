@@ -80,7 +80,7 @@ function SamplePrevArrow(props: ArrowProps) {
 }
 function PostContent({ publication, currentUser }: Props) {
 
-  const shareUrl= `https://test-xphones.vercel.app//#${publication._id}`
+  const shareUrl= `https://test-xphones.vercel.app/#${publication._id}`
 
   const [isOpen, setIsOpen] = useState(false);
 
