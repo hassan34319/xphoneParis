@@ -255,7 +255,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
             )}
             {applied && (
               <p className="text-green-500 mt-2">
-                livraison gratuite
+                Livraison gratuite
               </p>
             )}
             {currentUser ? (
