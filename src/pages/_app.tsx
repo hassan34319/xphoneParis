@@ -8,9 +8,10 @@ import { Toaster } from "react-hot-toast";
 import Modal from "../components/Modal";
 import LoginModal from "../components/LoginModal";
 import RegisterModal from "../components/RegisterModal";
-import ChangeAdressModal from "../components/ChangeAdressModal";
+import ChangeAddressModal from "../components/ChangeAddressModal"; // Fixed typo
 import { SessionProvider } from "next-auth/react";
 import ChangePasswordModal from "../components/changePasswordModal";
+
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
@@ -21,11 +22,17 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         >
           <Toaster />
           <ChangePasswordModal/>
-          <ChangeAdressModal />
+          <ChangeAddressModal />
           <LoginModal />
           <RegisterModal />
           <Navbar />
           <div className="mt-6 relative mb-auto" id="page-wrap">
+            <Head>
+              <title>Xphones</title>
+              <meta name="description" content="Your meta description here" />
+              {/* Replace the URL with your logo image */}
+              <link rel="icon" href="/logo2.jpeg" />
+            </Head>
             <Component {...pageProps} />
           </div>
           <Footer />
