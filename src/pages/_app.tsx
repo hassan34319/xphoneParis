@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 import Modal from "../components/Modal";
 import LoginModal from "../components/LoginModal";
 import RegisterModal from "../components/RegisterModal";
-import ChangeAddressModal from "../components/ChangeAddressModal"; // Fixed typo
+import ChangeAdressModal from "../components/ChangeAdressModal";
 import { SessionProvider } from "next-auth/react";
 import ChangePasswordModal from "../components/changePasswordModal";
 
