@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
               <title>Xphones</title>
               <meta name="description" content="Check out iPhone 12 XR Pro and iPhone 12 Pro Max. Visit your local store and for expert advice." />
               {/* Replace the URL with your logo image */}
-              <link rel="icon" href="/logoMain.jpeg" />
+              <link rel="icon" href="/logoMain.jpg" />
             </Head>
             <Component {...pageProps} />
           </div>
