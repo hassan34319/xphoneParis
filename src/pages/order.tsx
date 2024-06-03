@@ -114,7 +114,7 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ orders }) => {
               <th className="py-2 px-4 border-b">Phone Number</th>
               <th className="py-2 px-4 border-b">Status</th>
               <th className="py-2 px-4 border-b">Calculated Price</th>
-              <th className="py-2 px-4 border-b">Discount</th>
+              <th className="py-2 px-4 border-b">Discount (In euros)</th>
               <th className="py-2 px-4 border-b">Promo</th>
               <th className="py-2 px-4 border-b">Total Price</th>
               <th className="py-2 px-4 border-b">Cart Items</th>

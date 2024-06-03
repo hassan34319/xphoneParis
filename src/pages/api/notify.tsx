@@ -115,7 +115,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ORDERID: Date.now().toString(),
         ORDERDATE: date,
         calculated : calculateTotalPrice(cart),
-        discount : Math.round((totalPrice * discountPercentage / 100)),
+        discount : discountPercentage,
         itemName1: cart[0].name,
         itemPrice1: cart[0].price * cart[0].quantity,
         itemUnitPrice1: cart[0].price,
@@ -191,7 +191,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         status: "Received",
         calculated : calculateTotalPrice(cart),
         total : totalPrice,
-        discount : calculateTotalPrice(cart) * discountPercentage/100,
+        discount : discountPercentage,
         promo : obj_.promo,
         items: {
           create: cart,
