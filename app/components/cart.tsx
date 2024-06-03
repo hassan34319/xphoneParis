@@ -169,7 +169,7 @@ const Cart: React.FC<Props> = ({ promoCodes, currentUser }) => {
             </h1>
             <h1 className="flex flex-row justify-between text-2xl mt-8">
               Montant final
-              <span className="text-2xl font-bold">{applied? totalPrice : totalPrice+10} &euro;</span>
+              <span className="text-2xl font-bold">{applied? totalPrice : totalPrice+deliveryFee} &euro;</span>
             </h1>
             <div className="flex flex-col lg:flex-row items-center mt-4">
               <label htmlFor="promoCode" className="mr-2 mb-2 lg:mb-0">
