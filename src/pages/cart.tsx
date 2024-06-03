@@ -57,36 +57,8 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
   const [applied, setApplied] = useState(false)
   const sessionMain = useSession();
   const router = useRouter();
-  const calculateTotalPrice = (cart: Item[]) => {
-    return cart.reduce((totalPrice: number, item: Item) => {
-      return totalPrice + item.price * item.quantity;
-    }, 0);
-  };
-  const calculatedPrice = calculateTotalPrice(cartItems)
-  useEffect(() => {
-    setError("");
-    const fetchData = async () => {
-      const session = await getSession();
-      const currentUser = session?.user;
-      if (session) {
-        const email = currentUser?.email;
-        setEmail(email!.toString());
-        try {
-          const response = await axios.get(`/api/user?email=${email}`);
-          setShippingAdress(response.data.shippingAdress);
-          setFirstName(response.data.firstName);
-          setLastName(response.data.lastName);
-          setPostalCode(response.data.postalCode);
-          setPhoneNumber(response.data.phoneNumber);
-          setCountry(response.data.country);
-        } catch (error) {
-          setError(JSON.stringify(error));
-        }
-      }
-    };
 
-    fetchData();
-  }, [sessionMain]);
+
 
   // const checkoutHandler = async () => {
   //   if (cartItems.length == 0) {
@@ -112,9 +84,6 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
 
   //   stripe.redirectToCheckout({ sessionId: data.id });
   // };
-
-  
-  // Fixed Delivery Fee
   const deliveryFee = 19;
 
   useEffect(() => {
@@ -131,6 +100,8 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
     // Add delivery fee
     return subtotal;
   };
+
+
 
   // Handle form submission
   const handleFormSubmit = async () => {
@@ -199,6 +170,32 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
       setPromoCodeError("Invalid code"); // Display error message
     }
   };
+
+  useEffect(() => {
+    setError("");
+    const fetchData = async () => {
+      const session = await getSession();
+      const currentUser = session?.user;
+      if (session) {
+        const email = currentUser?.email;
+        setEmail(email!.toString());
+        try {
+          const response = await axios.get(`/api/user?email=${email}`);
+          setShippingAdress(response.data.shippingAdress);
+          setFirstName(response.data.firstName);
+          setLastName(response.data.lastName);
+          setPostalCode(response.data.postalCode);
+          setPhoneNumber(response.data.phoneNumber);
+          setCountry(response.data.country);
+        } catch (error) {
+          setError(JSON.stringify(error));
+        }
+      }
+    };
+
+    fetchData();
+  }, [sessionMain]);
+
   return (
     <Layout>
       <div className="w-11/12 mx-auto h-full vh-full">
@@ -222,17 +219,17 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
             <h1 className="text-xl">{cartItems.length} articles</h1>
             <h1 className="flex flex-row justify-between text-xl mt-8">
               Total panier
-              <span className="text-xl font-bold">{calculatedPrice} &euro;</span>
+              <span className="text-xl font-bold">{totalPrice} &euro;</span>
             </h1>
             <h1 className="flex flex-row justify-between text-xl mt-4">
-              Montant de réduction
-              <span className="text-xl font-bold">{(calculatedPrice * discountPercentage/100)} &euro;</span>
+              Frais de livraison
+              <span className={applied ? "line-through text-gray-500" : ""}>
+                {applied ? 0 : deliveryFee} &euro;
+              </span>
             </h1>
             <h1 className="flex flex-row justify-between text-2xl mt-8">
               Montant final
-              <span className="text-2xl font-bold">
-                {totalPrice} &euro;
-              </span>
+              <span className="text-2xl font-bold">{applied? totalPrice : totalPrice+deliveryFee} &euro;</span>
             </h1>
             <div className="flex flex-col lg:flex-row items-center mt-4">
               <label htmlFor="promoCode" className="mr-2 mb-2 lg:mb-0">
@@ -257,7 +254,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
             {promoCodeError && (
               <p className="text-red-500 mt-2">{promoCodeError}</p>
             )}
-    {applied && (
+            {applied && (
               <p className="text-green-500 mt-2">
                 livraison gratuite
               </p>
