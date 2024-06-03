@@ -29,9 +29,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           <div className="mt-6 relative mb-auto" id="page-wrap">
             <Head>
               <title>Xphones</title>
-              <meta name="description" content="Your meta description here" />
+              <meta name="description" content="Check out iPhone 12 XR Pro and iPhone 12 Pro Max. Visit your local store and for expert advice." />
               {/* Replace the URL with your logo image */}
-              <link rel="icon" href="/logo2.jpeg" />
+              <link rel="icon" href="/logoMain.jpeg" />
             </Head>
             <Component {...pageProps} />
           </div>
