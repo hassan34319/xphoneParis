@@ -70,7 +70,7 @@ const Cart: React.FC<Props> = ({ promoCodes, currentUser }) => {
     }, 0);
     
     // Add delivery fee
-    return subtotal + deliveryFee;
+    return subtotal;
   };
 
   // Handle form submission
@@ -87,7 +87,7 @@ const Cart: React.FC<Props> = ({ promoCodes, currentUser }) => {
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/api/payment";
-    cartItems.push({ email: currentUser.email!, total: totalPrice, discount : applied? 19 : 0, promo: enteredPromoCode });
+    cartItems.push({ email: currentUser.email!, total: totalPrice, discount : applied? 0 : 19, promo: enteredPromoCode });
     const serializedData = JSON.stringify(cartItems);
     const email = currentUser.email!
     console.log(serializedData);
@@ -131,6 +131,9 @@ const Cart: React.FC<Props> = ({ promoCodes, currentUser }) => {
     const promoCode = promoCodes.find((code) => code.code.toLowerCase() === enteredPromoCode.toLowerCase());
 
     if (promoCode) {
+      if (applied) {
+        return
+      }
       setApplied(true);
       setPromoCodeError("");
     } else {
@@ -166,7 +169,7 @@ const Cart: React.FC<Props> = ({ promoCodes, currentUser }) => {
             </h1>
             <h1 className="flex flex-row justify-between text-2xl mt-8">
               Montant final
-              <span className="text-2xl font-bold">{totalPrice} &euro;</span>
+              <span className="text-2xl font-bold">{applied? totalPrice : totalPrice+10} &euro;</span>
             </h1>
             <div className="flex flex-col lg:flex-row items-center mt-4">
               <label htmlFor="promoCode" className="mr-2 mb-2 lg:mb-0">
