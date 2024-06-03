@@ -91,6 +91,31 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
     setTotalPrice(calculateTotalPrice(cartItems));
   }, [cartItems, enteredPromoCode, setTotalPrice]);
 
+  useEffect(() => {
+    setError("");
+    const fetchData = async () => {
+      const session = await getSession();
+      const currentUser = session?.user;
+      if (session) {
+        const email = currentUser?.email;
+        setEmail(email!.toString());
+        try {
+          const response = await axios.get(`/api/user?email=${email}`);
+          setShippingAdress(response.data.shippingAdress);
+          setFirstName(response.data.firstName);
+          setLastName(response.data.lastName);
+          setPostalCode(response.data.postalCode);
+          setPhoneNumber(response.data.phoneNumber);
+          setCountry(response.data.country);
+        } catch (error) {
+          setError(JSON.stringify(error));
+        }
+      }
+    };
+
+    fetchData();
+  }, [sessionMain]);
+
   const calculateTotalPrice = (cart: Item[]) => {
     // Calculate subtotal
     const subtotal = cart.reduce((totalPrice: number, item: Item) => {
@@ -105,21 +130,18 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
 
   // Handle form submission
   const handleFormSubmit = async () => {
-
-    if(!currentUser) {
-      return
-    }
     function getFullItem(item: any) {
       return [item.name, item.color].join(" ") + " × " + item.quantity + "|";
     }
     const items = cartItems.map(getFullItem);
     const unique_id = Date.now().toString();
+    const session = await getSession();
+    const currentUser = session?.user;
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/api/payment";
-    cartItems.push({ email: currentUser.email!, total: totalPrice, discount : applied? 0 : 19, promo: enteredPromoCode });
+    cartItems.push({ email: email, total: totalPrice, discount :  applied? 0 : 19, promo: enteredPromoCode });
     const serializedData = JSON.stringify(cartItems);
-    const email = currentUser.email!
     console.log(serializedData);
     const params: Record<string, string> = {
       serializedData,
@@ -132,9 +154,9 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
       CustomField3:
         "https://cdn.shopify.com/s/files/1/0061/7929/1200/files/ephones_250x.png?v=1638106517",
       CustomField4: items,
-      CustomField5: `${currentUser.firstName}|${currentUser.lastName}|${currentUser.email}|`,
-      CustomField6: `${currentUser.firstName}|${currentUser.lastName}|${currentUser.phoneNumber}|${currentUser.shippingAdress}|${currentUser.city}|${currentUser.country}|${currentUser.postalCode}`,
-      CustomField7: `${currentUser.firstName}|${currentUser.lastName}|${currentUser.phoneNumber}|${currentUser.shippingAdress}|${currentUser.city}|${currentUser.country}|${currentUser.postalCode}`,
+      CustomField5: `${firstName}|${lastName}|${email}|`,
+      CustomField6: `${firstName}|${lastName}|${phoneNumber}|${shippingAdress}|${country}|${postalCode}`,
+      CustomField7: `${firstName}|${lastName}|${phoneNumber}|${shippingAdress}|${country}|${postalCode}`,
       PayType: "0",
     };
 
@@ -145,7 +167,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
       input.value = params[key];
       form.appendChild(input);
     }
-    console.log(form)
+
     document.body.appendChild(form);
     form.submit();
   };
@@ -171,30 +193,7 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
     }
   };
 
-  useEffect(() => {
-    setError("");
-    const fetchData = async () => {
-      const session = await getSession();
-      const currentUser = session?.user;
-      if (session) {
-        const email = currentUser?.email;
-        setEmail(email!.toString());
-        try {
-          const response = await axios.get(`/api/user?email=${email}`);
-          setShippingAdress(response.data.shippingAdress);
-          setFirstName(response.data.firstName);
-          setLastName(response.data.lastName);
-          setPostalCode(response.data.postalCode);
-          setPhoneNumber(response.data.phoneNumber);
-          setCountry(response.data.country);
-        } catch (error) {
-          setError(JSON.stringify(error));
-        }
-      }
-    };
 
-    fetchData();
-  }, [sessionMain]);
 
   return (
     <Layout>
