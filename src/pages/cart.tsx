@@ -112,19 +112,43 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
 
   //   stripe.redirectToCheckout({ sessionId: data.id });
   // };
+
+  
+  // Fixed Delivery Fee
+  const deliveryFee = 19;
+
+  useEffect(() => {
+    // Reset total price when promo code changes
+    setTotalPrice(calculateTotalPrice(cartItems));
+  }, [cartItems, enteredPromoCode, setTotalPrice]);
+
+  const calculateTotalPrice = (cart: Item[]) => {
+    // Calculate subtotal
+    const subtotal = cart.reduce((totalPrice: number, item: Item) => {
+      return totalPrice + item.price * item.quantity;
+    }, 0);
+    
+    // Add delivery fee
+    return subtotal;
+  };
+
+  // Handle form submission
   const handleFormSubmit = async () => {
+
+    if(!currentUser) {
+      return
+    }
     function getFullItem(item: any) {
       return [item.name, item.color].join(" ") + " × " + item.quantity + "|";
     }
     const items = cartItems.map(getFullItem);
     const unique_id = Date.now().toString();
-    const session = await getSession();
-    const currentUser = session?.user;
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/api/payment";
-    cartItems.push({ email: email, total: totalPrice, discount : discountPercentage, promo: enteredPromoCode });
+    cartItems.push({ email: currentUser.email!, total: totalPrice, discount : applied? 0 : 19, promo: enteredPromoCode });
     const serializedData = JSON.stringify(cartItems);
+    const email = currentUser.email!
     console.log(serializedData);
     const params: Record<string, string> = {
       serializedData,
@@ -137,9 +161,9 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
       CustomField3:
         "https://cdn.shopify.com/s/files/1/0061/7929/1200/files/ephones_250x.png?v=1638106517",
       CustomField4: items,
-      CustomField5: `${firstName}|${lastName}|${email}|`,
-      CustomField6: `${firstName}|${lastName}|${phoneNumber}|${shippingAdress}|${country}|${postalCode}`,
-      CustomField7: `${firstName}|${lastName}|${phoneNumber}|${shippingAdress}|${country}|${postalCode}`,
+      CustomField5: `${currentUser.firstName}|${currentUser.lastName}|${currentUser.email}|`,
+      CustomField6: `${currentUser.firstName}|${currentUser.lastName}|${currentUser.phoneNumber}|${currentUser.shippingAdress}|${currentUser.city}|${currentUser.country}|${currentUser.postalCode}`,
+      CustomField7: `${currentUser.firstName}|${currentUser.lastName}|${currentUser.phoneNumber}|${currentUser.shippingAdress}|${currentUser.city}|${currentUser.country}|${currentUser.postalCode}`,
       PayType: "0",
     };
 
@@ -150,21 +174,18 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
       input.value = params[key];
       form.appendChild(input);
     }
-
+    console.log(form)
     document.body.appendChild(form);
     form.submit();
   };
-
-  const handlePromoCodeChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  // Handle promo code change
+  const handlePromoCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setApplied(false)
     setEnteredPromoCode(event.target.value);
-    setDiscountPercentage(0);
-    setTotalPrice(calculatedPrice) // Reset discount percentage
-    setPromoCodeError(""); // Reset promo code error
+    setPromoCodeError("");
   };
 
+  // Apply promo code
   const applyPromoCode = () => {
     const promoCode = promoCodes.find((code) => code.code.toLowerCase() === enteredPromoCode.toLowerCase());
 
@@ -172,17 +193,12 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
       if (applied) {
         return
       }
-      const discountedPrice =
-        totalPrice - (totalPrice * promoCode.discountPercentage) / 100;
-      setDiscountPercentage(promoCode.discountPercentage);
-      setTotalPrice(discountedPrice);
-      setApplied(true)
+      setApplied(true);
       setPromoCodeError("");
     } else {
       setPromoCodeError("Invalid code"); // Display error message
     }
   };
-
   return (
     <Layout>
       <div className="w-11/12 mx-auto h-full vh-full">
@@ -241,9 +257,9 @@ const Cart: React.FC<Props> = ({ promoCodes }) => {
             {promoCodeError && (
               <p className="text-red-500 mt-2">{promoCodeError}</p>
             )}
-            {discountPercentage > 0 && (
+    {applied && (
               <p className="text-green-500 mt-2">
-                Réduction appliquée: {discountPercentage}%
+                livraison gratuite
               </p>
             )}
             {currentUser ? (
