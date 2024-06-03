@@ -121,6 +121,7 @@ const Cart: React.FC<Props> = ({ promoCodes, currentUser }) => {
   };
   // Handle promo code change
   const handlePromoCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setApplied(false)
     setEnteredPromoCode(event.target.value);
     setPromoCodeError("");
   };
@@ -142,7 +143,7 @@ const Cart: React.FC<Props> = ({ promoCodes, currentUser }) => {
       <div className="w-11/12 mx-auto h-full vh-full mt-6">
         <h1 className="text-3xl underline-offset-8 underline my-4">Votre panier</h1>
         {cartItems.length == 0 && (
-          <h1 className="text-xl my-4">C'est vide... trop vide...</h1>
+          <h1 className="text-xl my-4">C&apos;est vide... trop vide...</h1>
         )}
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="lg:w-8/12">
