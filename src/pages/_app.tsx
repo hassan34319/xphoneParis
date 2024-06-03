@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         >
           <Toaster />
           <ChangePasswordModal/>
-          <ChangeAddressModal />
+          <ChangeAdressModal />
           <LoginModal />
           <RegisterModal />
           <Navbar />
