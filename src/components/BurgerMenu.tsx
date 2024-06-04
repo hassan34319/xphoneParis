@@ -87,6 +87,7 @@ const BurgerMenu = () => {
   const selectedItemHandler = async (title: string) => {
     setItemSelected(true);
     if(smartphoneSelected) {
+      setSmartphoneSelected(false)
       if(title == "Apple") {
         try {
           const query = `*[_type == "product" && brand == "apple"]`;
