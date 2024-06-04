@@ -10,7 +10,7 @@ const Categories2: React.FC = () => {
   const [tablets, setTablets] = useState<product[]>([]);
   const [computers, setComputers] = useState<product[]>([]);
   const [pc, setPc] = useState<product[]>([]);
-  const [console, setConsole] = useState<product[]>([]);
+  const [consolee, setConsole] = useState<product[]>([]);
   type category = {
     name: string;
     products: product[];
@@ -21,7 +21,7 @@ const Categories2: React.FC = () => {
     { name: "Tablettes", products: tablets },
     { name: "Télévisions", products: televisions },
     { name: "Écran Pc", products: pc },
-    { name: "Console", products: console },
+    { name: "Console", products: consolee },
   ];
 
   useEffect(() => {
