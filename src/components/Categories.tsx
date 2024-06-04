@@ -61,7 +61,7 @@ export const categories: Category[] = [
     title: "Console",
     sub: "Plongez dans vos jeux favoris",
     image:
-      "/console.png",
+      "/console2.jpeg",
     search: "Console",
   },
 ];

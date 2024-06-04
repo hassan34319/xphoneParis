@@ -18,15 +18,12 @@ const Home: NextPage = () => {
           Marie S.
         </h2>
         <div
-                  className="relative h-56 md:h-96 text-center flex justify-center items-center w-full mt-8"
-                >
-                  <video
-                    controls
-                    className="object-contain relative mx-auto my-auto md:h-[23.8rem]"
-                  >
-                    <source src="/video1.mp4" type="video/mp4" />
-                  </video>
-                </div>
+  className="relative h-56 md:h-96 text-center flex justify-center items-center w-full mt-8"
+>
+  <video controls poster="/community.png" className="object-contain relative mx-auto my-auto md:h-[23.8rem]">
+    <source src="/video1.mp4" type="video/mp4" />
+  </video>
+</div>
         <div className="flex flex-col">
           <Categories2 />
           <Categories />
