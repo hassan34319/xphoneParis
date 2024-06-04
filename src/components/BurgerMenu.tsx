@@ -90,7 +90,7 @@ const BurgerMenu = () => {
       setSmartphoneSelected(false)
       if(title == "Apple") {
         try {
-          const query = `*[_type == "product" && brand == "apple"]`;
+          const query = `*[_type == "product" && category == "smartphone" && brand == "apple"]`;
           const items: product[] = await sanityClient.fetch(query);
           setSubItems(
             items.map((item) => {
@@ -103,7 +103,7 @@ const BurgerMenu = () => {
       }
       else {
         try {
-          const query = `*[_type == "product" && brand == "samsung"]`;
+          const query = `*[_type == "product" && category == "smartphone" && brand == "samsung"]`;
           const items: product[] = await sanityClient.fetch(query);
           setSubItems(
             items.map((item) => {
@@ -114,6 +114,7 @@ const BurgerMenu = () => {
           console.log(error);
         }
       }
+      return;
       }
     const slug = menuItems.find((item) => item.title == title)?.slug;
     if (slug == "smartphone") {
