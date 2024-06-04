@@ -54,14 +54,14 @@ export const categories: Category[] = [
     title: "Écran Pc",
     sub: "Découvrez des écrans performants",
     image:
-      "/pc.png",
+      "/pc2.jpeg",
     search: "Pc",
   },
   {
     title: "Console",
     sub: "Plongez dans vos jeux favoris",
     image:
-      "/console2.jpeg",
+      "/console3.jpeg",
     search: "Console",
   },
 ];

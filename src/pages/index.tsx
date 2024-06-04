@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         <div
   className="relative h-56 md:h-96 text-center flex justify-center items-center w-full mt-8"
 >
-  <video controls poster="/community.png" className="object-contain relative mx-auto my-auto md:h-[23.8rem]">
+  <video controls poster="/cover.jpeg" className="object-contain relative mx-auto my-auto md:h-[23.8rem]">
     <source src="/video1.mp4" type="video/mp4" />
   </video>
 </div>
