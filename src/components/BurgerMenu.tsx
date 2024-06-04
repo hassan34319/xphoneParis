@@ -74,6 +74,9 @@ const BurgerMenu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [itemSelected, setItemSelected] = useState(false);
   const [subItems, setSubItems] = useState<nameAndId[]>([]);
+  const [specialSubItems, setSpecialSubItems] = useState<nameAndId[]>([]);
+  const [smartphoneSelected, setSmartphoneSelected] = useState(false)
+
 
   const menuHandler = () => {
     setMenuOpen((oldState) => !oldState);
@@ -83,7 +86,40 @@ const BurgerMenu = () => {
 
   const selectedItemHandler = async (title: string) => {
     setItemSelected(true);
+    if(smartphoneSelected) {
+      if(title == "Apple") {
+        try {
+          const query = `*[_type == "product" && brand == "apple"]`;
+          const items: product[] = await sanityClient.fetch(query);
+          setSubItems(
+            items.map((item) => {
+              return { name: item.name, _id: item._id as string };
+            })
+          );
+        } catch (error: any) {
+          console.log(error);
+        }
+      }
+      else {
+        try {
+          const query = `*[_type == "product" && brand == "samsung"]`;
+          const items: product[] = await sanityClient.fetch(query);
+          setSubItems(
+            items.map((item) => {
+              return { name: item.name, _id: item._id as string };
+            })
+          );
+        } catch (error: any) {
+          console.log(error);
+        }
+      }
+      }
     const slug = menuItems.find((item) => item.title == title)?.slug;
+    if (slug == "smartphone") {
+      setSpecialSubItems([{name : "Apple", _id : "1"}, {name : "Samsung", _id : "2"}])
+      setSmartphoneSelected(true);
+      return;
+    }
     try {
       const query = `*[_type == "product" && category == "${slug}"]`;
       const items: product[] = await sanityClient.fetch(query);
@@ -130,7 +166,7 @@ const BurgerMenu = () => {
                     </div>
                   );
                 })
-            : subItems.map((item: nameAndId) => {
+            : !smartphoneSelected ?  subItems.map((item: nameAndId) => {
                 return (
                   <div
                     key={item._id}
@@ -148,7 +184,25 @@ const BurgerMenu = () => {
                     </Link>
                   </div>
                 );
-              })}
+              }) : specialSubItems.map((item: nameAndId) => {
+                return (
+                  <div
+                    key={item._id}
+                    className={`${
+                      item.name === "Bons Plans" ? "text-red-600" : ""
+                    } my-4 text-white`}
+                    onClick={menuHandler}
+                  >
+                    <Link
+                      key={item._id}
+                      href={"/products/" + item._id}
+                      className="block text-2xl"
+                    >
+                      {item.name}
+                    </Link>
+                  </div>
+                )  
+                })}
         </div>
       </Menu>
     </div>
