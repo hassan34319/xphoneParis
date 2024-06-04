@@ -22,7 +22,6 @@ const Home: NextPage = () => {
                 >
                   <video
                     controls
-                    autoPlay
                     className="object-contain relative mx-auto my-auto md:h-[23.8rem]"
                   >
                     <source src="/video1.mp4" type="video/mp4" />

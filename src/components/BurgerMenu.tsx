@@ -61,6 +61,8 @@ const menuItems = [
   { title: "Ordinateurs", slug: "computer" },
   { title: "Tablettes", slug: "tablet" },
   { title: "Télévisions", slug: "television" },
+  { title: "Écran PC", slug: "pc" },
+  { title: "Console", slug: "console" },
 ];
 
 type nameAndId = {

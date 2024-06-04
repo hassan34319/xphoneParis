@@ -9,6 +9,8 @@ const Categories2: React.FC = () => {
   const [televisions, setTelevisions] = useState<product[]>([]);
   const [tablets, setTablets] = useState<product[]>([]);
   const [computers, setComputers] = useState<product[]>([]);
+  const [pc, setPc] = useState<product[]>([]);
+  const [console, setConsole] = useState<product[]>([]);
   type category = {
     name: string;
     products: product[];
@@ -18,6 +20,8 @@ const Categories2: React.FC = () => {
     { name: "Ordinateurs", products: computers },
     { name: "Tablettes", products: tablets },
     { name: "Télévisions", products: televisions },
+    { name: "Écran Pc", products: pc },
+    { name: "Console", products: console },
   ];
 
   useEffect(() => {
@@ -30,16 +34,24 @@ const Categories2: React.FC = () => {
         const tabletsQuery = '*[_type == "product" && category == "tablet"]';
         const computersQuery =
           '*[_type == "product" && category == "computer"]';
+        const pcQuery =
+          '*[_type == "product" && category == "pc"]';
+        const consoleQuery =
+          '*[_type == "product" && category == "console"]';
         const phones: product[] = await sanityClient.fetch(phonesQuery);
         const televisions: product[] = await sanityClient.fetch(
           televisionsQuery
         );
         const tablets: product[] = await sanityClient.fetch(tabletsQuery);
         const computers: product[] = await sanityClient.fetch(computersQuery);
+        const pc : product[] = await sanityClient.fetch(pcQuery);
+        const console: product[] = await sanityClient.fetch(consoleQuery);
         setPhones(phones);
         setTelevisions(televisions);
         setTablets(tablets);
         setComputers(computers);
+        setPc(pc)
+        setConsole(console)
         setLoading(false);
       } catch (error: any) {
         console.error(error);

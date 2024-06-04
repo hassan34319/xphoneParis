@@ -85,7 +85,7 @@ const Slide2 = () => {
         <h1 className="text-5xl">Meilleurs prix constatés en Europe !</h1>
         <h1 className="font-bold text-5xl mt-4">Iphone 11</h1>
         <h2 className="mt-4 text-2xl">
-          A partir de 225&euro; <span className="line-through">800&euro;</span>
+          A partir de 225&euro; <span className="line-through">419 &euro;</span>
         </h2>
         <button
           className="bg-black text-white px-8 py-2 rounded text-2xl mt-8 shadow-xl hover:shadow-2xl"
