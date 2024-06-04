@@ -186,12 +186,12 @@ const BurgerMenu = () => {
                 );
               }) : specialSubItems.map((item: nameAndId) => {
                 return (
-                  <div key={index} className="my-4 text-white">
+                  <div key={item._id} className="my-4 text-white">
                     <button
                       className="block text-2xl"
-                      onClick={() => selectedItemHandler(item)}
+                      onClick={() => selectedItemHandler(item.name)}
                     >
-                      {item}
+                      {item.name}
                     </button>
                   </div>
                 );
