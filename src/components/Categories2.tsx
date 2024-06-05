@@ -10,6 +10,7 @@ const Categories2: React.FC = () => {
   const [tablets, setTablets] = useState<product[]>([]);
   const [computers, setComputers] = useState<product[]>([]);
   const [pc, setPc] = useState<product[]>([]);
+  const [dyson, setDyson] = useState<product[]>([]);
   const [consolee, setConsole] = useState<product[]>([]);
   type category = {
     name: string;
@@ -22,6 +23,7 @@ const Categories2: React.FC = () => {
     { name: "Télévisions", products: televisions },
     { name: "Écran Pc", products: pc },
     { name: "Console", products: consolee },
+    { name: "Dyson", products: dyson },
   ];
 
   useEffect(() => {
@@ -38,6 +40,8 @@ const Categories2: React.FC = () => {
           '*[_type == "product" && category == "pc"]';
         const consoleQuery =
           '*[_type == "product" && category == "console"]';
+        const dysonQuery =
+          '*[_type == "product" && category == "dyson"]';
         const phones: product[] = await sanityClient.fetch(phonesQuery);
         const televisions: product[] = await sanityClient.fetch(
           televisionsQuery
@@ -46,12 +50,14 @@ const Categories2: React.FC = () => {
         const computers: product[] = await sanityClient.fetch(computersQuery);
         const pc : product[] = await sanityClient.fetch(pcQuery);
         const console: product[] = await sanityClient.fetch(consoleQuery);
+        const dyson: product[] = await sanityClient.fetch(dysonQuery);
         setPhones(phones);
         setTelevisions(televisions);
         setTablets(tablets);
         setComputers(computers);
         setPc(pc)
         setConsole(console)
+        setDyson(dyson)
         setLoading(false);
       } catch (error: any) {
         console.error(error);

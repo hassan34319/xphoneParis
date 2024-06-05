@@ -63,6 +63,7 @@ const menuItems = [
   { title: "Télévisions", slug: "television" },
   { title: "Écran PC", slug: "pc" },
   { title: "Console", slug: "console" },
+  {title : "Dyson", slug: "dyson"}
 ];
 
 type nameAndId = {

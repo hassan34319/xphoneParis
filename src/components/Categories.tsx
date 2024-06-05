@@ -64,6 +64,13 @@ export const categories: Category[] = [
       "/console3.jpeg",
     search: "Console",
   },
+  {
+    title: "Dyson",
+    sub: "Des produits innovants pour la maison",
+    image:
+      "/dyson.jpeg",
+    search: "Dyson",
+  },
 ];
 
 const Categories: React.FC = () => {
