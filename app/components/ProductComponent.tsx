@@ -60,9 +60,9 @@ function ProductComponent({ product, currentUser }: Props) {
                   fill
                 />
               </div>
-              <div className="w-[30%] h-full flex flex-col reltive items-center justify-center">
+              <div className="w-[30%] h-full flex flex-col reltive items-center justify-start">
                 <div className="w-full h-32 relative">
-                  <Image className="object-contain" fill src="/Verified.png" alt="Verified"/>
+                  <Image className="object-contain" fill src="/grnty.png" alt="Verified"/>
                 </div>
                 <div className="w-full h-24 relative">
                   <Image className="object-contain" fill src="https://image.noelshack.com/fichiers/2024/17/7/1714333874-rreerreer.png" alt="Verified"/>

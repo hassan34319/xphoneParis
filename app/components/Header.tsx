@@ -69,7 +69,7 @@ const Header: React.FC<NavbarProps> = ({
       {/* Z Index ( z-index ) is a CSS property that defines the order of overlapping HTML elements. Elements with a higher index will be placed on top of elements with a lower index. */}
       {/* bg-gradient-to-r from-[#A9F1DF] to-[#FFBBBB] */}
       <button
-        className="md:hidden text-[#AE3033] cursor-pointer w-1/5"
+        className="md:hidden text-[#AE3033] cursor-pointer w-1/6"
         onClick={toggleSidebar}
       >
         <svg
@@ -84,10 +84,11 @@ const Header: React.FC<NavbarProps> = ({
           )}
         </svg>
       </button>
-      <Link href="/#post-main" className="w-1/6 md:w-1/5 relative flex flex-col items-center justify-center">
+      <div className="md:ml-3 w-1/6 md:w-1/4 flex flex-row justify-between ">
+      <Link href="/#post-main" className="w-full md:w-1/3 relative flex flex-col items-center justify-center">
         <div className="w-full h-6 md:h-8 relative">
           <Image
-            src="/community.png"
+            src="/Social.jpg"
             alt="abc"
             className="object-contain"
             fill
@@ -95,6 +96,29 @@ const Header: React.FC<NavbarProps> = ({
         </div>
         <h3 className="text-[0.6rem] md:text-xs">Communite</h3>
       </Link>
+      <Link href="/#post-main" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
+        <div className="w-full h-6 md:h-8 relative">
+          <Image
+            src="/quality.jpg"
+            alt="abc"
+            className="object-contain"
+            fill
+          />
+        </div>
+        <h3 className="text-[0.6rem] md:text-xs">Notre Quality</h3>
+      </Link>
+      <Link href="/#post-main" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
+        <div className="w-full h-6 md:h-8 relative">
+          <Image
+            src="/magasins.jpg"
+            alt="abc"
+            className="object-contain"
+            fill
+          />
+        </div>
+        <h3 className="text-[0.6rem] md:text-xs">Nos Magasins</h3>
+      </Link>
+      </div>
       <div className="items-center justify-center flex flex-1 md:w-1/5">
         {/* So by default it is in center and when md screen comes ot goes to 20% width of the total width of page */}
         {/*Tailwind Styles are mobile first so whatever we style is for mobile and then we add breakpoints for changes for bigger screens like md means for screen sizes greater than md*/}
@@ -169,7 +193,7 @@ const Header: React.FC<NavbarProps> = ({
           }
         }  */}
       </div>
-      <div className="flex w-1/4 items-center justify-center gap-x-4 md:w-1/4 md:gap-x-6 mr-3 ">
+      <div className="flex w-1/3 items-center justify-center gap-x-4 md:w-1/4 md:gap-x-6 md:mr-3 ">
         {currentUser && (
           <Link href="/user" className="flex flex-col items-center">
             <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />

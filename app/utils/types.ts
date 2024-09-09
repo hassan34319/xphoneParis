@@ -45,6 +45,7 @@ export type product = {
   categoryReal? : string
   tags: string[];
   desc: string;
+  rating : string;
   variants: variant[];
   accessories : accessories[]
   review? : Review[]

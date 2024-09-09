@@ -7,124 +7,77 @@ import { Publication } from "../utils/types";
 import { User } from "@prisma/client";
 import { FaImage, FaVideo, FaUserTag, FaMapMarkerAlt } from 'react-icons/fa';
 
-type props = {
-  handleAddPost : (post : Publication) => void
+type Props = {
+  handleAddPost: (post: Publication) => void;
   currentUser: User | null;
-}
+};
 
-const PostCreation = ({handleAddPost,currentUser} : props) => {
+const PostCreation = ({ handleAddPost, currentUser }: Props) => {
   const [postText, setPostText] = useState("");
-  const [uploadedImage, setUploadedImage] = useState([]);
-  const [uploadedVideo, setUploadedVideo] = useState([]);
-  const [uploadedThumbnail, setThumbnail] = useState([]);
+  const [uploadedImage, setUploadedImage] = useState<string[]>([]);
+  const [uploadedVideo, setUploadedVideo] = useState<string[]>([]);
+  const [uploadedThumbnail, setThumbnail] = useState<string[]>([]);
   const [title, setTitle] = useState("");
+
   const handleSubmitChange = async () => {
     try {
       const publicationData = {
-        username : currentUser?.firstName + " " + currentUser?.lastName,
-        userImage : currentUser?.image || undefined,
-        approved : currentUser?.email == "xphonesparis@gmail.com" ? true : false,
+        username: currentUser?.firstName + " " + currentUser?.lastName,
+        userImage: currentUser?.image || undefined,
+        approved: currentUser?.email === "xphonesparis@gmail.com",
         title: title,
-        content: postText, // Update the content field to use the postText directly
+        content: postText,
         images: uploadedImage || [],
-        video: uploadedVideo || [] ,
-        // Add other fields if needed based on your form inputs
+        video: uploadedVideo || [],
       };
 
-      const createdPublication = await handleAddPost(publicationData);
-      setUploadedImage([])
-      setUploadedVideo([])
-      setThumbnail([])
-      setTitle("")
-      setPostText("")
-      toast.success("Publication envoyée pour approbation")
-      // Handle the successful submission (e.g., show a success message or redirect to the post page)
-    } catch (error) {
-      // Handle the error (e.g., show an error message)
-    }
-  };
-  async function createPublication(publicationData: Publication) {
-    try {
-      // Make a post request to Sanity to create a new publication with the given data
-      const response = await sanityClient.create({
-        ...publicationData,
-        _type: "publication",
-      });
-      console.log("Publication created successfully:", response);
-      return response;
+      await handleAddPost(publicationData);
+      setUploadedImage([]);
+      setUploadedVideo([]);
+      setThumbnail([]);
+      setTitle("");
+      setPostText("");
+      toast.success("Publication envoyée pour approbation");
     } catch (error) {
       console.error("Error creating publication:", error);
-      throw error;
     }
-  }
-  const handlePostTextChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
+  };
+
+  const handlePostTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostText(event.target.value);
   };
-  const handleTitleTextChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
+
+  const handleTitleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(event.target.value);
   };
-  const handleImageUpload = () => {
-    // Initialize Cloudinary Widget
-    
-    const widget = (window as any).cloudinary.createUploadWidget(
-      {
-        cloudName: "dxu48h2sd",
-        uploadPreset: "ao0bo4fi",
-      },
-      (error: any, result: any) => {
-        if (!error && result && result.event === "success") {
-          setUploadedImage((prevUploadedImage) =>
-            prevUploadedImage.concat(result.info.secure_url)
-          );
-          setThumbnail((prevImageThumbnail) =>
-            prevImageThumbnail.concat(result.info.thumbnail_url)
-          );
-          console.log(result.info.secure_url);
-        }
-      }
-    );
 
-    // Open the widget when the button is clicked
-    widget.open();
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const fileArray = Array.from(files).map((file) => URL.createObjectURL(file));
+      setUploadedImage((prevImages) => prevImages.concat(fileArray));
+      setThumbnail((prevThumbnails) => prevThumbnails.concat(fileArray));
+    }
   };
 
-  const handleVideoUpload = () => {
-    // Initialize Cloudinary Widget
-    const widget = (window as any).cloudinary.createUploadWidget(
-      {
-        cloudName: "dxu48h2sd",
-        uploadPreset: "b7qclf41",
-      },
-      (error: any, result: any) => {
-        if (!error && result && result.event === "success") {
-          setUploadedVideo((prevUploadedVideo) =>
-            prevUploadedVideo.concat(result.info.secure_url)
-          );
-          setThumbnail((prevVideoThumbnal) =>
-            prevVideoThumbnal.concat(result.info.thumbnail_url)
-          );
-          console.log(result.info.secure_url);
-        }
-      }
-    );
-
-    // Open the widget when the button is clicked
-    widget.open();
+  const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const fileArray = Array.from(files).map((file) => URL.createObjectURL(file));
+      setUploadedVideo((prevVideos) => prevVideos.concat(fileArray));
+    }
   };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4 w-11/12 md:w-1/2">
-    <textarea
-      className="w-full border rounded-lg p-2 mb-4"
-      placeholder="Qu'avez-vous à l'esprit ?"
-      value={postText}
-      onChange={handlePostTextChange}
-    ></textarea>
-          {uploadedThumbnail && uploadedThumbnail.length > 0 && (
-        <div className="mt-2 flex flex-row flex-wrap space-x-2 ">
+      <textarea
+        className="w-full border rounded-lg p-2 mb-4"
+        placeholder="Qu'avez-vous à l'esprit ?"
+        value={postText}
+        onChange={handlePostTextChange}
+      ></textarea>
+      {uploadedThumbnail && uploadedThumbnail.length > 0 && (
+        <div className="mt-2 flex flex-row flex-wrap space-x-2">
           {uploadedThumbnail.map((imageUrl, index) => (
             <Image
               key={index}
@@ -132,36 +85,39 @@ const PostCreation = ({handleAddPost,currentUser} : props) => {
               alt={`Uploaded ${index + 1}`}
               width={50}
               height={50}
-              className="mr-2" // Averdjust spacing between images if needed
+              className="mr-2"
             />
           ))}
         </div>
       )}
-    <div className="flex items-center justify-between mb-4">
-      <div className="flex flex-row gap-x-2">
-        <button
-          className="bg-gray-200 rounded-lg px-4 py-2 mr-2"
-          onClick={handleImageUpload}
-        >
-          <FaImage />
-        </button>
-        <button
-          className="bg-gray-200 rounded-lg px-4 py-2 mr-2"
-          onClick={handleVideoUpload}
-        >
-          <FaVideo />
-        </button>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-row gap-x-2">
+          <label className="bg-gray-200 rounded-lg px-4 py-2 cursor-pointer">
+            <FaImage />
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageUpload}
+              style={{ display: "none" }}
+            />
+          </label>
+          <label className="bg-gray-200 rounded-lg px-4 py-2 cursor-pointer">
+            <FaVideo />
+            <input
+              type="file"
+              accept="video/*"
+              multiple
+              onChange={handleVideoUpload}
+              style={{ display: "none" }}
+            />
+          </label>
         </div>
-        {/* Add similar buttons for tagging users and adding locations */}
-      <button
-        className="bg-blue-500 text-white rounded-lg px-4 py-2"
-        onClick={handleSubmitChange}
-      >
-        Poste
-      </button>
+        <button className="bg-blue-500 text-white rounded-lg px-4 py-2" onClick={handleSubmitChange}>
+          Poste
+        </button>
+      </div>
     </div>
-</div>
-
   );
 };
 

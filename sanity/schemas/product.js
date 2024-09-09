@@ -30,6 +30,11 @@ export default {
       type: "string",
     },
     {
+      name: "rating",
+      title: "Rating",
+      type: "string",
+    },
+    {
       name: "variants",
       title: "Variants",
       type: "array",

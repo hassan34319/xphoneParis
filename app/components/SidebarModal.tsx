@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface NavbarProps {
   menuCategories: { title: string; products: { name: string; _id: string }[] }[];
@@ -15,6 +15,8 @@ const SidebarModal: React.FC<NavbarProps> = ({
   const [isSubModalOpen, setIsSubModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("");
   const [activeProduct, setActiveProduct] = useState("");
+
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const toggleSubModal = () => {
     if (isSubModalOpen) {
@@ -41,6 +43,22 @@ const SidebarModal: React.FC<NavbarProps> = ({
     };
   }, [isOpen, isSubModalOpen]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        toggleSidebar();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, toggleSidebar]);
+
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
     setActiveProduct("");
@@ -62,16 +80,24 @@ const SidebarModal: React.FC<NavbarProps> = ({
         ></div>
       )}
       <div
+        ref={sidebarRef}
         className={`space-y-10 fixed top-12 md:top-[7.2rem] left-0 w-full h-full bg-white z-50 shadow-lg md:w-1/4 ${
           isOpen ? "block" : "hidden"
         } overflow-y-auto`}
       >
-        <button
-          className="absolute top-0 right-0 m-4 p-2 text-white bg-[#AE3033] rounded-lg cursor-pointer"
-          onClick={toggleSidebar}
-        >
-          Close
-        </button>
+<button
+  className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-transparent rounded-full cursor-pointer"
+  onClick={toggleSidebar}
+>
+  <svg
+    className="w-6 h-6 text-[#AE3033]"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+  >
+    <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+</button>
 
         <div className="p-4 h-full overflow-y-auto">
           <h2 className="font-bold text-sm text-[#AE3033]">Menu Categories</h2>
@@ -108,11 +134,18 @@ const SidebarModal: React.FC<NavbarProps> = ({
           } md:h-screen overflow-y-auto`}
         >
           <button
-            className="absolute top-0 right-0 m-4 p-2 text-white bg-[#AE3033] rounded-lg cursor-pointer"
-            onClick={closeSubModal}
-          >
-            Close
-          </button>
+  className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-[#AE3033] rounded-full cursor-pointer"
+  onClick={closeSubModal}
+>
+  <svg
+    className="w-6 h-6 text-white"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+  >
+    <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+</button>
 
           <div className="p-4 h-full overflow-y-auto mt-10">
             {activeCategory && (
@@ -155,4 +188,3 @@ const SidebarModal: React.FC<NavbarProps> = ({
 };
 
 export default SidebarModal;
-

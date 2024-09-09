@@ -226,7 +226,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
 
         <div>
           <h1 className="lg:text-xl mt-10 mb-2">Condition</h1>
-          <div className="flex flex-row md:gap-4 gap-2 mb-12">
+          <div className="flex  flex-wrap md:gap-4 gap-2 mb-12">
             {uniqueGradesAndPrices.map((gradeAndPrice: any) => {
               return (
                 <SelectionButton
@@ -241,10 +241,10 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                     onChange={(e) => setSelectedGrade(e.target.value)}
                     className="hidden"
                   />
-                  <h1 className="w-full text-xs whitespace-nowrap">
+                  <h1 className="w-full text-lg whitespace-nowrap">
                     {gradeAndPrice[0]}
                   </h1>
-                  <h1 className="text-xs whitespace-nowrap">
+                  <h1 className="text-lg whitespace-nowrap">
                     {gradeAndPrice[1]} &euro;
                   </h1>
                 </SelectionButton>
@@ -253,7 +253,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
           </div>
 
           <h1 className="lg:text-xl my-2">Stockage</h1>
-          <div className="flex flex-row gap-4 mb-12">
+          <div className="flex  flex-wrap gap-4 mb-12">
             {uniqueCapacities.map((capacity: any) => {
               return (
                 <SelectionButton
@@ -270,14 +270,14 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                     }
                     className="hidden"
                   />
-                  {capacity} Go
+                  <h1 className="text-lg">{capacity} Go</h1>
                 </SelectionButton>
               );
             })}
           </div>
 
           <h1 className="lg:text-xl my-2">Couleur</h1>
-          <div className="flex flex-row gap-4">
+          <div className="flex  flex-wrap gap-4">
             {uniqueColors.map((color: any) => {
               return (
                 <SelectionButton key={color} selected={selectedColor == color}>
@@ -289,7 +289,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                     onChange={(e) => colorChangeHandler(e.target.value)}
                     className="hidden"
                   />
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center text-lg">
                     <span
                       className="w-4 h-4 rounded-full inline-block mr-2"
                       style={{ backgroundColor: getColorCode(color) }}
