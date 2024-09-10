@@ -129,6 +129,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
       {/* Sub Modal */}
       {isSubModalOpen && (
         <div
+        ref={sidebarRef}
           className={`fixed top-12 md:top-[7.2rem] left-0 md:left-[25%] w-full h-full bg-white z-50 shadow-lg md:w-1/4 ${
             isOpen ? "block" : "hidden"
           } md:h-screen overflow-y-auto`}

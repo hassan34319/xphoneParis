@@ -88,13 +88,13 @@ const Header: React.FC<NavbarProps> = ({
       <Link href="/#post-main" className="w-full md:w-1/3 relative flex flex-col items-center justify-center">
         <div className="w-full h-6 md:h-8 relative">
           <Image
-            src="/Social.jpg"
+            src="/community.png"
             alt="abc"
             className="object-contain"
             fill
           />
         </div>
-        <h3 className="text-[0.6rem] md:text-xs">Communite</h3>
+        <h3 className="text-[0.6rem] md:text-xs">Social Club</h3>
       </Link>
       <Link href="/#post-main" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
         <div className="w-full h-6 md:h-8 relative">
@@ -105,7 +105,7 @@ const Header: React.FC<NavbarProps> = ({
             fill
           />
         </div>
-        <h3 className="text-[0.6rem] md:text-xs">Notre Quality</h3>
+        <h3 className="text-[0.6rem] md:text-xs">Notre qualité</h3>
       </Link>
       <Link href="/#post-main" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
         <div className="w-full h-6 md:h-8 relative">
