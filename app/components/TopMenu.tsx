@@ -28,7 +28,8 @@ const TopMenu: React.FC<NavbarProps> = ({
               viewBox="0 0 24 24"
             >
               {isSidebarOpen ? (
-                <path d="M19 7h-14c-1.104 0-2 .896-2 2v6c0 1.104.896 2 2 2h14c1.104 0 2-.896 2-2v-6c0-1.104-.896-2-2-2zm0 2v6h-14v-6h14zm-11 2h2v2h-2v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z" />
+                <></>
+                // <path d="M19 7h-14c-1.104 0-2 .896-2 2v6c0 1.104.896 2 2 2h14c1.104 0 2-.896 2-2v-6c0-1.104-.896-2-2-2zm0 2v6h-14v-6h14zm-11 2h2v2h-2v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z" />
               ) : (
                 <path d="M4 5h16v2h-16v-2zm0 6h16v2h-16v-2zm0 6h16v2h-16v-2z" />
               )}
