@@ -65,7 +65,7 @@ const Header: React.FC<NavbarProps> = ({
   };
   const loginModal = useLoginModal();
   return (
-    <header className="top-0 z-30 flex w-full items-center justify-between bg-white p-4">
+    <header className="top-0 z-30 flex w-full items-start md:items-center justify-between bg-white p-4">
       {/* Z Index ( z-index ) is a CSS property that defines the order of overlapping HTML elements. Elements with a higher index will be placed on top of elements with a lower index. */}
       {/* bg-gradient-to-r from-[#A9F1DF] to-[#FFBBBB] */}
       <button
@@ -84,7 +84,7 @@ const Header: React.FC<NavbarProps> = ({
           )}
         </svg>
       </button>
-      <div className="md:ml-3 w-1/6 md:w-1/4 flex flex-row justify-between ">
+      <div className="md:ml-3 w-1/6 md:w-1/4 flex flex-row justify-between items-start ">
       <Link href="/#post-main" className="w-full md:w-1/3 relative flex flex-col items-center justify-center">
         <div className="w-full h-6 md:h-8 relative">
           <Image
@@ -193,7 +193,7 @@ const Header: React.FC<NavbarProps> = ({
           }
         }  */}
       </div>
-      <div className="flex w-1/3 items-center justify-center gap-x-4 md:w-1/4 md:gap-x-6 md:mr-3 ">
+      <div className="flex w-1/3 items-start md:items-center justify-center gap-x-4 md:w-1/4 md:gap-x-6 md:mr-3 ">
         {currentUser && (
           <Link href="/user" className="flex flex-col items-center">
             <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />

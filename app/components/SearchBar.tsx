@@ -19,7 +19,7 @@ function SearchBar({}: Props) {
     }
   };
   return (
-    <div className="flex flex-1 items-center justify-center space-x-8 md:hidden mb-5 mt-2">
+    <div className="flex flex-1 items-center justify-center space-x-8 md:hidden mb-5">
         
       {/* Flex 1 means you want this div to take as much space as possible so 80% space as 20% space is taken by above container as w=1/5 for that. Space x means apce between components horizontally */}
 
