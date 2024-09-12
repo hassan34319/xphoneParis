@@ -94,7 +94,7 @@ const Header: React.FC<NavbarProps> = ({
             fill
           />
         </div>
-        <h3 className="text-[0.6rem] md:text-xs">Social Club</h3>
+        <h3 className="text-[0.6rem] md:text-xs text-center">Social Club</h3>
       </Link>
       <Link href="/#post-main" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
         <div className="w-full h-6 md:h-8 relative">
@@ -105,7 +105,7 @@ const Header: React.FC<NavbarProps> = ({
             fill
           />
         </div>
-        <h3 className="text-[0.6rem] md:text-xs">Notre qualité</h3>
+        <h3 className="text-[0.6rem] md:text-xs text-center">Notre qualité</h3>
       </Link>
       <Link href="/#post-main" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
         <div className="w-full h-6 md:h-8 relative">
@@ -116,7 +116,7 @@ const Header: React.FC<NavbarProps> = ({
             fill
           />
         </div>
-        <h3 className="text-[0.6rem] md:text-xs">Nos Magasins</h3>
+        <h3 className="text-[0.6rem] md:text-xs text-center">Nos Magasins</h3>
       </Link>
       </div>
       <div className="items-center justify-center flex flex-1 md:w-1/5">
@@ -197,7 +197,7 @@ const Header: React.FC<NavbarProps> = ({
         {currentUser && (
           <Link href="/user" className="flex flex-col items-center">
             <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
-            <h3 className="text-[0.6rem]">Espace Client</h3>
+            <h3 className="text-[0.6rem] text-center">Espace Client</h3>
           </Link>
         )}
         {!currentUser && (
@@ -206,21 +206,21 @@ const Header: React.FC<NavbarProps> = ({
             onClick={loginModal.onOpen}
           >
             <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
-            <h3 className="text-[0.6rem]">Espace Client</h3>
+            <h3 className="text-[0.6rem] text-center">Espace Client</h3>
           </button>
         )}
         <Link href="/us" className="hidden lg:flex flex-col items-center">
           <GlobeAltIcon className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
-          <h3 className="text-[0.6rem]">Accueil</h3>
+          <h3 className="text-[0.6rem] text-center">Accueil</h3>
         </Link>
         <Link href="/faq" className="hidden lg:flex flex-col items-center">
           <QuestionMarkCircleIcon className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
-          <h3 className="text-[0.6rem]">FAQ</h3>
+          <h3 className="text-[0.6rem] text-center">FAQ</h3>
         </Link>
         {/* https://heroicons.com/ */}
         {/* //See Global Css FIle Must Give height and width to the icons for them to be seen. */}
         <Link href="/cart">
-          <div className="relative cursor-pointer md:flex flex-col items-center">
+          <div className="relative cursor-pointer md:flex flex-col justify-center items-center">
             {totalQuantity > 0 && (
               <span className="absolute -right-1 -top-1 z-50 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r  from-[#AE3033] to-[#751A21] text-xs text-[white]">
                 {totalQuantity}
@@ -229,7 +229,7 @@ const Header: React.FC<NavbarProps> = ({
             )}
             {/* -top-1 -right-1 means it will negative margin to right and top so moves towards that side. z-index-50 means top priority so on top of evrything */}
             <BiShoppingBag className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
-            <h3 className="text-[0.6rem]">Panier</h3>
+            <h3 className="text-[0.6rem] text-center">Panier</h3>
           </div>
         </Link>
 
