@@ -54,9 +54,9 @@ function SampleNextArrow(props: ArrowProps) {
       style={{
         ...style,
         display: "block",
-        background: "black",
-        borderRadius: "100%", // Fully rounded
-        border: "2px solid black", // Border color black
+        background: "red", // Red color for the background
+        borderRadius: "50%", // Fully rounded
+        // border: "2px solid red", // Red border
       }}
       onClick={onClick}
     />
@@ -70,14 +70,16 @@ function SamplePrevArrow(props: ArrowProps) {
       className={className}
       style={{
         ...style,
-        background: "black",
-        borderRadius: "100%", // Fully rounded
-        border: "2px solid black", // Border color black
+        display: "block",
+        background: "red", // Red color for the background
+        borderRadius: "50%", // Fully rounded
+        // border: "2px solid red", // Red border
       }}
       onClick={onClick}
     />
   );
 }
+
 function PostContent({ publication, currentUser }: Props) {
 
   const shareUrl= `https://test-xphones.vercel.app/#${publication._id}`
@@ -93,6 +95,7 @@ function PostContent({ publication, currentUser }: Props) {
       ? publication.likes.includes(currentUser.email)
       : false
   );
+  const [likesCount,setLikesCount] = useState(publication?.likes?.length)
   const [likes, setLikes] = useState(publication?.likes || []);
   // State for approved comments
 
@@ -165,59 +168,36 @@ function PostContent({ publication, currentUser }: Props) {
     }
   };
   const onLikeHandlerrr = async () => {
-    
-
-    if (!currentUser) {
+    if (!currentUser || !currentUser.email) {
       toast.error("Please login to Like a post");
       return;
     }
+  
+    const isAlreadyLiked = likes.includes(currentUser.email);
+    const updatedLikes = isAlreadyLiked
+      ? likes.filter((email) => email !== currentUser.email)
+      : [...likes, currentUser.email];
 
-    if(!currentUser.email) {
-      return;
-    }
+      console.log(updatedLikes)
 
-    const updatedLikes = likes.includes(currentUser.email!)
-    ? likes.filter((email) => email !== currentUser.email)
-    : [...likes, currentUser.email];
-
-    // Update the likes array on the Sanity publication using its ID
+      setLikesCount(updatedLikes.length)
+  
     try {
-      // Send the update request to Sanity
+      // Update the likes array in Sanity
       await sanityClient
         .patch(publication._id!)
         .set({ likes: updatedLikes })
         .commit();
-
-      // Handle successful update if needed
-      console.log("Likes updated successfully!");
+  
+      // Update state based on whether it was liked or unliked
+      setLikes(updatedLikes);
+      setIsLiked(!isLiked); // Toggle like status
     } catch (error) {
-      // Handle error if the update fails
       console.error("Error updating likes:", error);
+      toast.error("Error updating likes");
     }
-        // Update the likesNum state to reflect the new number of likes
-   
-
-
-
-    // Update the likes array locally (optional) to show the immediate change to the user
-
-    if(currentUser && currentUser.email) {
-    setLikes((prevLikes) => {
-      const updatedLikes = prevLikes.includes(currentUser!.email!)
-        ? prevLikes.filter((email) => email !== currentUser.email)
-        : [...prevLikes, currentUser.email!];
-  
-      // Toggle the like state
-      setIsLiked(!prevLikes.includes(currentUser!.email!));
-    
-  
-      // Return the updated likes array to set the new state
-      return updatedLikes; // No need for || []
-    });
-  }
-
-   
   };
+  
   const [commentContent, setCommentContent] = useState("");
   const onCommentHandler = async () => {
     // Check if the current user is authenticated before adding the comment
@@ -278,7 +258,7 @@ function PostContent({ publication, currentUser }: Props) {
     slidesToScroll: 1,
     innerWidth: "max",
     beforeChange: (current: number, next: number) => setCurrentSlide(next),
-    className: "custom-slider",
+    // className: "custom-slider",
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
@@ -383,7 +363,7 @@ function PostContent({ publication, currentUser }: Props) {
           <HandThumbUpIcon
             className={`h-4  text-green-600 fill-green-800`}
           />{" "}
-          {likes.length}
+          {likesCount}
         </p>
        {publication.buttonText && publication.productReference &&  <Link href={`/products/${publication.productReference._ref}`}  className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">{publication.buttonText}</Link>}
       </div>

@@ -2,10 +2,10 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { sanityClient } from "../../lib/sanityClient";
+import { sanityClient } from "../../lib/sanityClient"; // Import Sanity client
 import { Publication } from "../utils/types";
 import { User } from "@prisma/client";
-import { FaImage, FaVideo, FaUserTag, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaImage, FaVideo } from 'react-icons/fa';
 
 type Props = {
   handleAddPost: (post: Publication) => void;
@@ -18,14 +18,31 @@ const PostCreation = ({ handleAddPost, currentUser }: Props) => {
   const [uploadedVideo, setUploadedVideo] = useState<string[]>([]);
   const [uploadedThumbnail, setThumbnail] = useState<string[]>([]);
   const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Function to upload image/video to Sanity and get URL
+  const uploadToSanity = async (file: File): Promise<string> => {
+    try {
+      const asset = await sanityClient.assets.upload("file", file, {
+        contentType: file.type,
+        filename: file.name,
+      });
+
+      return asset.url; // Returning the uploaded file URL
+    } catch (error) {
+      console.error("Sanity upload failed:", error);
+      throw error;
+    }
+  };
 
   const handleSubmitChange = async () => {
+    setLoading(true);
     try {
       const publicationData = {
-        username: currentUser?.firstName + " " + currentUser?.lastName,
+        username: `${currentUser?.firstName} ${currentUser?.lastName}`,
         userImage: currentUser?.image || undefined,
         approved: currentUser?.email === "xphonesparis@gmail.com",
-        title: title,
+        title,
         content: postText,
         images: uploadedImage || [],
         video: uploadedVideo || [],
@@ -40,6 +57,9 @@ const PostCreation = ({ handleAddPost, currentUser }: Props) => {
       toast.success("Publication envoyée pour approbation");
     } catch (error) {
       console.error("Error creating publication:", error);
+      toast.error("Failed to create publication");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,20 +71,34 @@ const PostCreation = ({ handleAddPost, currentUser }: Props) => {
     setTitle(event.target.value);
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const fileArray = Array.from(files).map((file) => URL.createObjectURL(file));
-      setUploadedImage((prevImages) => prevImages.concat(fileArray));
-      setThumbnail((prevThumbnails) => prevThumbnails.concat(fileArray));
+      setLoading(true);
+      try {
+        const fileArray = await Promise.all(Array.from(files).map((file) => uploadToSanity(file)));
+        setUploadedImage((prevImages) => prevImages.concat(fileArray));
+        setThumbnail((prevThumbnails) => prevThumbnails.concat(fileArray));
+      } catch (error) {
+        toast.error("Failed to upload images");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVideoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const fileArray = Array.from(files).map((file) => URL.createObjectURL(file));
-      setUploadedVideo((prevVideos) => prevVideos.concat(fileArray));
+      setLoading(true);
+      try {
+        const fileArray = await Promise.all(Array.from(files).map((file) => uploadToSanity(file)));
+        setUploadedVideo((prevVideos) => prevVideos.concat(fileArray));
+      } catch (error) {
+        toast.error("Failed to upload videos");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -113,8 +147,12 @@ const PostCreation = ({ handleAddPost, currentUser }: Props) => {
             />
           </label>
         </div>
-        <button className="bg-blue-500 text-white rounded-lg px-4 py-2" onClick={handleSubmitChange}>
-          Poste
+        <button
+          className={`bg-blue-500 text-white rounded-lg px-4 py-2 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={handleSubmitChange}
+          disabled={loading}
+        >
+          {loading ? 'Loading...' : 'Poste'}
         </button>
       </div>
     </div>
@@ -122,3 +160,4 @@ const PostCreation = ({ handleAddPost, currentUser }: Props) => {
 };
 
 export default PostCreation;
+
