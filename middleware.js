@@ -1,5 +1,6 @@
 // middleware.js
 import { NextResponse } from 'next/server';
+import maintenanceConfig from './maintenance.json';
 
 const maintenancePaths = ['/maintenance', '/_next', '/api'];
 
@@ -11,9 +12,7 @@ export function middleware(req) {
     return NextResponse.next();
   }
 
-  const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true';
-
-  if (isMaintenance) {
+  if (maintenanceConfig.enabled) {
     url.pathname = '/maintenance';
     return NextResponse.redirect(url);
   }
