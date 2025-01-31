@@ -19,7 +19,7 @@ const BottomMenu = () => {
       <h1 className="text-xl">BESOIN D'AIDE</h1>
       <div className="flex flex-col items-center justify-center text-sm space-y-1">
             <Link href={"/contactez"}>Contactez-nous</Link>
-            <h3>Questions fréquente</h3>
+            <Link href={"/faq"}>Questions fréquente</Link>
             <Link href={"/livraison"}>Livrasion</Link>
         </div>
       </div>
@@ -27,9 +27,9 @@ const BottomMenu = () => {
       <div className="flex flex-col items-center justify-center space-y-2">
       <h1 className="text-xl">DROITS LEGAUX</h1>
       <div className="flex flex-col items-center justify-center text-sm space-y-1">
-    <h3>Conditions générale d'utilisation</h3>
-    <h3>Conditions générale de vente</h3>
-    <h3>Mentions légales</h3>
+    <Link href={""}>Conditions générale d'utilisation</Link>
+    <Link href={"/cgv"}>Conditions générale de vente</Link>
+    <Link href={"/mentions"}>Mentions légales</Link>
   </div>
 </div>
 
