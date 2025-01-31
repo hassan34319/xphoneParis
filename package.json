@@ -40,6 +40,7 @@
     "react-bootstrap": "^2.10.2",
     "react-burger-menu": "^3.0.8",
     "react-dom": "^18.2.0",
+    "react-error-boundary": "^5.0.0",
     "react-feather": "^2.0.10",
     "react-hook-form": "^7.44.3",
     "react-hot-toast": "^2.3.0",

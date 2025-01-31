@@ -92,7 +92,8 @@ async function QuiSommes() {
   <div className="w-full md:w-1/2 max-w-xl">
     <video
       autoPlay
-      muted
+      // muted
+      
       loop
       playsInline
       controls={false}
@@ -100,7 +101,8 @@ async function QuiSommes() {
     >
       <source 
         // Access the video URL directly from the asset
-        src={mediaData.heroVideo?.asset?.url || ''}
+        // src={mediaData.heroVideo?.asset?.url || ''}
+        src="/video1.mp4"
         type="video/mp4"
       />
       Your browser does not support the video tag.
