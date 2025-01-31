@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 /* eslint-disable react/no-unescaped-entities */
 const cgv = () => {
   return (
-      <div className="mx-auto w-11/12 rounded my-2 p-4">
+      <div className="mx-auto w-11/12 rounded my-2 p-4 text-center">
         <h1 className="text-xl mb-2 text-center">
           Conditions generales de ventes
         </h1>
