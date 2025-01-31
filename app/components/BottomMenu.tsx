@@ -11,6 +11,7 @@ const BottomMenu = () => {
             <Link href={"/qui_sommes"}>Qui sommes nous?</Link>
             <Link href={"/notre_quality"}>Notre qualité</Link>
             <Link href={"/nos_magasin"}>Nos magasin</Link>
+            <Link href={"/nos_grades"}>Nos magasin</Link>
         </div>
       </div>
 
