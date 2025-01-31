@@ -61,7 +61,7 @@ async function Home({}: Props) {
         />
         <Categories />
       </div>
-      <Post publications={publications} currentUser={currentUser} />
+      {/* <Post publications={publications} currentUser={currentUser} /> */}
       <SubscribeCard />
       <Values />
     </div>

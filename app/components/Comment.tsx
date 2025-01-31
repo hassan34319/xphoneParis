@@ -21,9 +21,9 @@ function CommentComponent({ comment }: Props) {
             />
             {comment.user}
           </p>
-          <p className="text-sm text-gray-900">
+          <div className="text-sm text-gray-900">
             <p>{comment.createdAt?.toLocaleString()}</p>
-          </p>
+          </div>
         </div>
       </footer>
       <p className="pt-[2vh] text-gray-900">{comment.content}</p>
