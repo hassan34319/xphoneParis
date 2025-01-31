@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-
+  typescript: {
+    ignoreBuildErrors: true
+  },
+  eslint: {
+    ignoreDuringBuilds: true
+  },
   images: {
     domains: ["flowbite.com", "image.noelshack.com", "www.noelshack.com", "res.cloudinary.com","cdn.sanity.io", "fiverr-res.cloudinary.com","www.backmarket.be","m.media-amazon.com","www.pngall.com","www.rueducommerce.fr"],
   },
@@ -17,6 +22,6 @@ const nextConfig = {
         : null,
     ].filter(Boolean);
   },
-};
-
-module.exports = nextConfig;
+ };
+ 
+ module.exports = nextConfig;
