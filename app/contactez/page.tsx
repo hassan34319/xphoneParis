@@ -2,7 +2,7 @@ import { sanityClient } from "../../lib/sanityClient";
 import Image from 'next/image';
 import { urlFor } from '../../lib/sanityClient';
 
-// Types for media content only
+
 interface ContactPageMedia {
   logo: any;
   emailAgent: any;
