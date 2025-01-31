@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SelectionButton from "./SelectionButton";
 import { urlFor } from "../../lib/sanityClient";
 import { useStateContext } from "../context/stateContext";
@@ -7,29 +7,33 @@ import ClientOnly from "./ClientOnly";
 import Image from "next/image";
 
 interface ProductSelectionProps {
-  product: any;
+  selectedColor: string;
+  selectedCapacity: string;
+  selectedGrade: string;
   setImage: (image: string) => void;
+  product: any;
 }
 
 const ProductSelection: React.FC<ProductSelectionProps> = ({
   product,
   setImage,
+  selectedColor: initialColor,
+  selectedCapacity: initialCapacity,
+  selectedGrade: initialGrade,
 }) => {
-  const mappedAccessories =
-    product.accessories &&
-    product.accessories.map((acc: any) => ({
-      ...acc,
-      image_new: urlFor(acc.icon).url(),
-    }));
   const { addToCart, cartItems } = useStateContext();
   const [productImage, setProductImage] = useState(
     urlFor(product.variants[0].image).url()
   );
-  const [selectedColor, setSelectedColor] = useState(product.variants[0].color);
-  const [selectedCapacity, setSelectedCapacity] = useState(
-    product.variants[0].capacity
-  );
-  const [selectedGrade, setSelectedGrade] = useState(product.variants[0].grade);
+  const [selectedColor, setSelectedColor] = useState(initialColor);
+  const [selectedCapacity, setSelectedCapacity] = useState(initialCapacity);
+  const [selectedGrade, setSelectedGrade] = useState(initialGrade);
+
+  useEffect(() => {
+    setSelectedColor(initialColor);
+    setSelectedCapacity(initialCapacity);
+    setSelectedGrade(initialGrade);
+  }, [initialColor, initialCapacity, initialGrade]);
 
   const price = product.variants
     .filter(
@@ -48,8 +52,6 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
         selectedGrade == variant.grade
     )
     .map((variant: any) => variant.quantity)[0];
-
-  console.log(Availquantity);
 
   const cartQuantity = cartItems.reduce((quantity: number, item: any) => {
     if (
@@ -226,7 +228,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
 
         <div>
           <h1 className="lg:text-xl mt-10 mb-2">Condition</h1>
-          <div className="flex  flex-wrap md:gap-4 gap-2 mb-12">
+          <div className="flex flex-wrap md:gap-4 gap-2 mb-12">
             {uniqueGradesAndPrices.map((gradeAndPrice: any) => {
               return (
                 <SelectionButton
@@ -234,7 +236,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                   selected={selectedGrade == gradeAndPrice[0]}
                 >
                   <input
-                    type={"radio"}
+                    type="radio"
                     name="grade"
                     value={gradeAndPrice[0]}
                     checked={selectedGrade == gradeAndPrice[0]}
@@ -253,7 +255,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
           </div>
 
           <h1 className="lg:text-xl my-2">Stockage</h1>
-          <div className="flex  flex-wrap gap-4 mb-12">
+          <div className="flex flex-wrap gap-4 mb-12">
             {uniqueCapacities.map((capacity: any) => {
               return (
                 <SelectionButton
@@ -261,7 +263,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                   selected={selectedCapacity == capacity}
                 >
                   <input
-                    type={"radio"}
+                    type="radio"
                     name="capacity"
                     value={capacity}
                     checked={selectedCapacity == capacity}
@@ -277,12 +279,12 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
           </div>
 
           <h1 className="lg:text-xl my-2">Couleur</h1>
-          <div className="flex  flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4">
             {uniqueColors.map((color: any) => {
               return (
                 <SelectionButton key={color} selected={selectedColor == color}>
                   <input
-                    type={"radio"}
+                    type="radio"
                     name="color"
                     value={color}
                     checked={selectedColor == color}
@@ -300,32 +302,6 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                 </SelectionButton>
               );
             })}
-          </div>
-          {mappedAccessories && (
-            <h1 className="lg:text-xl my-4">Accessories</h1>
-          )}
-          <div className="flex flex-wrap gap-4">
-            {mappedAccessories &&
-              mappedAccessories.map((acc: any) => {
-                return (
-                  <div
-                    key={acc.title}
-                    className=" w-full bg-red-500 flex flex-row  justify-center items-center rounded-lg px-2 md:py-2 whitespace-nowrap md:w-[45%] lg:w-[45%] xl:w-[30%]"
-                  >
-                    <div className="relative md:h-5 w-5 h-10">
-                      <Image
-                        src={acc.image_new}
-                        alt="banner"
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
-                    <span className="ml-2 inline-block text-black text-sm font-bold">
-                      {acc.name}
-                    </span>
-                  </div>
-                );
-              })}
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-"use client";
+
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
@@ -33,13 +33,12 @@ import LoginModal from "./LoginModal";
 import useLoginModal from "../../hooks/useLoginModal";
 interface NavbarProps {
   currentUser?: SafeUser | null;
-  menuCategories : { title: string; products: { name: string; _id: string }[] }[];
+  menuCategories: { title: string; products: { name: string; _id: string }[] }[];
 }
 interface BrandData {
   [key: string]: string[];
 }
-// Type rfce to create component and export it with the same name as your page
-// Image component imported by next/image can be used isntead of regular img html tag and is lazy loaded by default.
+
 type Props = {};
 const Header: React.FC<NavbarProps> = ({
   menuCategories,
@@ -65,7 +64,7 @@ const Header: React.FC<NavbarProps> = ({
   };
   const loginModal = useLoginModal();
   return (
-    <header className="top-0 z-30 flex w-full items-start md:items-center justify-between bg-white p-4">
+    <header className="top-0 z-30 flex w-full font-sans items-start md:items-center justify-between bg-white p-4">
       {/* Z Index ( z-index ) is a CSS property that defines the order of overlapping HTML elements. Elements with a higher index will be placed on top of elements with a lower index. */}
       {/* bg-gradient-to-r from-[#A9F1DF] to-[#FFBBBB] */}
       <button
@@ -84,47 +83,56 @@ const Header: React.FC<NavbarProps> = ({
           )}
         </svg>
       </button>
-      <div className="md:ml-3 w-1/6 md:w-1/4 flex flex-row justify-between items-start ">
-      <Link href="/#post-main" className="w-full md:w-1/3 relative flex flex-col items-center justify-center">
-        <div className="w-full h-6 md:h-8 relative">
-          <Image
-            src="/community.png"
-            alt="abc"
-            className="object-contain"
-            fill
-          />
-        </div>
-        <h3 className="text-[0.6rem] md:text-xs text-center">Social Club</h3>
-      </Link>
-      <Link href="/#post-main" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
-        <div className="w-full h-6 md:h-8 relative">
-          <Image
-            src="/quality.jpg"
-            alt="abc"
-            className="object-contain"
-            fill
-          />
-        </div>
-        <h3 className="text-[0.6rem] md:text-xs text-center">Notre qualité</h3>
-      </Link>
-      <Link href="/#post-main" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
-        <div className="w-full h-6 md:h-8 relative">
-          <Image
-            src="/magasins.jpg"
-            alt="abc"
-            className="object-contain"
-            fill
-          />
-        </div>
-        <h3 className="text-[0.6rem] md:text-xs text-center">Nos Magasins</h3>
-      </Link>
+      <div className="md:ml-3 w-1/6 md:w-1/4 flex flex-row  items-start justify-center ">
+        <Link href="/socialclub" className="w-full md:w-1/3 flex flex-col items-center justify-center">
+          <div className="w-full h-[18px] mt-1 md:mt-0 mb-[1px] md:h-8 relative">
+            <Image
+              src="/community.png"
+              alt="abc"
+              className="object-contain"
+              fill
+            />
+          </div>
+
+
+          <h3 className="text-[0.6rem] md:text-xs text-center  leading-none">
+            <span className="block md:inline">Social </span>
+            <span className="block md:inline font-extrabold md:font-normal">Club</span>
+          </h3>
+
+
+
+
+        </Link>
+        <Link href="/notre_quality" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
+          <div className="w-full h-6 md:h-8 relative">
+            <Image
+              src="/quality.jpg"
+              alt="abc"
+              className="object-contain"
+              fill
+            />
+          </div>
+          <h3 className="text-[0.6rem] md:text-xs text-center">Notre qualité</h3>
+        </Link>
+        <Link href="/nos_magasin" className="hidden w-full md:w-1/3 relative lg:flex flex-col items-center justify-center">
+          <div className="w-full h-6 md:h-8 relative">
+            <Image
+              src="/magasins.jpg"
+              alt="abc"
+              className="object-contain"
+              fill
+            />
+          </div>
+          <h3 className="text-[0.6rem] md:text-xs text-center">Nos Magasins</h3>
+        </Link>
       </div>
       <div className="items-center justify-center flex flex-1 md:w-1/5">
         {/* So by default it is in center and when md screen comes ot goes to 20% width of the total width of page */}
         {/*Tailwind Styles are mobile first so whatever we style is for mobile and then we add breakpoints for changes for bigger screens like md means for screen sizes greater than md*/}
         <Link href="/">
           {/*Adds a Link to the apple tag to homepage */}
-          <div className="relative h-6 w-40 md:h-8 md:w-[14rem] xl:h-12 xl:w-[20rem] cursor-pointer opacity-100 transition hover:opacity-80">
+          <div className="relative h-5 mt-1 w-40 md:h-8 md:w-[14rem] xl:h-12 xl:w-[20rem] cursor-pointer opacity-100 transition hover:opacity-80">
             {/* //Tailwind by default has no margins so content starts right from top left, h and w are height and width */}
             {/* //Relative must be added when using layout=fill for the image so that div is relative to the size of image.  */}
             <Image
@@ -197,7 +205,11 @@ const Header: React.FC<NavbarProps> = ({
         {currentUser && (
           <Link href="/user" className="flex flex-col items-center">
             <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
-            <h3 className="text-[0.6rem] text-center">Espace Client</h3>
+            <h3 className="text-[0.6rem] text-center leading-none">
+              <span className="block md:inline">Espace </span>
+              <span className="block md:inline font-extrabold md:font-normal">Client</span>
+            </h3>
+
           </Link>
         )}
         {!currentUser && (
@@ -206,7 +218,11 @@ const Header: React.FC<NavbarProps> = ({
             onClick={loginModal.onOpen}
           >
             <BiUser className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
-            <h3 className="text-[0.6rem] text-center">Espace Client</h3>
+            <h3 className="text-[0.6rem] text-center leading-none">
+              <span className="block md:inline">Espace </span>
+              <span className="block md:inline font-extrabold md:font-normal">Client</span>
+            </h3>
+
           </button>
         )}
         <Link href="/us" className="hidden lg:flex flex-col items-center">
@@ -220,18 +236,17 @@ const Header: React.FC<NavbarProps> = ({
         {/* https://heroicons.com/ */}
         {/* //See Global Css FIle Must Give height and width to the icons for them to be seen. */}
         <Link href="/cart">
-          <div className="relative cursor-pointer md:flex flex-col justify-center items-center">
+          <div className="relative cursor-pointer flex flex-col justify-center items-center mx-auto">
             {totalQuantity > 0 && (
-              <span className="absolute -right-1 -top-1 z-50 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r  from-[#AE3033] to-[#751A21] text-xs text-[white]">
+              <span className="absolute -right-1 -top-1 z-50 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-[#AE3033] to-[#751A21] text-xs text-white">
                 {totalQuantity}
-                {/* FONT FOR THIS IS IMPORTED IN APP.JS AND ADDED TO TAILWIND.CONFIG.JS  AND THEN TP GLOBAL.CSS*/}
               </span>
             )}
-            {/* -top-1 -right-1 means it will negative margin to right and top so moves towards that side. z-index-50 means top priority so on top of evrything */}
             <BiShoppingBag className="w-6 h-6 cursor-pointer opacity-100 transition hover:opacity-75" />
-            <h3 className="text-[0.6rem] text-center">Panier</h3>
+            <h3 className="text-[0.6rem] text-center "><span className="block font-extrabold md:font-normal">Panier</span></h3>
           </div>
         </Link>
+
 
         {/* {session ? (
           <Image
