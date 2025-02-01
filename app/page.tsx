@@ -51,7 +51,8 @@ async function Home({}: Props) {
     <div className="h-full mb-10">
       <Carousel Banners={banners} />
     <ScrollingReviews scrollingReviews={scrollingReviews[0].reviews}/>
-      <div className="flex flex-col">
+      <section id="bon-plans" className="flex flex-col">
+        {/* <section id="bon-plans"> */}
         <Categories2
           phones={phones}
           televisions={televisions}
@@ -59,8 +60,11 @@ async function Home({}: Props) {
           computers={computers}
           exclusive={exclusive}
         />
+        </section>
+        {/* </section> */}
+        <section id="all-products" className="flex flex-col">
         <Categories />
-      </div>
+        </section>
       {/* <Post publications={publications} currentUser={currentUser} /> */}
       <SubscribeCard />
       <Values />

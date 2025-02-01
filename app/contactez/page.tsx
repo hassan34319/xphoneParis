@@ -46,7 +46,8 @@ async function ContactPage() {
       <div className="grid grid-cols-2 md:grid-cols-2 gap-8 w-full max-w-4xl">
 
       <div className="flex flex-col items-center space-y-4">
-  <div className="rounded-3xl overflow-hidden border-4 border-blue-500 w-full max-w-md aspect-video">
+      <div className="rounded-3xl overflow-hidden border-4 border-blue-500 w-3/4 max-w-sm aspect-square">
+
     <img
       src={urlFor(mediaData.phoneAgent).url()}
       alt="Customer Service Phone"
@@ -66,7 +67,7 @@ async function ContactPage() {
 </div>
 
 <div className="flex flex-col items-center space-y-4">
-  <div className="rounded-3xl overflow-hidden border-4 border-green-500 w-full max-w-md aspect-video">
+<div className="rounded-3xl overflow-hidden border-4 border-blue-500 w-3/4 max-w-sm aspect-square">
     <img
       src={urlFor(mediaData.emailAgent).url()}
       alt="Customer Service Email"

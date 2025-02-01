@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { urlFor } from '../../lib/sanityClient';
 import { test } from "node:test";
 
+
 // Types for media content only
 interface QuiSommes {
   logo: any;
@@ -67,6 +68,10 @@ async function QuiSommes() {
     "90 % des vendeurs sont basés en Asie, avec des commissions allant de 10 % à 20 %",
     "Plateforme regroupant particuliers et professionnels, avec un contrôle limité sur la qualité des produits et des commissions allant de 10 % à 18 %"
   ];
+  
+
+  
+  
 
   return (
     <div className="flex flex-col items-center px-4 py-8 space-y-12 mx-auto max-w-6xl">
@@ -78,7 +83,7 @@ async function QuiSommes() {
       <div className="border-2 border-black p-2 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-lg xl:max-w-xl ">
           <Image 
             src={urlFor(mediaData.logo).url()}
-            
+
             alt="XPhones Logo"
             width={500}
             height={300}
@@ -92,11 +97,11 @@ async function QuiSommes() {
   <div className="w-full md:w-1/2 max-w-xl">
     <video
       autoPlay
-      // muted
+      muted
       
       loop
       playsInline
-      controls={false}
+      controls={true}
       className="w-full h-auto"
     >
       <source 

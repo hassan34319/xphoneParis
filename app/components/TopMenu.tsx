@@ -7,11 +7,43 @@ interface NavbarProps {
   menuCategories: { title: string; products: { name: string; _id: string }[] }[];
 }
 
+interface BaseCategory {
+  title: string;
+  search: string;
+}
+
+interface CustomCategory extends BaseCategory {
+  customLink: string;
+}
+
+type CategoryItem = BaseCategory | CustomCategory;
+
+const hasCustomLink = (category: CategoryItem): category is CustomCategory => {
+  return 'customLink' in category;
+};
+
 const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [visibleCategories, setVisibleCategories] = useState(8);
   const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const allCategories: CategoryItem[] = [
+    { title: "Tous les produits", search: "", customLink: "/#all-products" },
+    { title: "Bon plans", search: "", customLink: "/#bon-plans" },
+    ...predefined_categories
+  ];
+
+  const handleSectionClick = (e: React.MouseEvent<HTMLAnchorElement>, customLink: string) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault();
+      const sectionId = customLink.split('#')[1];
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   const updateVisibleCategories = () => {
     const width = window.innerWidth;
@@ -38,7 +70,7 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
 
   const handleNext = () => {
     setCurrentIndex(prev => 
-      Math.min(prev + 1, predefined_categories.length - visibleCategories)
+      Math.min(prev + 1, allCategories.length - visibleCategories)
     );
   };
 
@@ -47,18 +79,12 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
   };
 
   const showPrevButton = currentIndex > 0;
-  const showNextButton = currentIndex + visibleCategories < predefined_categories.length;
-
-  const visibleCategoriesList = predefined_categories.slice(
-    currentIndex,
-    currentIndex + visibleCategories
-  );
+  const showNextButton = currentIndex + visibleCategories < allCategories.length;
 
   return (
     <div className="hidden md:block">
       <div className="w-full bg-[#f8f9fc] h-10">
         <div className="relative h-full flex items-center px-4 lg:px-20">
-
           <div className="flex items-center mr-4 shrink-0">
             <button className="text-black cursor-pointer" onClick={toggleSidebar}>
               <svg
@@ -72,7 +98,6 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
               </svg>
             </button>
           </div>
-
 
           {showPrevButton && (
             <button 
@@ -92,7 +117,6 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
             </button>
           )}
 
-
           <div 
             ref={containerRef} 
             className="flex-1 overflow-hidden"
@@ -101,18 +125,26 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
               className="flex items-center justify-between transition-transform duration-300 ease-in-out"
               style={{
                 transform: `translateX(-${(currentIndex * 100) / visibleCategories}%)`,
-                width: `${(100 * predefined_categories.length) / visibleCategories}%`
+                width: `${(100 * allCategories.length) / visibleCategories}%`
               }}
             >
-              {predefined_categories.map((category) => (
+              {allCategories.map((category) => (
                 <Link
                   key={category.title}
-                  href={{ pathname: "/products", query: { search: category.search } }}
+                  href={hasCustomLink(category) ? category.customLink : { pathname: "/products", query: { search: category.search } }}
+                  onClick={(e) => {
+                    if (hasCustomLink(category)) {
+                      handleSectionClick(e, category.customLink);
+                    }
+                  }}
                   className="flex-shrink-0"
-                  style={{ width: `${100 / predefined_categories.length}%` }}
+                  style={{ width: `${100 / allCategories.length}%` }}
                 >
-                  <h1 className="text-black cursor-pointer font-['Open_Sans'] whitespace-nowrap hover:text-[#AE3033] transition-colors text-center text-sm lg:text-base px-2">
+                  <h1 className="text-black cursor-pointer font-['Open_Sans'] whitespace-nowrap hover:text-[#AE3033] transition-colors text-center text-sm lg:text-base px-2 ">
+                    <div className={`${category.title === "Bon plans" ? "text-[#AE3033]" : "text-black"}`}>
                     {category.title}
+                    </div>
+                    
                   </h1>
                 </Link>
               ))}

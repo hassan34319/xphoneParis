@@ -254,29 +254,26 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
             })}
           </div>
 
-          <h1 className="lg:text-xl my-2">Stockage</h1>
-          <div className="flex flex-wrap gap-4 mb-12">
-            {uniqueCapacities.map((capacity: any) => {
-              return (
-                <SelectionButton
-                  key={capacity}
-                  selected={selectedCapacity == capacity}
-                >
-                  <input
-                    type="radio"
-                    name="capacity"
-                    value={capacity}
-                    checked={selectedCapacity == capacity}
-                    onChange={(e) =>
-                      capacityChangeHandler(parseInt(e.target.value))
-                    }
-                    className="hidden"
-                  />
-                  <h1 className="text-lg">{capacity} Go</h1>
-                </SelectionButton>
-              );
-            })}
-          </div>
+          {uniqueCapacities.length > 0 && uniqueCapacities[0] !== 0 && (
+  <>
+    <h1 className="lg:text-xl my-2">Stockage</h1>
+    <div className="flex flex-wrap gap-4 mb-12">
+      {uniqueCapacities.map((capacity: any) => (
+        <SelectionButton key={capacity} selected={selectedCapacity == capacity}>
+          <input
+            type="radio"
+            name="capacity"
+            value={capacity}
+            checked={selectedCapacity == capacity}
+            onChange={(e) => capacityChangeHandler(parseInt(e.target.value))}
+            className="hidden"
+          />
+          <h1 className="text-lg">{capacity} Go</h1>
+        </SelectionButton>
+      ))}
+    </div>
+  </>
+)}
 
           <h1 className="lg:text-xl my-2">Couleur</h1>
           <div className="flex flex-wrap gap-4">
