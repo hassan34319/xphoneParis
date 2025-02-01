@@ -67,7 +67,7 @@ async function GradesPage() {
       </h1>
 
       <div className="flex justify-center w-full px-4 mb-4">
-      <div className="border-2 border-black p-2 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-lg xl:max-w-xl ">
+      <div className=" p-2 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-lg xl:max-w-xl ">
           <Image 
             src={urlFor(data.logo).url()} 
             
