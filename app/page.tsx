@@ -15,6 +15,8 @@ type Props = {};
 
 async function Home({}: Props) {
   const phonesQuery = '*[_type == "product" && category == "smartphone"]';
+  const audioQuery = '*[_type == "product" && category == "audio"]';
+  const jeuxVideoQuery = '*[_type == "product" && category == "jeuxVideo"]';
   const televisionsQuery = '*[_type == "product" && category == "television"]';
   const tabletsQuery = '*[_type == "product" && category == "tablet"]';
   const computersQuery = '*[_type == "product" && category == "computer"]';
@@ -25,6 +27,8 @@ async function Home({}: Props) {
   console.log(banners);
   const phones: product[] = await sanityClient.fetch(phonesQuery);
   const televisions: product[] = await sanityClient.fetch(televisionsQuery);
+  const audio: product[] = await sanityClient.fetch(audioQuery);
+  const jeuxVideo: product[] = await sanityClient.fetch(jeuxVideoQuery);
   const tablets: product[] = await sanityClient.fetch(tabletsQuery);
   const computers: product[] = await sanityClient.fetch(computersQuery);
   const exclusive: product[] = await sanityClient.fetch(exclusiveQuery);
@@ -59,6 +63,9 @@ async function Home({}: Props) {
           tablets={tablets}
           computers={computers}
           exclusive={exclusive}
+          audio={audio}
+          jeuxVideo={jeuxVideo}
+
         />
         </section>
         {/* </section> */}

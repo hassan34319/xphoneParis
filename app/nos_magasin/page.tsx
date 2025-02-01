@@ -42,7 +42,7 @@ async function Nosmagasin() {
 
       <div className="grid grid-cols-2 md:grid-cols-2 gap-8 w-full max-w-4xl">
         <div className="flex flex-col items-center space-y-4">
-          <div className="rounded-3xl overflow-hidden border-4 border-red-500 w-full max-w-md aspect-video">
+          <div className="rounded-3xl overflow-hidden  w-full max-w-md ">
             <Image
               src={urlFor(mediaData.store1).url()}
               alt="XPhones Store Republique"
@@ -53,7 +53,7 @@ async function Nosmagasin() {
             />
           </div>
           <div className="text-center">
-            <h2 className="text-sm font-bold text-blue-500">
+            <h2 className="text-sm font-bold text-blue-700">
               Xphones CANAL SAINT MARTIN <br />
               86 quai de jemmapes <br />
               75010 Paris <br />
@@ -65,7 +65,7 @@ async function Nosmagasin() {
         </div>
 
         <div className="flex flex-col items-center space-y-4">
-          <div className="rounded-3xl overflow-hidden border-4 border-purple-500 w-full max-w-md aspect-video">
+          <div className="rounded-3xl overflow-hidden  w-full max-w-md">
             <Image
               src={urlFor(mediaData.store2).url()}
               alt="XPhones Store Nation"
@@ -76,7 +76,7 @@ async function Nosmagasin() {
             />
           </div>
           <div className="text-center">
-            <h2 className="text-sm font-bold text-blue-500">
+            <h2 className="text-sm font-bold text-blue-700">
               Xphones VOLTAIRE <br />
               6 rue Voltaire <br />
               75011 Paris <br />

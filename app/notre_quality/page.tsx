@@ -54,8 +54,19 @@ async function QualityPage() {
       </div>
       
       <p className="text-lg text-center max-w-2xl mb-12">
-        {data.subtitle || "Nous garantissons la qualité de nos produits et services"}
-      </p>
+  Nous <span className="text-red-500 font-bold">vendons</span> exclusivement des appareils d'origine, jamais  
+  <span className="text-green-500 font-bold"> ouverts</span>,  
+  <span className="text-yellow-500 font-bold"> altérés</span> de quelque manière que ce soit.
+  <br /><br />
+  Cela garantit une durée de vie plus longue et une   
+  <span className="text-purple-500 font-bold">fiabilité supérieure</span>.
+  <br /><br />
+  En optant pour nos produits, vous choisissez la  
+  <span className="text-pink-500 font-bold"> qualité</span> et la  
+  <span className="text-yellow-500 font-bold"> performance</span> sont intactes, offrant une meilleure expérience d'utilisation et une tranquillité d'esprit sur le  
+  <span className="text-yellow-500 font-bold"> long terme</span>.
+</p>
+
 
       {/* Features Grid */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
@@ -65,7 +76,7 @@ async function QualityPage() {
             className="flex flex-col items-center space-y-4"
           >
             {/* Circle Image Container */}
-            <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-red-500 transition-transform hover:scale-105">
+            <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden transition-transform hover:scale-105">
               <img
                 src={urlFor(feature.image).url()}
                 alt={feature.description}

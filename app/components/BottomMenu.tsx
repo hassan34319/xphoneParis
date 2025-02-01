@@ -4,32 +4,32 @@ import { AiOutlineMail } from "react-icons/ai";
 
 const BottomMenu = () => {
   return (
-    <div className="w-full h-max bg-black py-4 flex flex-col lg:flex-row lg:items-start justify-center gap-8 mt-10 px-20 text-white">
+    <div className=" w-full h-max bg-black py-4 flex flex-col  lg:flex-row lg:items-start justify-center gap-8 mt-10 px-20 text-white">
       <div className="flex flex-col items-center justify-center space-y-2">
-        <h1 className="text-xl">À PROPOS</h1>
+        <h1 className="text-xl text-center">À PROPOS</h1>
         <div className="flex flex-col items-center justify-center text-sm space-y-1">
-            <Link href={"/qui_sommes"}>Qui sommes nous?</Link>
-            <Link href={"/notre_quality"}>Notre qualité</Link>
-            <Link href={"/nos_magasin"}>Nos magasin</Link>
-            <Link href={"/nos_grades"}>Nos grades</Link>
+            <Link className="text-center"  href={"/qui_sommes"}>Qui sommes nous?</Link>
+            <Link className="text-center"  href={"/notre_quality"}>Notre qualité</Link>
+            <Link className="text-center"  href={"/nos_magasin"}>Nos magasin</Link>
+            <Link className="text-center"  href={"/nos_grades"}>Nos grades</Link>
         </div>
       </div>
 
       <div className="flex flex-col items-center justify-center space-y-2">
-      <h1 className="text-xl">BESOIN D'AIDE</h1>
+      <h1 className="text-xl text-center">BESOIN D'AIDE</h1>
       <div className="flex flex-col items-center justify-center text-sm space-y-1">
-            <Link href={"/contactez"}>Contactez-nous</Link>
-            <Link href={"/faq"}>Questions fréquente</Link>
-            <Link href={"/livraison"}>Livrasion</Link>
+            <Link className="text-center"  href={"/contactez"}>Contactez-nous</Link>
+            <Link className="text-center" href={"/faq"}>Questions fréquente</Link>
+            <Link className="text-center" href={"/livraison"}>Livrasion</Link>
         </div>
       </div>
 
       <div className="flex flex-col items-center justify-center space-y-2">
-      <h1 className="text-xl">DROITS LEGAUX</h1>
+      <h1 className="text-xl text-center">DROITS LEGAUX</h1>
       <div className="flex flex-col items-center justify-center text-sm space-y-1">
-    <Link href={""}>Conditions générale d'utilisation</Link>
-    <Link href={"/cgv"}>Conditions générale de vente</Link>
-    <Link href={"/mentions"}>Mentions légales</Link>
+    <Link className="text-center"  href={""}>Conditions générale d'utilisation</Link>
+    <Link className="text-center"  href={"/cgv"}>Conditions générale de vente</Link>
+    <Link className="text-center" href={"/mentions"}>Mentions légales</Link>
   </div>
 </div>
 

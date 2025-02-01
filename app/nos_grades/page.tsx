@@ -82,22 +82,33 @@ async function GradesPage() {
 
       
       
+      
       <p className="text-lg text-center max-w-3xl mb-12">
-        {data.subtitle}
-      </p>
+  Nos appareils d'origine sont soigneusement classés en  
+  <span className="text-purple-500 font-bold"> trois grades esthétiques</span>  pour s'adapter à tous les  
+  <span className="text-green-500 font-bold"> goûts et budgets.</span>
+  <br /><br />
+  Que vous optiez pour un modèle en Bon état, un Très bon état ou Comme neuf, vous bénéficiez toujours d'un  
+  <span className="text-yellow-500 font-bold"> appareil fonctionnel</span> à un  
+  <span className="text-red-500 font-bold"> prix attractif avec une garantie de 1 an.</span>
+  <br /><br />
+  Chaque produit a été vérifié pour garantir une qualité optimale, alors profitez de l'occasion pour obtenir un excellent appareil 
+  <span className="text-blue-500 font-bold"> à moindre coût!</span> 
+</p>
 
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-3/4">
         {data.grades?.map((grade, index) => (
           <div 
             key={grade._key}
-            className={`flex flex-col items-center p-6 border-2 border-black rounded-lg ${
+            className={`flex flex-col  items-center p-6 border-2 border-black rounded-lg ${
               index === data.grades.length - 1 && data.grades.length % 2 !== 0
                 ? "lg:col-span-2 lg:max-w-2xl lg:mx-auto"
                 : ""
             }`}
           >
-            <h2 className="text-2xl font-bold mb-4">{grade.title}</h2>
+            <h2 className="text-2xl font-bold mb-4 text-blue-800">{grade.title}</h2>
             
 
             <div className="mb-4">
@@ -110,13 +121,13 @@ async function GradesPage() {
             </p>
             
 
-            <div className="flex w-full gap-4">
+            <div className="flex w-full gap-4 ">
 
               <div className="flex flex-col gap-4 flex-1">
                 {grade.images?.slice(0, 2).map((img) => (
                   <div 
                     key={img._key}
-                    className="border-4 border-dashed border-gray-800 rounded-lg overflow-hidden aspect-[4/3]"
+                    className=" rounded-lg overflow-hidden "
                   >
                     <img
                       src={urlFor(img.image).url()}
@@ -130,7 +141,7 @@ async function GradesPage() {
 
               {grade.images?.[2] && (
                 <div className="flex-1 flex items-center">
-                  <div className="border-4 border-dashed border-gray-800 rounded-lg overflow-hidden aspect-[4/3] w-full">
+                  <div className=" rounded-lg overflow-hidden ">
                     <img
                       src={urlFor(grade.images[2].image).url()}
                       alt={`${grade.title} example`}

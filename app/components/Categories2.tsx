@@ -12,18 +12,20 @@ type Props = {
   exclusive : product[]
 }
 
-const Categories2: React.FC<Props> = ({ phones,televisions,computers,tablets,exclusive }) =>  {
+const Categories2: React.FC<Props> = ({ phones,televisions,computers,tablets,exclusive,audio,jeuxVideo }) =>  {
   const [loading, setLoading] = useState(false);
   type category = {
     name: string;
     products: product[];
   };
   const categories: category[] = [
-    {name : "Promotion du Moment", products : exclusive},
-    { name: "Téléphones", products: phones },
-    { name: "Ordinateurs", products: computers },
-    { name: "Tablettes", products: tablets },
-    { name: "Télévisions", products: televisions },
+    { name: "Promotion du Moment", products: exclusive ?? [] },
+    { name: "Téléphones", products: phones ?? [] },
+    { name: "Ordinateurs", products: computers ?? [] },
+    { name: "Tablettes", products: tablets ?? [] },
+    { name: "Télévisions", products: televisions ?? [] },
+    { name: "Jeux vidéo", products: jeuxVideo ?? [] },
+    { name: "Audio", products: audio ?? [] },
   ];
 
   // useEffect(() => {
