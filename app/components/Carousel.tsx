@@ -52,7 +52,7 @@ const Carousel: React.FC<Props> = ({ Banners }) => {
         {mappedBanners.map((banner) => (
           <SwiperSlide key={banner._id} className="">
             <Link href={banner.link}>
-                <div className="h-[32rem] md:h-[20rem] lg:h-[24rem] xl:h-[28rem] relative">
+                <div className="h-[34rem] md:h-[20rem] lg:h-[24rem] xl:h-[35rem] relative">
                 {hydrated && (
                   <Image
                     src={

@@ -74,9 +74,9 @@ async function QuiSommes() {
   
 
   return (
-    <div className="flex flex-col items-center px-4 py-8 space-y-12 mx-auto max-w-6xl bg-white">
+    <div className="flex flex-col items-center px-4 py-8 space-y-12 mx-auto max-w-6xl">
       {/* Heading */}
-      <h1 className="text-4xl font-extrabold text-center tracking-wider">Qui sommes nous ?</h1>
+      <h1 className="text-4xl font-bold text-center tracking-wider">Qui sommes nous ?</h1>
 
       {/* Logo */}
       <div className="flex justify-center w-full px-4">
@@ -96,7 +96,7 @@ async function QuiSommes() {
 <div className="flex flex-col md:flex-row items-center gap-8 w-full">
   <div className="w-full md:w-1/2 max-w-xl">
     <video
-      // autoPlay
+      autoPlay
       muted
       
       loop
@@ -200,14 +200,14 @@ async function QuiSommes() {
       </div>
 
       {/* Phone Section */}
-      <div className="flex flex-col-2 md:flex-row gap-8 w-full">
+      <div className="flex flex-col-2 md:flex-row gap-8 w-full  ">
         <div className="w-full md:w-1/2 flex justify-center">
           <Image 
             src={urlFor(mediaData.frenchProductsSection.phoneImage).url()}
             alt="Phone"
             width={200}
             height={200}
-            className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-sm h-auto object-contain"
+            className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-sm h-auto object-contain justify-center"
           />
         </div>
         <div className="w-full md:w-1/2 flex flex-col justify-center space-y-4">
