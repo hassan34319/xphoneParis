@@ -30,13 +30,13 @@ async function Nosmagasin() {
         </div>
       </div>
 
-      <p className="text-l text-center max-w-3xl">XPhones Paris: Des boutiques à votre service et des prix Imbattables</p>
+      <p className="text-l text-lg xl:text-xl text-center max-w-3xl">XPhones Paris: Des boutiques à votre service et des prix Imbattables</p>
       
-      <p className="text-l text-center max-w-3xl">
+      <p className="text-l text-lg xl:text-xl text-center max-w-3xl">
         Chez XPhones, nous avons révolutionné l'achat de produits high-tech à Paris. Nos deux boutiques vous offrent la possibilité de voir et tester les produits avant de les acheter, avec l'accompagnement de nos experts sur place. En plus de cela, vous bénéficiez d'un service après-vente immédiat et personnalisé, un avantage que beaucoup de plateformes en ligne ne peuvent pas proposer.
       </p>
       
-      <p className="text-l text-center max-w-3xl">
+      <p className="text-l text-lg xl:text-xl text-center max-w-3xl">
         Contrairement aux autres vendeurs en ligne qui agissent comme des intermédiaires, passant par des plateformes comme Amazon, Cdiscount ou Backmarket, avec des commissions supplémentaires, nous vendons directement en magasin. Cela nous permet de proposer les meilleurs prix du marché, sans les coûts cachés des intermédiaires, tout en garantissant une proximité et une transparence totale.
       </p>
 
@@ -53,7 +53,7 @@ async function Nosmagasin() {
             />
           </div>
           <div className="text-center">
-            <h2 className="text-sm font-bold text-blue-700">
+            <h2 className="text-md xl:text-xl font-bold text-blue-700">
               Xphones CANAL SAINT MARTIN <br />
               86 quai de jemmapes <br />
               75010 Paris <br />
@@ -76,7 +76,7 @@ async function Nosmagasin() {
             />
           </div>
           <div className="text-center">
-            <h2 className="text-sm font-bold text-blue-700">
+            <h2 className="text-md xl:text-xl font-bold text-blue-700">
               Xphones VOLTAIRE <br />
               6 rue Voltaire <br />
               75011 Paris <br />

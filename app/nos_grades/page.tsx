@@ -83,7 +83,7 @@ async function GradesPage() {
       
       
       
-      <p className="text-lg text-center max-w-3xl mb-12">
+      <p className="text-lg xl:text-xl text-center max-w-4xl mb-12">
   Nos appareils d'origine sont soigneusement classés en  
   <span className="text-purple-500 font-bold"> trois grades esthétiques</span>  pour s'adapter à tous les  
   <span className="text-green-500 font-bold"> goûts et budgets.</span>
@@ -116,7 +116,7 @@ async function GradesPage() {
             </div>
             
 
-            <p className="text-center mb-6">
+            <p className="text-center text-lg xl:text-xl mb-6">
               {grade.description}
             </p>
             

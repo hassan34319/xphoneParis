@@ -46,8 +46,8 @@ async function QualityPage() {
           />
         </div>
       </div>
-      <PortableTextComponent content={data.subtitle} />
-      <p className="text-lg text-center max-w-2xl mb-12">
+
+      <p className="text-lg xl:text-2xl text-center max-w-3xl mb-12">
         Nous <span className="text-red-500 font-bold">vendons</span> exclusivement des appareils d'origine, jamais
         <span className="text-green-500 font-bold"> ouverts</span>,
         <span className="text-yellow-500 font-bold"> altérés</span> de quelque manière que ce soit.
@@ -76,7 +76,7 @@ async function QualityPage() {
               />
             </div>
             {/* Description */}
-            <p className="text-center text-sm md:text-base lg:text-lg max-w-xs px-2">
+            <p className="text-center text-sm md:text-base lg:text-lg xl:text-2xl max-w-xs px-2">
               {feature.description}
             </p>
           </div>

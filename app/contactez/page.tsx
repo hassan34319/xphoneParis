@@ -37,7 +37,7 @@ async function ContactPage() {
       </div>
 
 
-      <p className="text-xl text-center max-w-3xl">
+      <p className="text-xl xl:text-2xl text-center max-w-3xl">
         Pour contacter notre service client, vous pouvez nous joindre par email, 
         par téléphone ou vous rendre directement dans l'un de nos magasins.
       </p>
@@ -54,7 +54,7 @@ async function ContactPage() {
       className="w-full h-full object-cover"
     />
   </div>
-  <div className="flex items-center space-x-2">
+  <div className="flex items-center space-x-2 text-xl xl:text-2xl">
     <img src={urlFor(mediaData.phoneIcon).url()} alt="Phone" className="w-12 h-12" />
     <span className="text-xl font-bold">
       <span className="text-gray-600">01 </span>
@@ -76,7 +76,7 @@ async function ContactPage() {
   </div>
   <div className="flex items-center space-x-2">
     <img src={urlFor(mediaData.emailIcon).url()} alt="Email" className="w-12 h-12" />
-    <div className="text-xl break-all text-center">
+    <div className="text-xl break-all text-center xl:text-2xl">
       <span className="inline-block text-gray-600">Contact</span>
       <span className="inline-block text-orange-500">@</span>
       <span className="inline-block text-red-500">xphones</span>
@@ -95,8 +95,8 @@ async function ContactPage() {
             />
           </div>
           <div className="text-center">
-            <h2 className="text-2xl font-bold" style={{ color: '#8B5CF6' }}>XPHONES STORE REPUBLIQUE</h2>
-            <p className="mt-2">
+            <h2 className="text-xl xl:text-2xl font-bold" style={{ color: '#8B5CF6' }}>XPHONES STORE REPUBLIQUE</h2>
+            <p className="mt-2 text-lg xl:text-xl">
               <span className="text-yellow-500">86</span>
               <span className="text-red-500"> quai </span>
               <span className="text-green-500">de </span>
@@ -116,8 +116,8 @@ async function ContactPage() {
             />
           </div>
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-red-500">XPHONES STORE NATION</h2>
-            <p className="mt-2">
+            <h2 className="text-xl  xl:text-2xl font-bold text-red-500">XPHONES STORE NATION</h2>
+            <p className="mt-2 text-lg xl:text-xl">
               <span className="text-red-500">6 </span>
               <span className="text-green-500">rue </span>
               <span className="text-red-500">Voltaire </span>

@@ -74,7 +74,7 @@ async function QuiSommes() {
   
 
   return (
-    <div className="flex flex-col items-center px-4 py-8 space-y-12 mx-auto max-w-6xl">
+    <div className="flex flex-col items-center px-4 py-8 space-y-12 mx-auto max-w-7xl">
       {/* Heading */}
       <h1 className="text-4xl font-bold text-center tracking-wider">Qui sommes nous ?</h1>
 
@@ -114,12 +114,12 @@ async function QuiSommes() {
     </video>
   </div>
   <div className="w-full md:w-1/2 max-w-xl">
-    <p className="text-sm text-left">
+    <p className="text-sm text-center lg:text-lg xl:text-2xl">
       <span className="text-red-600">Xphones s'est imposé comme l'unique maison</span> capable de fournir exclusivement des appareils 
-      <span className="text-green-600">d'origine à des prix inférieurs aux reconditionnés</span>. 
+      <span className="text-green-600"> d'origine à des prix inférieurs aux reconditionnés</span>. 
       Fort de notre expérience avec notre partenaire je ne reviendrai jamais en arrière après avoir découvert des appareils aux 
-      <span className="text-red-600">d'origine</span>, nous avons su préserver cette offre
-      <span className="text-green-600">authentique et durable</span>.
+      <span className="text-red-600"> d'origine</span>, nous avons su préserver cette offre
+      <span className="text-green-600"> authentique et durable</span>.
     </p>
   </div>
 </div>
@@ -132,9 +132,9 @@ async function QuiSommes() {
               <Image 
                 src={urlFor(image).url()}
                 alt={`Feature ${index + 1}`}
-                width={250}
-                height={250}
-                className="w-full h-auto object-contain"
+                width={200}
+                height={200}
+                className="w-full lg:w-3/4 h-auto object-contain"
               />
             </div>
           </div>
@@ -142,14 +142,14 @@ async function QuiSommes() {
       </div>
 
       {/* Text Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl mx-auto justify-center">
         <div className="flex flex-col items-center">
-          <p className="text-center text-sm">
+          <p className="text-center text-sm lg:text-lg xl:text-2xl">
             Chez Xphones, nous sommes fiers de privilégier l'origine française pour vous garantir qualité et authenticité.
           </p>
         </div>
         <div className="flex flex-col items-center">
-          <p className="text-center text-sm">
+          <p className="text-center text-sm lg:text-lg xl:text-2xl">
             Optez pour la tranquillité d'esprit en recevant vos appareils qui atteignent une clientèle à l'autre de fiabilité
           </p>
         </div>
@@ -167,7 +167,7 @@ async function QuiSommes() {
               className="w-full max-w-[200px] sm:max-w-[250px] md:max-w-xs h-auto object-contain"
             />
           </div>
-          <p className="text-center text-sm">
+          <p className="text-center text-sm lg:text-lg xl:text-2xl">
             Xphones propose uniquement des produits Français et Européens.
           </p>
           <div className="flex justify-center">
@@ -181,7 +181,7 @@ async function QuiSommes() {
           </div>
         </div>
         <div className="w-full md:w-1/2 flex flex-col justify-center gap-8">
-          <p className="text-center text-sm">
+          <p className="text-center text-sm lg:text-lg xl:text-2xl">
             Chez Xphones, nous sommes fiers de privilégier l'origine française pour vous garantir qualité et authenticité.
           </p>
           <div className="flex justify-center">
@@ -193,7 +193,7 @@ async function QuiSommes() {
               className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-sm h-auto object-contain"
             />
           </div>
-          <p className="text-center text-sm font-bold">
+          <p className="text-center text-sm font-bold lg:text-lg xl:text-2xl">
             Stoppons nos achats de produits importés de qualité médiocre et achetons des produits locaux et durables.
           </p>
         </div>
@@ -211,14 +211,14 @@ async function QuiSommes() {
           />
         </div>
         <div className="w-full md:w-1/2 flex flex-col justify-center space-y-4">
-          <p className="text-sm">
+          <p className="text-sm lg:text-lg xl:text-2xl">
             Réalisez les meilleures économies !
             En achetant chez Xphones, vous évitez les frais très élevés facturés par les grandes plateformes de vente comme Cdiscount, Amazon, Rakuten, et surtout Back Market.
           </p>
-          <p className="text-sm">
+          <p className="text-sm lg:text-lg xl:text-2xl">
             Leurs commissions peuvent atteindre jusqu'à 30 % du prix initialement fixé par le vendeur.
           </p>
-          <p className="text-sm">
+          <p className="text-sm lg:text-lg xl:text-2xl">
             Luttons donc contre ces grandes majors, dont 90 % des vendeurs proposent des produits reconditionnés provenant d'Asie.
           </p>
         </div>
@@ -233,16 +233,16 @@ async function QuiSommes() {
                 <Image 
                   src={urlFor(image).url()}
                   alt={`Marketplace ${index + 1}`}
-                  width={180}
-                  height={180}
-                  className="w-full h-auto object-contain"
+                  width={200}
+                  height={200}
+                  className="w-full h-auto object-fill"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-red-600 text-4xl md:text-6xl font-bold">X</div>
                 </div>
               </div>
             </div>
-            <p className="text-sm text-center">{marketplaceDescriptions[index]}</p>
+            <p className="text-sm text-center lg:text-lg xl:text-2xl">{marketplaceDescriptions[index]}</p>
           </div>
         ))}
       </div>
@@ -260,8 +260,8 @@ async function QuiSommes() {
                 className="w-full max-w-[200px] sm:max-w-[250px] md:max-w-sm h-auto object-contain rounded-lg"
               />
             </div>
-            <div className="text-center space-y-0.5">
-              <h3 className="font-bold text-lg">{store.title}</h3>
+            <div className="text-center space-y-0.5 text-md xl:text-xl ">
+              <h3 className="font-bold text-lg xl:text-2xl">{store.title}</h3>
               <p>{store.address}</p>
               <p>{store.postal}</p>
               <p>Ouvert du Lundi au Samedi</p>
