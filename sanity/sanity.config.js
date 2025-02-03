@@ -13,7 +13,7 @@ import banner from './schemas/banner';
 import subcategory from './schemas/subcategory';
 import scrollingReviews from './schemas/scrollingReview';
 import menuCategory from './schemas/menuCategory';
-
+import {colorInput} from '@sanity/color-input'
 export default defineConfig({
   name: 'default',
   title: 'My Sanity Project',
@@ -21,6 +21,7 @@ export default defineConfig({
   dataset: 'production',
   plugins: [
     // Add any plugins if needed
+    [colorInput()]
   ],
   schema: {
     types: schemaTypes.concat([

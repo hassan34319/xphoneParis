@@ -38,11 +38,11 @@ function ProductComponent({ product, currentUser }: Props) {
   return (
     <ClientOnly>
       <div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 bg-white w-11/12 p-4 mx-auto rounded mt-10 mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 bg-white w-11/12 p-4 mx-auto rounded  mt-10 mb-10 ">
           <div className="flex flex-col justify-center items-center">
             <div className="w-full h-full relative flex items-center justify-center">
 
-              <div className="flex flex-col items-start w-2/3">
+              <div className="flex flex-col items-center w-2/3">
 
                 <div className="relative h-[24rem] w-full">
                   <Image
@@ -53,7 +53,7 @@ function ProductComponent({ product, currentUser }: Props) {
                   />
                 </div>
 
-
+                <div className="relative -ml-6 sm:-ml-16 md:-ml-18 lg:-ml-20 xl:-ml-20 ">
                 <ProductCarousel
                   variants={product.variants}
                   handleVariantClick={handleVariantClick}
@@ -64,6 +64,7 @@ function ProductComponent({ product, currentUser }: Props) {
                   selectedGrade={selectedGrade}
                   selectedCapacity={selectedCapacity}
                 />
+                </div>
               </div>
 
 

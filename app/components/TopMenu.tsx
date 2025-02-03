@@ -2,6 +2,18 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { categories as predefined_categories } from "./Categories";
 import SidebarModal from "./SidebarModal";
+import { Open_Sans } from 'next/font/google';
+import { Poppins } from 'next/font/google';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
+
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 interface NavbarProps {
   menuCategories: { title: string; products: { name: string; _id: string }[] }[];
@@ -24,7 +36,7 @@ const hasCustomLink = (category: CategoryItem): category is CustomCategory => {
 
 const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [visibleCategories, setVisibleCategories] = useState(8);
+  const [visibleCategories, setVisibleCategories] = useState(12);
   const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -47,11 +59,11 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
 
   const updateVisibleCategories = () => {
     const width = window.innerWidth;
-    if (width >= 1280) { // xl
+    if (width >= 1280) {
       setVisibleCategories(8);
-    } else if (width >= 1024) { // lg
+    } else if (width >= 1024) {
       setVisibleCategories(6);
-    } else if (width >= 768) { // md
+    } else if (width >= 768) {
       setVisibleCategories(4);
     } else {
       setVisibleCategories(3);
@@ -82,9 +94,9 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
   const showNextButton = currentIndex + visibleCategories < allCategories.length;
 
   return (
-    <div className="hidden md:block">
-      <div className="w-full bg-[#f8f9fc] h-10">
-        <div className="relative h-full flex items-center px-4 lg:px-20">
+    <div className="hidden md:block text-black openSans.className">
+      <div className="w-full bg-[#f8f9fc] h-12">
+        <div className="relative h-full flex items-center px-4 lg:px-16">
           <div className="flex items-center mr-4 shrink-0">
             <button className="text-black cursor-pointer" onClick={toggleSidebar}>
               <svg
@@ -102,7 +114,7 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
           {showPrevButton && (
             <button 
               onClick={handlePrev}
-              className="absolute left-12 lg:left-25 z-10 p-1 hover:bg-red-600 rounded transition-colors"
+              className="absolute left-10 lg:left-8 z-10 p-1 hover:bg-red-600 rounded transition-colors"
               aria-label="Previous category"
             >
               <svg 
@@ -122,10 +134,12 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
             className="flex-1 overflow-hidden"
           >
             <div 
-              className="flex items-center justify-between transition-transform duration-300 ease-in-out"
+              className="grid transition-transform duration-300 ease-in-out"
               style={{
                 transform: `translateX(-${(currentIndex * 100) / visibleCategories}%)`,
-                width: `${(100 * allCategories.length) / visibleCategories}%`
+                width: `${(100 * allCategories.length) / visibleCategories}%`,
+                gridTemplateColumns: `repeat(${allCategories.length}, 1fr)`,
+                gap: '1rem'
               }}
             >
               {allCategories.map((category) => (
@@ -137,14 +151,16 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
                       handleSectionClick(e, category.customLink);
                     }
                   }}
-                  className="flex-shrink-0"
-                  style={{ width: `${100 / allCategories.length}%` }}
+                  className="flex items-center justify-center px-4"
                 >
-                  <h1 className="text-black cursor-pointer font-['Open_Sans'] whitespace-nowrap hover:text-[#AE3033] transition-colors text-center text-sm lg:text-base px-2 ">
-                    <div className={`${category.title === "Bon plans" ? "text-[#AE3033]" : "text-black"}`}>
-                    {category.title}
+                  <h1 className="text-center text-base lg:text-lg font-extrabold truncate w-full">
+                    <div 
+                      className={`${
+                        category.title === "Bon plans" ? "text-[#AE3033]" : "text-black"
+                      } hover:text-[#AE3033] transition-colors`}
+                    >
+                      {category.title}
                     </div>
-                    
                   </h1>
                 </Link>
               ))}
@@ -154,7 +170,7 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
           {showNextButton && (
             <button 
               onClick={handleNext}
-              className="absolute right-2 lg:right-16 z-10 p-1 hover:bg-red-600 rounded transition-colors"
+              className="absolute right-10 lg:right-12 md:right-1 z-10 p-1 hover:bg-red-600 rounded transition-colors"
               aria-label="Next category"
             >
               <svg 

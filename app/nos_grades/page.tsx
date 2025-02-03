@@ -61,8 +61,8 @@ async function GradesPage() {
   };
 
   return (
-    <div className="flex flex-col items-center px-4 py-8 max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center tracking-wider mb-3">
+    <div className="flex flex-col items-center px-4 py-8 max-w-7xl mx-auto bg-white">
+        <h1 className="text-4xl text-center tracking-wider mb-3 font-extrabold">
         {data.mainTitle || "Nos Grades"}
       </h1>
 

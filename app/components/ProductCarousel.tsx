@@ -60,7 +60,7 @@ const ProductCarousel = ({
       {currentIndex > 0 && (
         <button
           onClick={handlePrev}
-          className="absolute left-0 z-10 p-1 bg-white rounded-full shadow-md hover:bg-gray-100 transform -translate-x-1/2"
+          className="absolute left-2 z-10 p-1 bg-white rounded-full shadow-md hover:bg-gray-100 transform -translate-x-1/2"
           aria-label="Previous variants"
         >
           <svg
@@ -86,7 +86,7 @@ const ProductCarousel = ({
                 isVariantSelected(variant)
                   ? "border-blue-500 shadow-lg"
                   : "border-gray-200 hover:border-blue-300"
-              }`}
+              } ` }
             >
               <Image
                 src={urlFor(variant.image).url()}
@@ -104,7 +104,7 @@ const ProductCarousel = ({
       {currentIndex < variants.length - itemsPerPage && (
         <button
           onClick={handleNext}
-          className="absolute right-0 z-10 p-1 bg-white rounded-full shadow-md hover:bg-gray-100 transform translate-x-1/2"
+          className="absolute right-2 z-10 p-1 bg-white rounded-full shadow-md hover:bg-gray-100 transform translate-x-1/2"
           aria-label="Next variants"
         >
           <svg

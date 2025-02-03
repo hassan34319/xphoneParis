@@ -18,9 +18,9 @@ async function ContactPage() {
   const mediaData: ContactPageMedia = await sanityClient.fetch(query);
   
   return (
-    <div className="flex flex-col items-center px-4 py-8 space-y-8 max-w-6xl mx-auto ">
+    <div className="flex flex-col items-center px-4 py-8 space-y-8 max-w-6xl mx-auto bg-white ">
 
-      <h1 className="text-4xl font-bold text-center tracking-wider">Contactez - Nous</h1>
+      <h1 className="text-4xl font-extrabold text-center tracking-wider">Contactez - Nous</h1>
 
 
       <div className="flex justify-center w-full px-4">
@@ -46,7 +46,7 @@ async function ContactPage() {
       <div className="grid grid-cols-2 md:grid-cols-2 gap-8 w-full max-w-4xl">
 
       <div className="flex flex-col items-center space-y-4">
-      <div className="rounded-3xl overflow-hidden border-4 border-blue-500 w-3/4 max-w-sm aspect-square">
+      <div className="rounded-3xl overflow-hidden  w-3/4 max-w-sm aspect-square">
 
     <img
       src={urlFor(mediaData.phoneAgent).url()}
@@ -67,7 +67,7 @@ async function ContactPage() {
 </div>
 
 <div className="flex flex-col items-center space-y-4">
-<div className="rounded-3xl overflow-hidden border-4 border-blue-500 w-3/4 max-w-sm aspect-square">
+<div className="rounded-3xl overflow-hidden  w-3/4 max-w-sm aspect-square">
     <img
       src={urlFor(mediaData.emailAgent).url()}
       alt="Customer Service Email"
@@ -87,7 +87,7 @@ async function ContactPage() {
 
 
         <div className="flex flex-col items-center space-y-4">
-          <div className="rounded-3xl overflow-hidden border-4 border-red-500 w-full max-w-md aspect-video">
+          <div className="rounded-3xl overflow-hidden  w-full max-w-md aspect-video">
             <img 
               src={urlFor(mediaData.storeRepublique).url()} 
               alt="XPhones Store Republique"
@@ -108,7 +108,7 @@ async function ContactPage() {
 
 
         <div className="flex flex-col items-center space-y-4">
-          <div className="rounded-3xl overflow-hidden border-4 border-purple-500 w-full max-w-md aspect-video">
+          <div className="rounded-3xl overflow-hidden  w-full max-w-md aspect-video">
             <img 
               src={urlFor(mediaData.storeNation).url()} 
               alt="XPhones Store Nation"

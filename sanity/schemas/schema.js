@@ -19,7 +19,8 @@ import nosmagsin from "./nosmagsin";
 import contactPage from "./contactPage";
 import qualityPage from "./qualityPage";
 import grades from "./grades";
+import post from "./post";
 export default createSchema({
   name: "default",
-  types: schemaTypes.concat([product, variant,code,categoryReal,brandReal, accessories,banner,publication,comment,review,subcategory,scrollingReviews, menuCategory, quiSommes, nosmagsin, contactPage, qualityPage,grades ]),
+  types: schemaTypes.concat([product, variant,code,categoryReal,brandReal, accessories,banner,publication,comment,review,subcategory,scrollingReviews, menuCategory, quiSommes, nosmagsin, contactPage, qualityPage,grades, post ]),
 });

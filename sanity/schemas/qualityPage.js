@@ -1,4 +1,5 @@
 // schemas/qualityPage.js
+
 export default {
     name: 'qualityPage',
     title: 'Quality Page',

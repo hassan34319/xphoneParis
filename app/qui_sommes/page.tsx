@@ -74,9 +74,9 @@ async function QuiSommes() {
   
 
   return (
-    <div className="flex flex-col items-center px-4 py-8 space-y-12 mx-auto max-w-6xl">
+    <div className="flex flex-col items-center px-4 py-8 space-y-12 mx-auto max-w-6xl bg-white">
       {/* Heading */}
-      <h1 className="text-4xl font-bold text-center tracking-wider">Qui sommes nous ?</h1>
+      <h1 className="text-4xl font-extrabold text-center tracking-wider">Qui sommes nous ?</h1>
 
       {/* Logo */}
       <div className="flex justify-center w-full px-4">
@@ -96,7 +96,7 @@ async function QuiSommes() {
 <div className="flex flex-col md:flex-row items-center gap-8 w-full">
   <div className="w-full md:w-1/2 max-w-xl">
     <video
-      autoPlay
+      // autoPlay
       muted
       
       loop

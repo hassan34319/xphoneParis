@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const FullScreenImagePage = () => {
   return (
-    <div className="w-full  flex items-center justify-center p-4">
+    <div className="w-full  flex items-center justify-center p-4 bg-white">
       <Image
         src="/df.png"
         alt="Full Screen Image"

@@ -63,7 +63,7 @@ const Categories2: React.FC<Props> = ({ phones,televisions,computers,tablets,exc
       {categories.map((category: category) => {
         return (
           <div key={category.name} className="my-10">
-            <h1 className="underline text-2xl lg:text-3xl">{category.name}</h1>
+            <h1 className="underline text-2xl lg:text-3xl py-4">{category.name}</h1>
             <div className="flex flex-row gap-8 mt-4 overflow-auto">
               {category.products.slice(0, 5).map((product: product) => {
                 return <ProductCard key={product._id} product={product} />;

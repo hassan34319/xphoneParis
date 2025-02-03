@@ -14,8 +14,8 @@ async function Nosmagasin() {
   const mediaData: NosmagasinMedia = await sanityClient.fetch(query);
 
   return (
-    <div className="flex flex-col items-center px-4 py-8 space-y-8 max-w-6xl mx-auto">
-      <h1 className="text-4xl font-bold text-center tracking-wider">Nos Magasin</h1>
+    <div className="flex flex-col items-center px-4 py-8 space-y-8 max-w-6xl mx-auto bg-white">
+      <h1 className="text-4xl font-extrabold text-center tracking-wider ">Nos Magasin</h1>
       
       <div className="flex justify-center w-full px-4">
       <div className=" p-2 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-lg xl:max-w-xl ">
