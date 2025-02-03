@@ -68,7 +68,7 @@ async function QualityPage() {
             className="flex flex-col items-center space-y-2 lg:space-y-3"
           >
             {/* Circle Image Container */}
-            <div className="relative w-36 h-36 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden transition-transform hover:scale-105">
+            <div className="relative w-36 h-36 max-w-64 max-h-64 md:w-48 md:h-48 lg:w-56 lg:h-56  rounded-full overflow-hidden transition-transform hover:scale-105">
               <img
                 src={urlFor(feature.image).url()}
                 alt={feature.description}
