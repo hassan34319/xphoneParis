@@ -41,7 +41,6 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const allCategories: CategoryItem[] = [
-    { title: "Tous les produits", search: "", customLink: "/#all-products" },
     { title: "Bon plans", search: "", customLink: "/#bon-plans" },
     ...predefined_categories
   ];
@@ -97,8 +96,8 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
     <div className="hidden md:block text-black openSans.className">
       <div className="w-full bg-[#f8f9fc] h-12">
         <div className="relative h-full flex items-center px-4 lg:px-16">
-          <div className="flex items-center mr-4 shrink-0">
-            <button className="text-black cursor-pointer" onClick={toggleSidebar}>
+          <div className="flex items-center space-x-2 mr-4 shrink-0">
+            <button className="text-black cursor-pointer flex items-center space-x-2" onClick={toggleSidebar}>
               <svg
                 className="w-6 h-6 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
@@ -108,13 +107,14 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
                   <path d="M4 5h16v2h-16v-2zm0 6h16v2h-16v-2zm0 6h16v2h-16v-2z" />
                 )}
               </svg>
+              <span className="font-extrabold lg:text-lg">Tous les produits</span>
             </button>
           </div>
 
           {showPrevButton && (
             <button 
               onClick={handlePrev}
-              className="absolute left-10 lg:left-8 z-10 p-1 hover:bg-red-600 rounded transition-colors"
+              className="p-1 hover:bg-red-600 rounded transition-colors"
               aria-label="Previous category"
             >
               <svg 

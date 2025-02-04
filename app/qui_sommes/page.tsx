@@ -124,50 +124,55 @@ async function QuiSommes() {
   </div>
 </div>
 
-      {/* Three Feature Images */}
-      <div className="flex justify-between w-full gap-2 md:gap-6">
-        {mediaData.threeFeatureImages.map((image, index) => (
-          <div key={index} className="flex items-center justify-center w-1/3">
-            <div className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-xs">
-              <Image 
-                src={urlFor(image).url()}
-                alt={`Feature ${index + 1}`}
-                width={200}
-                height={200}
-                className="w-full lg:w-3/4 h-auto object-contain"
-              />
-            </div>
-          </div>
-        ))}
+      {/* Three Feature Images with Text */}
+<div className="flex flex-col w-full max-w-7xl mx-auto gap-6 md:gap-8 px-4 -space-y-6">
+  {/* Images Row */}
+  <div className="flex justify-center w-full gap-12 md:gap-16 lg:gap-20">
+    {mediaData.threeFeatureImages.map((image, index) => (
+      <div key={index} className="w-[250px] sm:w-[300px] md:w-[350px] lg:w-[400px]">
+        <div className="flex justify-center">
+          <Image
+            src={urlFor(image).url()}
+            alt={`Feature ${index + 1}`}
+            width={400}
+            height={400}
+            className="w-full h-auto object-contain"
+          />
+        </div>
       </div>
+    ))}
+  </div>
 
-      {/* Text Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl mx-auto justify-center">
-        <div className="flex flex-col items-center">
-          <p className="text-center text-sm lg:text-lg xl:text-2xl">
-            Chez Xphones, nous sommes fiers de privilégier l'origine française pour vous garantir qualité et authenticité.
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <p className="text-center text-sm lg:text-lg xl:text-2xl">
-            Optez pour la tranquillité d'esprit en recevant vos appareils qui atteignent une clientèle à l'autre de fiabilité
-          </p>
-        </div>
-      </div>
+  {/* Text Row */}
+  <div className="flex justify-center w-full gap-12 md:gap-16 lg:gap-20">
+    {/* First Text - Width matches first image */}
+    <div className="w-[250px] sm:w-[300px] md:w-[350px] lg:w-[400px]">
+      <p className="text-center text-sm lg:text-lg xl:text-2xl italic">
+        Appareils reconditionnés lents et se déchargeant rapidement.
+      </p>
+    </div>
+    {/* Second Text - Width matches two images plus gap */}
+    <div className="w-[512px] sm:w-[612px] md:w-[716px] lg:w-[820px]">
+      <p className="text-center text-sm lg:text-lg xl:text-2xl italic">
+        Appareil d'origine rapide, performant avec une autonomie maximale.
+      </p>
+    </div>
+  </div>
+</div>
 
       {/* French Products Section */}
-      <div className="flex flex-col-2 md:flex-row gap-8 w-full">
+      <div className="flex flex-col-2 md:flex-row gap-8 w-full ">
         <div className="w-full md:w-1/2 flex flex-col gap-8">
           <div className="flex justify-center">
             <Image 
               src={urlFor(mediaData.frenchProductsSection.girlImage).url()}
               alt="French Products"
-              width={250}
-              height={250}
+              width={200}
+              height={200}
               className="w-full max-w-[200px] sm:max-w-[250px] md:max-w-xs h-auto object-contain"
             />
           </div>
-          <p className="text-center text-sm lg:text-lg xl:text-2xl">
+          <p className="text-center text-sm lg:text-lg xl:text-2xl italic">
             Xphones propose uniquement des produits Français et Européens.
           </p>
           <div className="flex justify-center">
@@ -181,15 +186,16 @@ async function QuiSommes() {
           </div>
         </div>
         <div className="w-full md:w-1/2 flex flex-col justify-center gap-8">
-          <p className="text-center text-sm lg:text-lg xl:text-2xl">
-            Chez Xphones, nous sommes fiers de privilégier l'origine française pour vous garantir qualité et authenticité.
-          </p>
+        <p className="text-center text-sm lg:text-lg xl:text-2xl">
+  Chez <span className="text-red-500">X</span>phones, nous sommes <span className="text-blue-500">fiers</span> de privilégier l'origine <span className="text-blue-500">fran</span><span className="text-red-500">çai</span><span className="text-red-500">se</span> pour vous <span className="text-blue-500">garantir</span> <span className="text-red-500">qualité</span> et <span className="text-blue-500">authenticité</span>. Nous nous sommes <span className="text-green-500">orientés à 100%</span> vers des <span className="text-blue-500">produits d'ori</span><span className="text-red-500">gine</span> répondant aux attentes d'une <span className="text-blue-500">clientèle</span> en quête de <span className="text-blue-500">fiabi</span><span className="text-red-500">lité</span>.
+</p>
+
           <div className="flex justify-center">
             <Image 
               src={urlFor(mediaData.frenchProductsSection.coqImage).url()}
               alt="French Coq"
-              width={200}
-              height={200}
+              width={250}
+              height={250}
               className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-sm h-auto object-contain"
             />
           </div>
@@ -225,27 +231,27 @@ async function QuiSommes() {
       </div>
 
       {/* Marketplace Section */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        {mediaData.marketplaceImages.map((image, index) => (
-          <div key={index} className="space-y-2">
-            <div className="relative w-full flex justify-center">
-              <div className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-[180px]">
-                <Image 
-                  src={urlFor(image).url()}
-                  alt={`Marketplace ${index + 1}`}
-                  width={200}
-                  height={200}
-                  className="w-full h-auto object-fill"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-red-600 text-4xl md:text-6xl font-bold">X</div>
-                </div>
-              </div>
-            </div>
-            <p className="text-sm text-center lg:text-lg xl:text-2xl">{marketplaceDescriptions[index]}</p>
+<div className="grid grid-cols-2 gap-4 md:gap-8 lg:gap-12 max-w-7xl mx-auto">
+  {mediaData.marketplaceImages.map((image, index) => (
+    <div key={index} className="space-y-4">
+      <div className="relative w-full flex justify-center">
+        <div className="w-full max-w-[250px] sm:max-w-[300px] md:max-w-[350px] lg:max-w-[400px]">
+          <Image 
+            src={urlFor(image).url()}
+            alt={`Marketplace ${index + 1}`}
+            width={300}
+            height={300}
+            className="w-full h-full"
+          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-red-600 text-4xl md:text-6xl lg:text-7xl font-bold">X</div>
           </div>
-        ))}
+        </div>
       </div>
+      <p className="text-sm text-center lg:text-lg xl:text-2xl">{marketplaceDescriptions[index]}</p>
+    </div>
+  ))}
+</div>
 
       {/* Store Locations */}
       <div className="w-full grid grid-cols-2 md:grid-cols-2 gap-8 text-blue-600">

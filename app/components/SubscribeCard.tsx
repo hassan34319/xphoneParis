@@ -41,7 +41,7 @@ const SubscribeCard = () => {
   };
 
   return (
-    <div id="Subscribe" className="container px-4 sm:px-8 mx-auto max-w-lg">
+    <div id="Subscribe" className="container px-4 max-w-2xl sm:px-8 mx-auto xl:max-w-[105rem] lg:max-w-7xl md:max-w-6xl">
       {/* card wrapper */}
       <div className="wrapper bg-white rounded-sm shadow-lg">
         <div className="card px-8 py-4">

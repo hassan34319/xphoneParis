@@ -17,7 +17,6 @@ type Props = {
 };
 
 function ProductComponent({ product, currentUser }: Props) {
-  const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<string>(urlFor(product.variants[0].image).url());
   const [selectedColor, setSelectedColor] = useState(product.variants[0].color);
   const [selectedCapacity, setSelectedCapacity] = useState(product.variants[0].capacity);
@@ -33,71 +32,38 @@ function ProductComponent({ product, currentUser }: Props) {
     setSelectedCapacity(capacity);
   };
 
-  if (loading) return <h1>Loading...</h1>;
-
   return (
     <ClientOnly>
-      <div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 bg-white w-11/12 p-4 mx-auto rounded  mt-10 mb-10 ">
-          <div className="flex flex-col justify-center items-center">
-            <div className="w-full h-full relative flex items-center justify-center">
-
-              <div className="flex flex-col items-center w-2/3">
-
-                <div className="relative h-[24rem] w-full">
-                  <Image
-                    src={image}
-                    alt="Product Image"
-                    className="object-contain"
-                    fill
-                  />
-                </div>
-
-                <div className="relative -ml-6 sm:-ml-16 md:-ml-18 lg:-ml-20 xl:-ml-20 ">
-                <ProductCarousel
-                  variants={product.variants}
-                  handleVariantClick={handleVariantClick}
-                  currentImage={image}
-                  onVariantSelect={handleVariantSelect}
-                  product={product}
-                  selectedColor={selectedColor}
-                  selectedGrade={selectedGrade}
-                  selectedCapacity={selectedCapacity}
-                />
-                </div>
-              </div>
-
-
-              <div className="w-[30%] h-full flex flex-col relative items-center justify-start">
-                <div className="w-full h-32 relative">
-                  <Image
-                    className="object-contain"
-                    fill
-                    src="/grnty.png"
-                    alt="Verified"
-                  />
-                </div>
-                <div className="w-full h-24 relative">
-                  <Image
-                    className="object-contain"
-                    fill
-                    src="https://image.noelshack.com/fichiers/2024/17/7/1714333874-rreerreer.png"
-                    alt="Verified"
-                  />
-                </div>
-                <h3 className="text-center font-bold text-xl md:text-2xl xl:text-3xl">Chargeur</h3>
-                <h3 className="text-center font-bold text-xl md:text-2xl xl:text-3xl">+ Cable</h3>
-              </div>
+      <div className="w-11/12 mx-auto bg-white p-4 rounded mt-10 mb-10">
+        {/* Product Info Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Side: Image & Carousel */}
+          <div className="flex flex-col items-center">
+            <div className="relative h-[24rem] w-full flex justify-center">
+              <Image
+                src={image}
+                alt="Product Image"
+                className="object-contain"
+                fill
+              />
             </div>
-
-            <ProductReview
-              id={product._id!}
-              currentUser={currentUser}
-              review={product.review}
-            />
+            {/* Product Variant Carousel */}
+            <div className="mt-4">
+              <ProductCarousel
+                variants={product.variants}
+                handleVariantClick={handleVariantClick}
+                currentImage={image}
+                onVariantSelect={handleVariantSelect}
+                product={product}
+                selectedColor={selectedColor}
+                selectedGrade={selectedGrade}
+                selectedCapacity={selectedCapacity}
+              />
+            </div>
           </div>
 
-          <div>
+          {/* Right Side: Product Selection & Reviews */}
+          <div className="flex flex-col">
             {product && (
               <ProductSelection
                 product={product}
@@ -107,21 +73,34 @@ function ProductComponent({ product, currentUser }: Props) {
                 selectedGrade={selectedGrade}
               />
             )}
-          </div>
 
+            {/* Desktop Reviews (Hidden on Small Screens) */}
+            <div className="hidden lg:block mt-10">
+              <ProductReview
+                id={product._id!}
+                currentUser={currentUser}
+                review={product.review}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Reviews (Visible Only on Small Screens) */}
+        <div className="block lg:hidden mt-10">
           <ProductReviewMobile
             id={product._id!}
             currentUser={currentUser}
             review={product.review}
           />
         </div>
+
+        <Script
+          src="https://upload-widget.cloudinary.com/global/all.js"
+          type="text/javascript"
+        />
       </div>
-      <Script
-        src="https://upload-widget.cloudinary.com/global/all.js"
-        type="text/javascript"
-      />
     </ClientOnly>
   );
 }
 
-export default ProductComponent;
+export default ProductComponent

@@ -7,9 +7,7 @@ const Footer = () => {
   return (
     <>
       <BottomMenu />
-      <div className="bg-black text-white">
-        <h1 className="my-2 text-center">2023 &copy; Xphones</h1>
-      </div>
+      
     </>
   );
 };

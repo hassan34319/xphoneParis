@@ -20,19 +20,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
   const [activeProduct, setActiveProduct] = useState("");
 
   const sidebarRef = useRef<HTMLDivElement>(null);
-
-  const toggleSubModal = () => {
-    if (isSubModalOpen) {
-      setActiveCategory("");
-      setActiveProduct("");
-    }
-    setIsSubModalOpen(!isSubModalOpen);
-  };
-
-  const closeSubModal = () => {
-    toggleSubModal();
-    toggleSidebar();
-  };
+  const subModalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen || isSubModalOpen) {
@@ -48,10 +36,14 @@ const SidebarModal: React.FC<NavbarProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target as Node)
-      ) {
+      const target = event.target as Node;
+      const isOutsideSidebar = sidebarRef.current && !sidebarRef.current.contains(target);
+      const isOutsideSubModal = subModalRef.current && !subModalRef.current.contains(target);
+
+      if (isSubModalOpen && isOutsideSubModal && isOutsideSidebar) {
+        setIsSubModalOpen(false);
+        setActiveCategory("");
+      } else if (!isSubModalOpen && isOutsideSidebar) {
         toggleSidebar();
       }
     };
@@ -63,31 +55,33 @@ const SidebarModal: React.FC<NavbarProps> = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, toggleSidebar]);
+  }, [isOpen, isSubModalOpen, toggleSidebar]);
 
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
-    setActiveProduct("");
-    toggleSubModal();
+    setIsSubModalOpen(true);
   };
 
   const handleProductClick = (productId: string) => {
     setActiveProduct(productId);
-    toggleSubModal();
+    setIsSubModalOpen(false);
     toggleSidebar();
+  };
+
+  const closeSubModal = () => {
+    setIsSubModalOpen(false);
+    setActiveCategory("");
   };
 
   return (
     <>
       {isOpen && (
-        <div
-          className="fixed top-0 md:top-[7.2rem] left-0 w-full h-full bg-black opacity-50 z-40"
-          onClick={toggleSidebar}
-        ></div>
+        <div className="fixed top-0 md:top-[7.2rem] left-0 w-full h-full bg-black opacity-50 z-40" />
       )}
+      
       <div
         ref={sidebarRef}
-        className={` fixed top-0  md:top-[7.2rem] left-0 w-full h-full bg-white z-50 shadow-lg md:w-1/4 ${
+        className={`fixed top-0 md:top-[7.2rem] left-0 w-full h-full bg-white z-50 shadow-lg md:w-[20%] ${
           isOpen ? "block" : "hidden"
         } overflow-y-auto`}
       >
@@ -111,7 +105,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
           </svg>
         </button>
 
-        <div className="p-4  h-full overflow-y-auto">
+        <div className="p-4 h-full overflow-y-auto">
           <h2 className="font-bold text-lg text-[#AE3033]">Categories</h2>
           <ul className="pl-4 mt-2">
             {menuCategories.map((category) => (
@@ -125,9 +119,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
                 <span className="mr-2">{category.title}</span>
                 <svg
                   className={`w-4 h-4 ml-auto fill-current -rotate-90 ${
-                    activeCategory === category.title
-                      ? "transform rotate-0"
-                      : ""
+                    activeCategory === category.title ? "transform rotate-0" : ""
                   }`}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -140,55 +132,54 @@ const SidebarModal: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Sub Modal */}
       {isSubModalOpen && (
         <div
-          ref={sidebarRef}
-          className={`fixed top-0 md:top-[7.2rem] left-0 md:left-[25%] w-full h-full bg-white z-50 shadow-lg md:w-1/4 ${
+          ref={subModalRef}
+          className={`fixed top-0 md:top-[7.2rem] left-0 md:left-[20%] w-full h-full bg-white z-50 shadow-lg md:w-[20%] ${
             isOpen ? "block" : "hidden"
           } md:h-screen overflow-y-auto`}
         >
-         <button
-          className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-transparent rounded-full cursor-pointer"
-          onClick={toggleSidebar}
-        >
-          <svg
-            className="w-6 h-6 text-[#AE3033]"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
+          <button
+            className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-transparent rounded-full cursor-pointer"
+            onClick={closeSubModal}
           >
-            <path
-              d="M6 18L18 6M6 6l12 12"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+            <svg
+              className="w-6 h-6 text-[#AE3033]"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M6 18L18 6M6 6l12 12"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
 
           <div className="p-4 h-full overflow-y-auto">
             {activeCategory && (
               <>
-              <h2 className="font-bold text-lg text-[#AE3033] flex items-center gap-x-2">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 text-[#AE3033] mr-2 cursor-pointer"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-    onClick={ toggleSubModal}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9.75 19.5L3 12l6.75-7.5M3 12h18"
-    />
-  </svg>
-  {activeCategory}
-</h2>
+                <h2 className="font-bold text-lg text-[#AE3033] flex items-center gap-x-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-[#AE3033] mr-2 cursor-pointer"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    onClick={closeSubModal}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.75 19.5L3 12l6.75-7.5M3 12h18"
+                    />
+                  </svg>
+                  {activeCategory}
+                </h2>
                 <ul className="pl-4 mt-2">
                   {menuCategories
                     .find((category) => category.title === activeCategory)
@@ -204,9 +195,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
                         <span className="mr-2">{product.name}</span>
                         <svg
                           className={`w-4 h-4 ml-auto fill-current -rotate-90 ${
-                            activeProduct === product._id
-                              ? "transform rotate-0"
-                              : ""
+                            activeProduct === product._id ? "transform rotate-0" : ""
                           }`}
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"

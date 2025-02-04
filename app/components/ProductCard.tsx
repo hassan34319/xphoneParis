@@ -8,7 +8,7 @@ import ClientOnly from "./ClientOnly";
 
 const StarRating = ({ rating = 0, totalStars = 5 }) => {
   return (
-    <div className="flex items-center mt-2">
+    <div className="flex items-center mt-1 mb-1">
       {Array.from({ length: totalStars }, (_, index) => (
         <svg
           key={index}
@@ -45,7 +45,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <ClientOnly>
       <div
-        className="bg-white rounded-xl p-2 flex flex-col  cursor-pointer shadow-lg  w-80 lg:h-[28rem] xl:h-[32rem] mb-6 hover:shadow-xl"
+        className="bg-white rounded-xl p-2 flex flex-col cursor-pointer shadow-lg w-80 lg:h-[24rem] xl:h-[26rem] mb-6 hover:shadow-xl"
         onClick={() => router.push(`/products/${product._id}`)}
       >
         <img
@@ -53,26 +53,30 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           alt="product image"
           className="object-contain h-44 w-32 m-4 mx-auto"
         />
-        <div className="whitespace">
-          <h1 className="text-2xl font-semibold">{product.name}</h1>
-          <h1 className="text-xl text-gray-600">{product.brand}</h1>
-          <h1 className="text-gray-600">{product.desc}</h1>
-          <h1 className="text-gray-600">A partir de:</h1>
-          <div className="flex flex-row gap-4">
-            <h1 className="font-semibold text-2xl mt-2 text-gray-400 line-through">
-              {Math.round(
-                (product.variants[0].price * 1.2 + Number.EPSILON) * 100
-              ) / 100}
-              &euro;
-            </h1>
-            <h1 className="font-semibold text-2xl mt-2">
-              {Math.round((product.variants[0].price + Number.EPSILON) * 100) /
-                100}
-              &euro;
-            </h1>
+        <div className="flex flex-col gap-1 px-2">
+          <h1 className="text-2xl font-semibold line-clamp-3 min-h-[3rem]">
+            {product.name}
+          </h1>
+          <h2 className="text-xl text-gray-600">{product.brand}</h2>
+
+          <div className="mt-1">
+            <p className="text-gray-600 text-sm">A partir de:</p>
+            <div className="flex flex-row gap-2 items-center">
+              <span className="font-semibold text-2xl text-gray-400 line-through">
+                {Math.round(
+                  (product.variants[0].price * 1.2 + Number.EPSILON) * 100
+                ) / 100}
+                &euro;
+              </span>
+              <span className="font-semibold text-2xl">
+                {Math.round((product.variants[0].price + Number.EPSILON) * 100) /
+                  100}
+                &euro;
+              </span>
+            </div>
           </div>
 
-          <StarRating rating={product.rating? Number(product.rating) : 5} totalStars={5} />
+          <StarRating rating={product.rating ? Number(product.rating) : 5} totalStars={5} />
         </div>
       </div>
     </ClientOnly>

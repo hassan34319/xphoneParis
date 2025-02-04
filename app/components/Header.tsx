@@ -40,7 +40,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
     <header className="top-0 z-30 flex w-full font-sans items-center justify-between bg-white p-4 font-extrabold">
       <div className="flex items-center justify-between w-full md:justify-normal">
         {/* Left Section - Mobile */}
-        <div className="flex items-center gap-4 md:hidden">
+        <div className="flex items-center gap-4 md:hidden space-y-8">
           {/* Hamburger Menu Button */}
           <button
             className="flex flex-col items-center h-12 text-[#AE3033] cursor-pointer"
@@ -48,7 +48,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
           >
             <div className="h-10 flex items-center justify-center -mt-1">
               <svg
-                className="w-8 h-8 fill-current"
+                className="w-10 h-10 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
               >
@@ -59,44 +59,36 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
                 )}
               </svg>
             </div>
-            {/* <span className="text-[10px] text-center mt-1 leading-tight">Menu</span> */}
           </button>
           
           {/* Accueil Link - Mobile */}
-          <Link href="/" className="flex flex-col items-center h-12">
-            <div className="h-10 flex items-center justify-center">
-              <div className="w-8 h-8 relative">
-                {/* <Image
-                  src="/community.png"
-                  alt="Community"
-                  className="object-contain"
-                  fill
-                /> */}
+          <Link href="/" className="flex flex-col items-center h-12 ">
+            <div className="h-10 flex items-center justify-center -mt-4">
+              <div className="w-10 h-10 relative">
                 <GlobeAltIcon /> 
               </div>
             </div>
             <span className="text-[10px] text-center mt-1 leading-tight">Acceuil</span>
           </Link>
         </div>
-          {/* Mobile Logo */}
-          <Link href="/" className="md:hidden">
-            <div className="relative h-10  w-36 cursor-pointer opacity-100 transition hover:opacity-80 mr-4 ml-4 -mt-2">
-              <Image
-                src="/logo001.jpeg"
-                alt="company_logo"
-                fill
-                className="fill"
-                priority
-              />
-            </div>
-          </Link>
 
-          
+        {/* Mobile Logo */}
+        <Link href="/" className="md:hidden">
+          <div className="relative h-10 w-36 cursor-pointer opacity-100 transition hover:opacity-80 mr-4 ml-4 -mt-2">
+            <Image
+              src="/logo001.jpeg"
+              alt="company_logo"
+              fill
+              className="fill"
+              priority
+            />
+          </div>
+        </Link>
 
         {/* Left Section - Desktop */}
         <div className="hidden md:ml-3 md:w-1/4 md:flex md:flex-row md:items-center md:justify-center md:gap-x-10">
-          <Link href="/socialclub" className="flex flex-col items-center">
-            <div className="w-8 h-8 relative">
+          <Link href="/" className="flex flex-col items-center">
+            <div className="w-10 h-10 relative">
               <Image
                 src="/community.png"
                 alt="Community"
@@ -104,11 +96,11 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
                 fill
               />
             </div>
-            <span className="text-xs text-center mt-2">Social Club</span>
+            <span className="text-xs text-center mt-2">Acceuil</span>
           </Link>
           
           <Link href="/notre_quality" className="hidden lg:flex lg:flex-col lg:items-center">
-            <div className="w-8 h-8 relative">
+            <div className="w-10 h-10 relative">
               <Image
                 src="/quality.jpg"
                 alt="Quality"
@@ -120,7 +112,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
           </Link>
           
           <Link href="/nos_magasin" className="hidden lg:flex lg:flex-col lg:items-center">
-            <div className="w-8 h-8 relative">
+            <div className="w-10 h-10 relative">
               <Image
                 src="/magasins.jpg"
                 alt="Stores"
@@ -148,8 +140,9 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
         </div>
 
         {/* Search Bar - Desktop Only */}
-        <div className="hidden flex-1 items-center justify-center md:flex md:self-center">
-          <form className="flex items-center w-full max-w-xl">
+        <div className="hidden flex-1 items-center justify-center mt-4 md:mt-0 md:flex md:self-center">
+
+          <form className="flex items-center w-full max-w-xl ">
             <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3">
                 <DevicePhoneMobileIcon className="w-4 h-4 text-gray-500" />
@@ -204,21 +197,21 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
               onClick={loginModal.onOpen}
             >
               <div className="h-10 flex items-center justify-center md:h-auto">
-                <BiUser className="w-8 h-8 cursor-pointer opacity-100 transition hover:opacity-75" />
+                <BiUser className="w-10 h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
               </div>
-              <span className="text-[10px] text-center mt-1 leading-tight md:mt-2 md:text-xs">
+              <span className="text-[10px] text-center mt-1  leading-tight md:mt-2 md:text-xs ">
                 Espace Client
               </span>
             </button>
           )}
 
-          <Link href="/us" className="hidden lg:flex lg:flex-col lg:items-center">
-            <GlobeAltIcon className="w-8 h-8 cursor-pointer opacity-100 transition hover:opacity-75" />
+          <Link href="/" className="hidden lg:flex lg:flex-col lg:items-center">
+            <GlobeAltIcon className="w-10 h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
             <span className="text-xs text-center mt-2">Accueil</span>
           </Link>
 
           <Link href="/faq" className="hidden lg:flex lg:flex-col lg:items-center">
-            <QuestionMarkCircleIcon className="w-8 h-8 cursor-pointer opacity-100 transition hover:opacity-75" />
+            <QuestionMarkCircleIcon className="w-10 h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
             <span className="text-xs text-center mt-2">FAQ</span>
           </Link>
 
@@ -230,7 +223,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
                     {totalQuantity}
                   </span>
                 )}
-                <BiShoppingBag className="w-8 h-8 cursor-pointer opacity-100 transition hover:opacity-75" />
+                <BiShoppingBag className="w-10 h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
               </div>
             </div>
             <span className="text-[10px] text-center mt-1 leading-tight md:mt-2 md:text-xs">Panier</span>

@@ -1,10 +1,15 @@
 import Link from "next/link";
 import { BsHeadset, BsHouse } from "react-icons/bs";
 import { AiOutlineMail } from "react-icons/ai";
+import { Open_Sans } from 'next/font/google';
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 const BottomMenu = () => {
   return (
-    <div className=" w-full h-max bg-black py-4 flex flex-col  lg:flex-row lg:items-start justify-center gap-12 mt-10 px-20 text-white">
+    <div className=" w-full h-max bg-white py-4 flex flex-col  lg:flex-row lg:items-start justify-center gap-12 mt-10 px-20 text-black openSans.className">
       <div className="flex flex-col items-center justify-center space-y-2">
         <h1 className="text-xl text-center xl:text-2xl">À PROPOS</h1>
         <div className="flex flex-col items-center justify-center text-sm space-y-1 lg:text-md xl:text-lg">
