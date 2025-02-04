@@ -73,6 +73,7 @@ async function Home({}: Props) {
         <Categories />
         </section>
       {/* <Post publications={publications} currentUser={currentUser} /> */}
+
       <SubscribeCard />
       <Values />
     </div>
@@ -80,3 +81,4 @@ async function Home({}: Props) {
 }
 
 export default Home;
+

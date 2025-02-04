@@ -169,7 +169,7 @@ async function QuiSommes() {
               alt="French Products"
               width={200}
               height={200}
-              className="w-full max-w-[200px] sm:max-w-[250px] md:max-w-xs h-auto object-contain"
+              className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-xs h-auto object-contain"
             />
           </div>
           <p className="text-center text-sm lg:text-lg xl:text-2xl italic">
@@ -196,7 +196,7 @@ async function QuiSommes() {
               alt="French Coq"
               width={250}
               height={250}
-              className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-sm h-auto object-contain"
+              className="w-full max-w-[250px] sm:max-w-[200px] md:max-w-sm h-auto object-contain"
             />
           </div>
           <p className="text-center text-sm font-bold lg:text-lg xl:text-2xl">
@@ -211,9 +211,9 @@ async function QuiSommes() {
           <Image 
             src={urlFor(mediaData.frenchProductsSection.phoneImage).url()}
             alt="Phone"
-            width={200}
-            height={200}
-            className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-sm h-auto object-contain justify-center"
+            width={250}
+            height={250}
+            className="w-full max-w-[250px] sm:max-w-[200px] md:max-w-sm h-auto object-contain justify-center"
           />
         </div>
         <div className="w-full md:w-1/2 flex flex-col justify-center space-y-4">
