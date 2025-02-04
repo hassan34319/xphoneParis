@@ -39,16 +39,14 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
   return (
     <header className="top-0 z-30 flex w-full font-sans items-center justify-between bg-white p-4 font-extrabold">
       <div className="flex items-center justify-between w-full md:justify-normal">
-        {/* Left Section - Mobile */}
         <div className="flex items-center gap-4 md:hidden space-y-8">
-          {/* Hamburger Menu Button */}
           <button
-            className="flex flex-col items-center h-14 text-[#AE3033] cursor-pointer"
+            className="flex flex-col items-center h-12 text-[#AE3033] cursor-pointer"
             onClick={toggleSidebar}
           >
-            <div className="h-12 flex items-center justify-center -mt-1">
+            <div className="max-h-12 flex items-center justify-center -mt-1">
               <svg
-                className="w-12 h-12 fill-current"
+                className="w-10 h-10 sm:w-12 sm:h-12 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
               >
@@ -61,25 +59,21 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
             </div>
           </button>
           
-          {/* Accueil Link - Mobile */}
-          <Link href="/" className="flex flex-col items-center h-12 ">
-            <div className="h-10 flex items-center justify-center -mt-4">
-              <div className="w-10 h-10 relative">
+          <Link href="/" className="flex flex-col items-center h-12">
+            <div className="h-8 w-8 sm:h-10 sm:w-10 relative flex items-center justify-center -mt-4">
               <Image
-              src="/community.png"
-              alt="abc"
-              className="object-contain"
-              fill
-            />
-              </div>
+                src="/community.png"
+                alt="abc"
+                className="object-contain"
+                fill
+              />
             </div>
-            <span className="text-[10px] text-center mt-1 leading-tight">Acceuil</span>
+            <span className="text-[10px] sm:text-[12px] text-center mt-1 leading-tight">Acceuil</span>
           </Link>
         </div>
 
-        {/* Mobile Logo */}
         <Link href="/" className="md:hidden">
-          <div className="relative h-10 w-36 cursor-pointer opacity-100 transition hover:opacity-80 mr-4 ml-4 -mt-2">
+          <div className="relative h-8 w-28 sm:h-10 sm:w-36 cursor-pointer opacity-100 transition hover:opacity-80 mr-4 ml-4 -mt-2">
             <Image
               src="/logo001.jpeg"
               alt="company_logo"
@@ -90,7 +84,6 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
           </div>
         </Link>
 
-        {/* Left Section - Desktop */}
         <div className="hidden md:ml-3 md:w-1/4 md:flex md:flex-row md:items-center md:justify-center md:gap-x-10">
           <Link href="/" className="flex flex-col items-center">
             <div className="w-10 h-10 relative">
@@ -129,25 +122,22 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
           </Link>
         </div>
 
-        {/* Desktop Logo */}
         <div className="hidden md:flex md:justify-center md:items-center mr-6 ml-4">
           <Link href="/">
-            <div className="relative h-24 w-[20rem] cursor-pointer opacity-100 transition hover:opacity-80">
+            <div className="relative h-14 w-[18rem]  cursor-pointer opacity-100 transition hover:opacity-80">
               <Image
                 src="/logo001.jpeg"
                 alt="company_logo"
                 fill
-                className="object-contain"
+                className="object-contain md:fill "
                 priority
               />
             </div>
           </Link>
         </div>
 
-        {/* Search Bar - Desktop Only */}
-        <div className="hidden flex-1 items-center justify-center mt-4 md:mt-0 md:flex md:self-center">
-
-          <form className="flex items-center w-full max-w-xl ">
+        <div className="hidden flex-1 items-center justify-center mt-4 sm:mr-4 md:mt-0 md:flex md:self-center">
+          <form className="flex items-center w-full max-w-xl">
             <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3">
                 <DevicePhoneMobileIcon className="w-4 h-4 text-gray-500" />
@@ -185,14 +175,13 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
           </form>
         </div>
 
-        {/* Right Section */}
-        <div className="flex items-center gap-4 md:w-1/4 md:justify-center">
+        <div className="flex items-center gap-2 sm:gap-4 md:w-1/4 md:justify-center">
           {currentUser ? (
             <Link href="/user" className="flex flex-col items-center h-12 md:h-auto">
-              <div className="h-10 flex items-center justify-center md:h-auto">
-                <BiUser className="w-8 h-8 cursor-pointer opacity-100 transition hover:opacity-75" />
+              <div className="h-8 sm:h-10 flex items-center justify-center md:h-auto">
+                <BiUser className="w-6 h-6 sm:w-8 sm:h-8 cursor-pointer opacity-100 transition hover:opacity-75" />
               </div>
-              <span className="text-[10px] text-center mt-1 leading-tight md:mt-2 md:text-xs">
+              <span className="text-[8px] sm:text-[10px] text-center mt-1 leading-tight md:mt-2 md:text-xs">
                 Espace Client
               </span>
             </Link>
@@ -201,10 +190,10 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
               className="flex flex-col items-center h-12 md:h-auto"
               onClick={loginModal.onOpen}
             >
-              <div className="h-10 flex items-center justify-center md:h-auto">
-                <BiUser className="w-10 h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
+              <div className="h-8 sm:h-10 flex items-center justify-center md:h-auto">
+                <BiUser className="w-8 h-8 sm:w-10 sm:h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
               </div>
-              <span className="text-[10px] text-center mt-1  leading-tight md:mt-2 md:text-xs ">
+              <span className="text-[10px] sm:text-[12px] text-center mt-1 leading-tight md:mt-2 md:text-xs">
                 Espace Client
               </span>
             </button>
@@ -221,17 +210,17 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
           </Link>
 
           <Link href="/cart" className="flex flex-col items-center h-12 md:h-auto">
-            <div className="h-10 flex items-center justify-center md:h-auto">
+            <div className="h-8 sm:h-10 flex items-center justify-center md:h-auto">
               <div className="relative">
                 {totalQuantity > 0 && (
-                  <span className="absolute -right-1 -top-1 z-50 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-[#AE3033] to-[#751A21] text-xs text-white">
+                  <span className="absolute -right-1 -top-1 z-50 flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-gradient-to-r from-[#AE3033] to-[#751A21] text-[10px] sm:text-xs text-white">
                     {totalQuantity}
                   </span>
                 )}
-                <BiShoppingBag className="w-10 h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
+                <BiShoppingBag className="w-8 h-8 sm:w-10 sm:h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
               </div>
             </div>
-            <span className="text-[10px] text-center mt-1 leading-tight md:mt-2 md:text-xs">Panier</span>
+            <span className="text-[10px] sm:text-[12px] text-center mt-1 leading-tight md:mt-2 md:text-xs">Panier</span>
           </Link>
         </div>
       </div>
