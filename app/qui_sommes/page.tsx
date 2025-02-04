@@ -146,13 +146,13 @@ async function QuiSommes() {
   {/* Text Row */}
   <div className="flex justify-center w-full gap-12 md:gap-16 lg:gap-20">
     {/* First Text - Width matches first image */}
-    <div className="w-[250px] sm:w-[300px] md:w-[350px] lg:w-[400px]">
+    <div className="w-[300px] sm:w-[300px] md:w-[350px] lg:w-[400px]">
       <p className="text-center text-sm lg:text-lg xl:text-2xl italic">
         Appareils reconditionnés lents et se déchargeant rapidement.
       </p>
     </div>
     {/* Second Text - Width matches two images plus gap */}
-    <div className="w-[512px] sm:w-[612px] md:w-[716px] lg:w-[820px]">
+    <div className="w-[550px] sm:w-[612px] md:w-[716px] lg:w-[820px]">
       <p className="text-center text-sm lg:text-lg xl:text-2xl italic">
         Appareil d'origine rapide, performant avec une autonomie maximale.
       </p>
