@@ -43,12 +43,12 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
         <div className="flex items-center gap-4 md:hidden space-y-8">
           {/* Hamburger Menu Button */}
           <button
-            className="flex flex-col items-center h-12 text-[#AE3033] cursor-pointer"
+            className="flex flex-col items-center h-14 text-[#AE3033] cursor-pointer"
             onClick={toggleSidebar}
           >
-            <div className="h-10 flex items-center justify-center -mt-1">
+            <div className="h-12 flex items-center justify-center -mt-1">
               <svg
-                className="w-10 h-10 fill-current"
+                className="w-12 h-12 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
               >
@@ -65,7 +65,12 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
           <Link href="/" className="flex flex-col items-center h-12 ">
             <div className="h-10 flex items-center justify-center -mt-4">
               <div className="w-10 h-10 relative">
-                <GlobeAltIcon /> 
+              <Image
+              src="/community.png"
+              alt="abc"
+              className="object-contain"
+              fill
+            />
               </div>
             </div>
             <span className="text-[10px] text-center mt-1 leading-tight">Acceuil</span>
