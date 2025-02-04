@@ -146,14 +146,14 @@ async function QuiSommes() {
   {/* Text Row */}
   <div className="flex justify-center w-full gap-12 md:gap-16 lg:gap-20">
     {/* First Text - Width matches first image */}
-    <div className="w-[300px] sm:w-[300px] md:w-[350px] lg:w-[400px]">
-      <p className="text-center text-sm lg:text-lg xl:text-2xl italic">
+    <div className="w-[100px] sm:w-[300px] md:w-[350px] lg:w-[400px]">
+      <p className="text-center text-xs lg:text-lg xl:text-2xl italic">
         Appareils reconditionnés lents et se déchargeant rapidement.
       </p>
     </div>
     {/* Second Text - Width matches two images plus gap */}
-    <div className="w-[550px] sm:w-[612px] md:w-[716px] lg:w-[820px]">
-      <p className="text-center text-sm lg:text-lg xl:text-2xl italic">
+    <div className="w-[580px] mr-6 sm:w-[612px] md:w-[716px] lg:w-[820px]">
+      <p className="text-center text-xs lg:text-lg xl:text-2xl italic">
         Appareil d'origine rapide, performant avec une autonomie maximale.
       </p>
     </div>
@@ -169,7 +169,7 @@ async function QuiSommes() {
               alt="French Products"
               width={200}
               height={200}
-              className="w-full max-w-[200px] sm:max-w-[150px] md:max-w-xs h-auto object-contain"
+              className="w-full max-w-[250px] sm:max-w-[150px] md:max-w-xs h-auto object-contain"
             />
           </div>
           <p className="text-center text-sm lg:text-lg xl:text-2xl italic">
@@ -186,7 +186,7 @@ async function QuiSommes() {
           </div>
         </div>
         <div className="w-full md:w-1/2 flex flex-col justify-center gap-8">
-        <p className="text-center text-sm lg:text-lg xl:text-2xl">
+        <p className="text-center text-xs lg:text-lg xl:text-2xl">
   Chez <span className="text-red-500">X</span>phones, nous sommes <span className="text-blue-500">fiers</span> de privilégier l'origine <span className="text-blue-500">fran</span><span className="text-red-500">çai</span><span className="text-red-500">se</span> pour vous <span className="text-blue-500">garantir</span> <span className="text-red-500">qualité</span> et <span className="text-blue-500">authenticité</span>. Nous nous sommes <span className="text-green-500">orientés à 100%</span> vers des <span className="text-blue-500">produits d'ori</span><span className="text-red-500">gine</span> répondant aux attentes d'une <span className="text-blue-500">clientèle</span> en quête de <span className="text-blue-500">fiabi</span><span className="text-red-500">lité</span>.
 </p>
 
@@ -199,7 +199,7 @@ async function QuiSommes() {
               className="w-full max-w-[250px] sm:max-w-[200px] md:max-w-sm h-auto object-contain"
             />
           </div>
-          <p className="text-center text-sm font-bold lg:text-lg xl:text-2xl">
+          <p className="text-center text-xs font-bold lg:text-lg xl:text-2xl">
             Stoppons nos achats de produits importés de qualité médiocre et achetons des produits locaux et durables.
           </p>
         </div>
