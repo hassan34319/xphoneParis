@@ -129,7 +129,7 @@ async function QuiSommes() {
   {/* Images Row */}
   <div className="flex justify-center w-full gap-12 md:gap-16 lg:gap-20">
     {mediaData.threeFeatureImages.map((image, index) => (
-      <div key={index} className="w-[250px] sm:w-[300px] md:w-[350px] lg:w-[400px]">
+      <div key={index} className="w-[300px] sm:w-[300px] md:w-[350px] lg:w-[400px]">
         <div className="flex justify-center">
           <Image
             src={urlFor(image).url()}
