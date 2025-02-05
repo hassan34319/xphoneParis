@@ -44,7 +44,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
             className="flex flex-col items-center h-12 text-[#AE3033] cursor-pointer"
             onClick={toggleSidebar}
           >
-            <div className="max-h-12 flex items-center justify-center -mt-1">
+            <div className="max-h-12 flex items-center justify-center -mt-0.5">
               <svg
                 className="w-10 h-10 sm:w-12 sm:h-12 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
@@ -59,8 +59,8 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
             </div>
           </button>
           
-          <Link href="/" className="flex flex-col items-center h-12">
-            <div className="h-8 w-8 sm:h-10 sm:w-10 relative flex items-center justify-center -mt-4">
+          <Link href="/" className="flex flex-col items-center h-10">
+            <div className="h-7 w-7 sm:h-10 sm:w-10 relative flex items-center justify-center -mt-4">
               <Image
                 src="/community.png"
                 alt="abc"
