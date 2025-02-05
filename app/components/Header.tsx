@@ -39,9 +39,9 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
   return (
     <header className="top-0 z-30 flex w-full font-sans items-center justify-between bg-white p-4 font-extrabold">
       <div className="flex items-center justify-between w-full md:justify-normal">
-        <div className="flex items-center gap-4 md:hidden space-y-8">
+        <div className="flex items-center gap-3 md:hidden space-y-8">
           <button
-            className="flex flex-col items-center h-12 text-[#AE3033] cursor-pointer"
+            className="flex flex-col items-center h-12 text-[#AE3033] cursor-pointer "
             onClick={toggleSidebar}
           >
             <div className="max-h-12 flex items-center justify-center -mt-0.5">
@@ -60,7 +60,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
           </button>
           
           <Link href="/" className="flex flex-col items-center h-10">
-            <div className="h-7 w-7 sm:h-10 sm:w-10 relative flex items-center justify-center -mt-4">
+            <div className="h-7 w-7 sm:h-10 sm:w-10 relative flex items-center justify-center -mt-[0.85rem]">
               <Image
                 src="/community.png"
                 alt="abc"
@@ -73,7 +73,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
         </div>
 
         <Link href="/" className="md:hidden">
-          <div className="relative h-8 w-28 sm:h-10 sm:w-36 cursor-pointer opacity-100 transition hover:opacity-80 mr-4 ml-4 -mt-2">
+          <div className="relative h-6 w-28 sm:h-10 sm:w-36 cursor-pointer opacity-100 transition hover:opacity-80 mr-3 ml-3 -mt-2">
             <Image
               src="/logo001.jpeg"
               alt="company_logo"
@@ -124,7 +124,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
 
         <div className="hidden md:flex md:justify-center md:items-center mr-6 ml-4">
           <Link href="/">
-            <div className="relative h-14 w-[18rem]  cursor-pointer opacity-100 transition hover:opacity-80">
+            <div className="relative h-14 w-[18rem]  cursor-pointer opacity-100 transition hover:opacity-80 ">
               <Image
                 src="/logo001.jpeg"
                 alt="company_logo"
@@ -217,7 +217,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
                     {totalQuantity}
                   </span>
                 )}
-                <BiShoppingBag className="w-8 h-8 sm:w-10 sm:h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
+                <BiShoppingBag className="w-8 h-8 -mt-1 sm:w-10 sm:h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
               </div>
             </div>
             <span className="text-[10px] sm:text-[12px] text-center mt-1 leading-tight md:mt-2 md:text-xs">Panier</span>
