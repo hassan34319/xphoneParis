@@ -48,7 +48,7 @@ function ProductComponent({ product, currentUser }: Props) {
               />
             </div>
             {/* Product Variant Carousel */}
-            <div className="mt-4">
+            <div className="mt-4 -ml-8">
               <ProductCarousel
                 variants={product.variants}
                 handleVariantClick={handleVariantClick}

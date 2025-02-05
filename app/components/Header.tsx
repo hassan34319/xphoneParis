@@ -213,7 +213,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
             <div className="h-8 sm:h-10 flex items-center justify-center md:h-auto">
               <div className="relative">
                 {totalQuantity > 0 && (
-                  <span className="absolute -right-1 -top-1 z-50 flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-gradient-to-r from-[#AE3033] to-[#751A21] text-[10px] sm:text-xs text-white">
+                  <span className="absolute -right-1 -top-1 z-30 flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-gradient-to-r from-[#AE3033] to-[#751A21] text-[10px] sm:text-xs text-white">
                     {totalQuantity}
                   </span>
                 )}
