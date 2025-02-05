@@ -217,7 +217,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
                     {totalQuantity}
                   </span>
                 )}
-                <BiShoppingBag className="w-8 h-8 -mt-1 sm:w-10 sm:h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
+                <BiShoppingBag className="w-8 h-8 -mt-0.5 sm:w-10 sm:h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
               </div>
             </div>
             <span className="text-[10px] sm:text-[12px] text-center mt-1 leading-tight md:mt-2 md:text-xs">Panier</span>
