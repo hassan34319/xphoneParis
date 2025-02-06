@@ -81,9 +81,9 @@ const SidebarModal: React.FC<NavbarProps> = ({
       
       <div
         ref={sidebarRef}
-        className={`fixed top-0 md:top-[7.2rem] left-0 w-full h-full bg-white z-50 shadow-lg md:w-[20%] ${
+        className={`fixed top-0 md:top-[7rem] left-0 w-full md:w-[15%] h-full md:max-h-fit bg-white z-50 shadow-lg ${
           isOpen ? "block" : "hidden"
-        } overflow-y-auto`}
+        } overflow-y-auto md:rounded-b-xl`}
       >
         <button
           className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-transparent rounded-full cursor-pointer"
@@ -105,7 +105,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
           </svg>
         </button>
 
-        <div className="p-4 h-full overflow-y-auto">
+        <div className="p-4">
           <h2 className="font-bold text-lg text-[#AE3033]">Categories</h2>
           <ul className="pl-4 mt-2">
             {menuCategories.map((category) => (
@@ -135,9 +135,9 @@ const SidebarModal: React.FC<NavbarProps> = ({
       {isSubModalOpen && (
         <div
           ref={subModalRef}
-          className={`fixed top-0 md:top-[7.2rem] left-0 md:left-[20%] w-full h-full bg-white z-50 shadow-lg md:w-[20%] ${
+          className={`fixed top-0 md:top-[7rem] left-0 md:left-[15%] w-full md:w-[20%] h-full md:max-h-fit bg-white z-50 shadow-lg ${
             isOpen ? "block" : "hidden"
-          } md:h-screen overflow-y-auto`}
+          } overflow-y-auto md:rounded-b-xl`}
         >
           <button
             className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-transparent rounded-full cursor-pointer"
@@ -159,7 +159,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
             </svg>
           </button>
 
-          <div className="p-4 h-full overflow-y-auto">
+          <div className="p-4">
             {activeCategory && (
               <>
                 <h2 className="font-bold text-lg text-[#AE3033] flex items-center gap-x-2">

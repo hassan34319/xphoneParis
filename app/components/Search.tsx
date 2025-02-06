@@ -1,19 +1,33 @@
 'use client'
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { BsSearch } from "react-icons/bs";
-const Search: React.FC = () => {
-  const [search, setSearch] = useState("");
-  const router = useRouter();
 
-  const searchHandler = () => {
-    if (search) {
-      router
-        .push(`/products?search=${search}`);
-        setSearch("")
-    } else {
-      return;
-    }
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import React, { useState, useTransition } from "react";
+import { BsSearch } from "react-icons/bs";
+
+const Search: React.FC = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  const handleSearch = () => {
+    if (!search.trim()) return;
+
+    startTransition(() => {
+      // Create a new URLSearchParams object
+      const params = new URLSearchParams(searchParams);
+      
+      if (search) {
+        params.set('search', search);
+      } else {
+        params.delete('search');
+      }
+
+      // Use replace instead of push to avoid history stack issues
+      router.replace(`${pathname}?${params.toString()}`);
+      setSearch("");
+    });
   };
 
   return (
@@ -26,11 +40,19 @@ const Search: React.FC = () => {
           placeholder="Essayez Iphone, Macbook..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={(e) => e.key == "Enter" && searchHandler()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSearch();
+            }
+          }}
+          disabled={isPending}
         />
         <BsSearch
-          className="ml-auto mr-4 h-6 w-6 text-gray-600 cursor-pointer"
-          onClick={searchHandler}
+          className={`ml-auto mr-4 h-6 w-6 cursor-pointer ${
+            isPending ? 'text-gray-400' : 'text-gray-600'
+          }`}
+          onClick={handleSearch}
         />
       </div>
     </div>
