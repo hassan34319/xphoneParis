@@ -179,9 +179,9 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
           {currentUser ? (
             <Link href="/user" className="flex flex-col items-center h-12 md:h-auto">
               <div className="h-8 sm:h-10 flex items-center justify-center md:h-auto">
-                <BiUser className="w-6 h-6 sm:w-8 sm:h-8 cursor-pointer opacity-100 transition hover:opacity-75" />
+                <BiUser className="w-8 h-8 sm:w-10 sm:h-10 cursor-pointer opacity-100 transition hover:opacity-75" />
               </div>
-              <span className="text-[8px] sm:text-[10px] text-center mt-1 leading-tight md:mt-2 md:text-xs">
+              <span className="text-[10px] sm:text-[12px] text-center mt-1 leading-tight md:mt-2 md:text-xs">
                 Espace Client
               </span>
             </Link>
