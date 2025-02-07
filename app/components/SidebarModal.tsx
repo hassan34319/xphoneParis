@@ -76,12 +76,12 @@ const SidebarModal: React.FC<NavbarProps> = ({
   return (
     <>
       {isOpen && (
-        <div className="fixed top-0 md:top-[7.2rem] left-0 w-full h-full bg-black opacity-50 z-40" />
+        <div className="fixed top-0 md:top-[6rem] left-0 w-full h-full bg-black opacity-50 z-40" />
       )}
       
       <div
         ref={sidebarRef}
-        className={`fixed top-0 md:top-[7rem] left-0 w-full md:w-[15%] h-full md:max-h-fit bg-white z-50 shadow-lg ${
+        className={`fixed top-0 md:top-[6rem] left-0 w-full md:w-[15%] h-full md:max-h-fit bg-white z-50 shadow-lg ${
           isOpen ? "block" : "hidden"
         } overflow-y-auto md:rounded-b-xl`}
       >
@@ -135,7 +135,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
       {isSubModalOpen && (
         <div
           ref={subModalRef}
-          className={`fixed top-0 md:top-[7rem] left-0 md:left-[15%] w-full md:w-[20%] h-full md:max-h-fit bg-white z-50 shadow-lg ${
+          className={`fixed top-0 md:top-[6rem] left-0 md:left-[15%] w-full md:w-[20%] h-full md:max-h-fit bg-white z-50 shadow-lg ${
             isOpen ? "block" : "hidden"
           } overflow-y-auto md:rounded-b-xl`}
         >
