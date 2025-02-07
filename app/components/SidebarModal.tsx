@@ -106,7 +106,11 @@ const SidebarModal: React.FC<NavbarProps> = ({
         </button>
 
         <div className="p-4">
-          <h2 className="font-bold text-lg text-[#AE3033]">Categories</h2>
+          {/* <h2 className="font-bold text-lg text-[#AE3033]">Categories</h2> */}
+          <div className="flex justify-center">
+          <img src="/logo0.jpeg" alt="" className="flex items-center w-[10rem] md:w-[10rem]" />
+          </div>
+          
           <ul className="pl-4 mt-2">
             {menuCategories.map((category) => (
               <li
