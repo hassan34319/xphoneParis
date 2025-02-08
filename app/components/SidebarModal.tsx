@@ -166,24 +166,27 @@ const SidebarModal: React.FC<NavbarProps> = ({
           <div className="p-4">
             {activeCategory && (
               <>
-                <h2 className="font-bold text-lg text-[#AE3033] flex items-center gap-x-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-[#AE3033] mr-2 cursor-pointer"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    onClick={closeSubModal}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9.75 19.5L3 12l6.75-7.5M3 12h18"
-                    />
-                  </svg>
-                  {activeCategory}
-                </h2>
+             
+             <h2 className="font-bold text-lg text-[#AE3033] relative flex items-center justify-center">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-[#AE3033] cursor-pointer absolute left-0"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+    onClick={closeSubModal}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9.75 19.5L3 12l6.75-7.5M3 12h18"
+    />
+  </svg>
+  <div>
+    {activeCategory}
+  </div>
+</h2>
                 <ul className="pl-4 mt-2">
                   {menuCategories
                     .find((category) => category.title === activeCategory)
