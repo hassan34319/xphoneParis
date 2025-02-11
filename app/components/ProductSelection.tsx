@@ -181,6 +181,10 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
         return "#FF0000";
       case "vert":
         return "#00FF00";
+      case "or":
+        return "#D4AF37";
+      case "graphite":
+        return "#41424C"
       default:
         return extractedColor;
     }
