@@ -82,9 +82,13 @@ function ProductReviewMobile({ id, currentUser, review, onReviewsUpdate }: Props
   const handleReviewTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(event.target.value);
   };
+  const initiateDeleteReview = (key: string) => {
+    setReviewToDelete(key);
+    handleDeleteReview(key);
+  };
 
-  const handleDeleteReview = async () => {
-    if (!reviewToDelete || !review) return;
+  const handleDeleteReview = async (key: string) => {
+    if (!key || !review) return;
     
     try {
       setIsDeleting(true);
@@ -92,7 +96,7 @@ function ProductReviewMobile({ id, currentUser, review, onReviewsUpdate }: Props
       if (!product) throw new Error("Product not found");
 
       // Filter out the review with the matching key
-      const updatedReviews = product.review.filter((rev: Review) => rev._key !== reviewToDelete);
+      const updatedReviews = product.review.filter((rev: Review) => rev._key !== key);
 
       const updatedProduct = {
         ...product,
@@ -105,7 +109,6 @@ function ProductReviewMobile({ id, currentUser, review, onReviewsUpdate }: Props
       onReviewsUpdate(updatedReviews);
       
       toast.success("Review deleted successfully");
-      setReviewToDelete(null);
       
     } catch (error) {
       toast.error("Failed to delete review");
@@ -227,8 +230,9 @@ function ProductReviewMobile({ id, currentUser, review, onReviewsUpdate }: Props
             </div>
             {isAdmin && (
               <button
-                onClick={() => handleDeleteReview()}
+              onClick={() => rev._key && handleDeleteReview(rev._key)}
                 className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100 transition-colors"
+                disabled={isDeleting}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
