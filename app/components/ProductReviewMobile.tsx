@@ -114,26 +114,29 @@ function ProductReviewMobile({ id, currentUser, review, onReviewsUpdate }: Props
       const updatedReviews = review.filter(rev => rev._key !== key);
       onReviewsUpdate(updatedReviews);
 
-      // Perform deletion in Sanity
-      const mutation = {
-        patch: {
-          id: id,
-          unset: [`review[_key=="${key}"]`]
-        }
+      // Get current document first
+      const product = await sanityClient.getDocument(id);
+      if (!product) throw new Error("Product not found");
+
+      // Update the document with filtered reviews
+      const updatedProduct = {
+        ...product,
+        review: product.review.filter((rev: Review) => rev._key !== key)
       };
 
-      await sanityClient.mutate([mutation]);
+      // Perform the update
+      await sanityClient.createOrReplace(updatedProduct);
       
-      // Immediately fetch latest data from Sanity
+      // Fetch latest data
       await fetchLatestReviews();
       
       toast.success("Review deleted successfully");
       
     } catch (error) {
+      console.error("Error deleting review:", error);
+      toast.error("Failed to delete review");
       // Revert optimistic update and fetch latest data
       await fetchLatestReviews();
-      toast.error("Failed to delete review");
-      console.error("Error deleting review:", error);
     } finally {
       setDeletingReviews(prev => {
         const next = new Set(prev);
