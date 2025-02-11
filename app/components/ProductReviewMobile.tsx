@@ -27,6 +27,9 @@ function ProductReviewMobile({ id, currentUser, review }: Props) {
   const [reviewText, setReviewText] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  // Check if current user is admin
+  const isAdmin = currentUser?.firstName === "Ali" && currentUser?.lastName === "Imran";
+
   function formatDateToNormalDate(dateString: string) {
     const months = [
       "January", "February", "March", "April", "May", "June",
@@ -74,6 +77,31 @@ function ProductReviewMobile({ id, currentUser, review }: Props) {
 
   const handleReviewTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(event.target.value);
+  };
+
+  const handleDeleteReview = async (reviewKey: string | undefined) => {
+    if (!reviewKey) return;
+    
+    try {
+      const product = await sanityClient.getDocument(id);
+      if (!product) throw new Error("Product not found");
+
+      // Filter out the review with the matching key
+      const updatedReviews = product.review.filter((rev: Review) => rev._key !== reviewKey);
+
+      const updatedProduct = {
+        ...product,
+        review: updatedReviews,
+      };
+
+      await sanityClient.createOrReplace(updatedProduct);
+      toast.success("Review deleted successfully");
+      
+      // You might want to refresh the reviews here or update the local state
+    } catch (error) {
+      toast.error("Failed to delete review");
+      console.error("Error deleting review:", error);
+    }
   };
 
   const addReviewToProduct = async (productId: string, reviewData: Review) => {
@@ -154,22 +182,34 @@ function ProductReviewMobile({ id, currentUser, review }: Props) {
       {/* Reviews Display */}
       {review?.map((rev) => (
         <article key={rev._key} className="mt-10 w-11/12 block md:hidden border-t-[0.5px] border-black border-opacity-50 pt-10">
-          <div className="flex items-center mb-4 space-x-4">
-            <Image
-              className="rounded-full"
-              src="/prof.png"
-              alt="pic"
-              width={40}
-              height={40}
-            />
-            <div className="space-y-1 font-medium">
-              <p className="text-black">
-                {rev.user}
-                <time className="block text-sm text-gray-500">
-                  Reviewed on {formatDateToNormalDate(rev.date)}
-                </time>
-              </p>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-4">
+              <Image
+                className="rounded-full"
+                src="/prof.png"
+                alt="pic"
+                width={40}
+                height={40}
+              />
+              <div className="space-y-1 font-medium">
+                <p className="text-black">
+                  {rev.user}
+                  <time className="block text-sm text-gray-500">
+                    Reviewed on {formatDateToNormalDate(rev.date)}
+                  </time>
+                </p>
+              </div>
             </div>
+            {isAdmin && (
+              <button
+                onClick={() => handleDeleteReview(rev._key)}
+                className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            )}
           </div>
           
           <div className="flex items-center mb-6">
