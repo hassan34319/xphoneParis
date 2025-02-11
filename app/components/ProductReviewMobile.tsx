@@ -29,6 +29,7 @@ function ProductReviewMobile({ id, currentUser, review, onReviewsUpdate }: Props
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deletingReviews, setDeletingReviews] = useState<Set<string>>(new Set());
 
 
   // Check if current user is admin
@@ -87,34 +88,58 @@ function ProductReviewMobile({ id, currentUser, review, onReviewsUpdate }: Props
     handleDeleteReview(key);
   };
 
+  const fetchLatestReviews = async () => {
+    try {
+      const product = await sanityClient.fetch(`
+        *[_type == "product" && _id == $id][0] {
+          review
+        }
+      `, { id });
+      
+      if (product && product.review) {
+        onReviewsUpdate(product.review);
+      }
+    } catch (error) {
+      console.error("Error fetching latest reviews:", error);
+    }
+  };
+
   const handleDeleteReview = async (key: string) => {
-    if (!key || !review) return;
+    if (!key || !review || deletingReviews.has(key)) return;
     
     try {
-      setIsDeleting(true);
-      const product = await sanityClient.getDocument(id);
-      if (!product) throw new Error("Product not found");
+      setDeletingReviews(prev => new Set(prev).add(key));
 
-      // Filter out the review with the matching key
-      const updatedReviews = product.review.filter((rev: Review) => rev._key !== key);
+      // Optimistically update UI
+      const updatedReviews = review.filter(rev => rev._key !== key);
+      onReviewsUpdate(updatedReviews);
 
-      const updatedProduct = {
-        ...product,
-        review: updatedReviews,
+      // Perform deletion in Sanity
+      const mutation = {
+        patch: {
+          id: id,
+          unset: [`review[_key=="${key}"]`]
+        }
       };
 
-      await sanityClient.createOrReplace(updatedProduct);
+      await sanityClient.mutate([mutation]);
       
-      // Update the local state through the parent component
-      onReviewsUpdate(updatedReviews);
+      // Immediately fetch latest data from Sanity
+      await fetchLatestReviews();
       
       toast.success("Review deleted successfully");
       
     } catch (error) {
+      // Revert optimistic update and fetch latest data
+      await fetchLatestReviews();
       toast.error("Failed to delete review");
       console.error("Error deleting review:", error);
     } finally {
-      setIsDeleting(false);
+      setDeletingReviews(prev => {
+        const next = new Set(prev);
+        next.delete(key);
+        return next;
+      });
     }
   };
 
@@ -162,8 +187,8 @@ function ProductReviewMobile({ id, currentUser, review, onReviewsUpdate }: Props
 
       await sanityClient.createOrReplace(updatedProduct);
       
-      // Update the local state through the parent component
-      onReviewsUpdate(updatedReviews);
+      // Fetch latest data after adding review
+      await fetchLatestReviews();
 
       toast.success("Review added successfully");
       setReviewText("");
