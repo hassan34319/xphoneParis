@@ -33,6 +33,7 @@
     "egoroof-blowfish": "^4.0.0",
     "heroicons": "^2.0.18",
     "js-cookie": "^3.0.5",
+    "lucide-react": "^0.475.0",
     "mailersend": "^2.1.1",
     "next": "^15.1.6",
     "next-auth": "^4.22.1",
