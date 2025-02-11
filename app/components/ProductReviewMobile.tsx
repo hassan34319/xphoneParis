@@ -19,13 +19,17 @@ type Props = {
   id: string;
   currentUser: User | null;
   review?: Review[];
+  onReviewsUpdate: (updatedReviews: Review[]) => void; // Add this prop
 };
 
-function ProductReviewMobile({ id, currentUser, review }: Props) {
+function ProductReviewMobile({ id, currentUser, review, onReviewsUpdate }: Props) {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
 
   // Check if current user is admin
   const isAdmin = currentUser?.firstName === "Ali" && currentUser?.lastName === "Imran";
@@ -79,15 +83,16 @@ function ProductReviewMobile({ id, currentUser, review }: Props) {
     setReviewText(event.target.value);
   };
 
-  const handleDeleteReview = async (reviewKey: string | undefined) => {
-    if (!reviewKey) return;
+  const handleDeleteReview = async () => {
+    if (!reviewToDelete || !review) return;
     
     try {
+      setIsDeleting(true);
       const product = await sanityClient.getDocument(id);
       if (!product) throw new Error("Product not found");
 
       // Filter out the review with the matching key
-      const updatedReviews = product.review.filter((rev: Review) => rev._key !== reviewKey);
+      const updatedReviews = product.review.filter((rev: Review) => rev._key !== reviewToDelete);
 
       const updatedProduct = {
         ...product,
@@ -95,12 +100,18 @@ function ProductReviewMobile({ id, currentUser, review }: Props) {
       };
 
       await sanityClient.createOrReplace(updatedProduct);
-      toast.success("Review deleted successfully");
       
-      // You might want to refresh the reviews here or update the local state
+      // Update the local state through the parent component
+      onReviewsUpdate(updatedReviews);
+      
+      toast.success("Review deleted successfully");
+      setReviewToDelete(null);
+      
     } catch (error) {
       toast.error("Failed to delete review");
       console.error("Error deleting review:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -123,7 +134,7 @@ function ProductReviewMobile({ id, currentUser, review }: Props) {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!currentUser) return;
+    if (!currentUser || !review) return;
 
     try {
       const reviewData: Review = {
@@ -136,7 +147,21 @@ function ProductReviewMobile({ id, currentUser, review }: Props) {
         images: uploadedImages,
       };
 
-      await addReviewToProduct(id, reviewData);
+      const product = await sanityClient.getDocument(id);
+      if (!product) throw new Error("Product not found");
+
+      const updatedReviews = [...(product.review || []), reviewData];
+      
+      const updatedProduct = {
+        ...product,
+        review: updatedReviews,
+      };
+
+      await sanityClient.createOrReplace(updatedProduct);
+      
+      // Update the local state through the parent component
+      onReviewsUpdate(updatedReviews);
+
       toast.success("Review added successfully");
       setReviewText("");
       setRating(0);
@@ -202,7 +227,7 @@ function ProductReviewMobile({ id, currentUser, review }: Props) {
             </div>
             {isAdmin && (
               <button
-                onClick={() => handleDeleteReview(rev._key)}
+                onClick={() => handleDeleteReview()}
                 className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
