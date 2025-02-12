@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useCallback } from "react";
 import { renderRatingStars } from "../utils/stars";
 import Image from "next/image";
 import { sanityClient } from "../../lib/sanityClient";
@@ -22,8 +22,8 @@ type Props = {
   onReviewsUpdate: (updatedReviews: Review[]) => void;
 };
 
-function ProductReviewMobile({ id, currentUser, review: initialReviews, onReviewsUpdate }: Props) {
-  const [reviews, setReviews] = useState<Review[]>(initialReviews || []);
+function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onReviewsUpdate }: Props) {
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -34,16 +34,15 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews, onReview
   // Check if current user is admin
   const isAdmin = currentUser?.firstName === "Ali" && currentUser?.lastName === "Imran";
 
-  const updateReviewsState = (newReviews: Review[]) => {
+  const updateReviewsState = useCallback((newReviews: Review[]) => {
     setReviews(newReviews);
     onReviewsUpdate(newReviews);
-  };
+  }, [onReviewsUpdate]);
 
   const handleDeleteReview = async (key: string) => {
     if (!key || pendingOperations.has(key)) return;
 
     try {
-      // Add operation to pending set
       setPendingOperations(prev => new Set([...prev, key]));
 
       // Optimistically update UI
@@ -53,21 +52,31 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews, onReview
       // Update Sanity
       const mutation = {
         patch: {
-          id: id,
+          id,
           unset: [`review[_key=="${key}"]`]
         }
       };
 
       await sanityClient.mutate([mutation]);
-      toast.success("Review deleted successfully");
+
+      // Verify deletion
+      const result = await sanityClient.fetch(`
+        *[_type == "product" && _id == $id][0] {
+          review
+        }
+      `, { id });
+
+      if (result && Array.isArray(result.review)) {
+        updateReviewsState(result.review);
+        toast.success("Review deleted successfully");
+      } else {
+        throw new Error("Failed to verify deletion");
+      }
 
     } catch (error) {
       console.error("Error deleting review:", error);
       toast.error("Failed to delete review");
-      
-      // Revert optimistic update
-      updateReviewsState(initialReviews || []);
-      
+      updateReviewsState(reviews);
     } finally {
       setPendingOperations(prev => {
         const next = new Set(prev);
@@ -79,29 +88,28 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews, onReview
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!currentUser || isSubmitting) return;
+    if (!currentUser || isSubmitting || !rating || !reviewText.trim()) {
+      toast.error("Please provide both rating and review text");
+      return;
+    }
 
     try {
       setIsSubmitting(true);
 
       const newReview: Review = {
-        _key: Date.now().toString(),
+        _key: `review-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         user: `${currentUser.firstName} ${currentUser.lastName}`,
         rating,
-        reviewText,
+        reviewText: reviewText.trim(),
         date: new Date().toISOString(),
         status: "pending",
         images: uploadedImages,
       };
 
-      // Optimistically update UI
-      const updatedReviews = [...reviews, newReview];
-      updateReviewsState(updatedReviews);
-
       // Update Sanity
       const mutation = {
         patch: {
-          id: id,
+          id,
           insert: {
             after: 'review[-1]',
             items: [newReview]
@@ -110,33 +118,41 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews, onReview
       };
 
       await sanityClient.mutate([mutation]);
-      
-      toast.success("Review added successfully");
-      
-      // Reset form
-      setReviewText("");
-      setRating(0);
-      setUploadedImages([]);
+
+      // Verify addition
+      const result = await sanityClient.fetch(`
+        *[_type == "product" && _id == $id][0] {
+          review
+        }
+      `, { id });
+
+      if (result && Array.isArray(result.review)) {
+        updateReviewsState(result.review);
+        toast.success("Review added successfully");
+        setReviewText("");
+        setRating(0);
+        setUploadedImages([]);
+      } else {
+        throw new Error("Failed to verify addition");
+      }
 
     } catch (error) {
       console.error("Error adding review:", error);
       toast.error("Failed to add review");
-      
-      // Revert optimistic update
-      updateReviewsState(initialReviews || []);
-      
+      updateReviewsState(reviews);
     } finally {
       setIsSubmitting(false);
     }
   };
-  function formatDateToNormalDate(dateString: string) {
+
+  const formatDateToNormalDate = (dateString: string) => {
     const months = [
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ];
     const date = new Date(dateString);
     return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-  }
+  };
 
   const handleImageClick = (imageUrl: string) => {
     setSelectedImage(imageUrl);
@@ -177,24 +193,6 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews, onReview
   const handleReviewTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(event.target.value);
   };
- 
-  const fetchLatestReviews = async () => {
-    try {
-      const product = await sanityClient.fetch(`
-        *[_type == "product" && _id == $id][0] {
-          review
-        }
-      `, { id });
-      
-      if (product && product.review) {
-        onReviewsUpdate(product.review);
-      }
-    } catch (error) {
-      console.error("Error fetching latest reviews:", error);
-    }
-  };
-
- 
 
   return (
     <>
@@ -250,23 +248,23 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews, onReview
               </div>
             </div>
             {isAdmin && (
-            <button
-              onClick={() => rev._key && handleDeleteReview(rev._key)}
-              className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100 transition-colors"
-              disabled={pendingOperations.has(rev._key || '')}
-            >
-              {pendingOperations.has(rev._key || '') ? (
-                <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              )}
-            </button>
-          )}
+              <button
+                onClick={() => rev._key && handleDeleteReview(rev._key)}
+                className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100 transition-colors"
+                disabled={pendingOperations.has(rev._key || '')}
+              >
+                {pendingOperations.has(rev._key || '') ? (
+                  <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                )}
+              </button>
+            )}
           </div>
           
           <div className="flex items-center mb-6">
@@ -284,7 +282,7 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews, onReview
               {rev.images.map((img, index) => (
                 <div
                   key={index}
-                  className="relative cursor-pointer group h-[15vh] w-[20%] "
+                  className="relative cursor-pointer group h-[15vh] w-[20%]"
                   onClick={() => handleImageClick(img)}
                 >
                   <div className="absolute inset-1 p-0.5">
