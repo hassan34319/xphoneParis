@@ -80,45 +80,29 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
     setReviewText(event.target.value);
   };
 
-  const fetchLatestReviews = async () => {
-    try {
-      const product = await sanityClient.getDocument(id);
-      if (!product) throw new Error("Product not found");
-      setReviews(product.review || []);
-      return product.review;
-    } catch (error) {
-      console.error("Error fetching latest reviews:", error);
-      return null;
-    }
-  };
-
   const handleDeleteReview = async (reviewKey: string | undefined) => {
     if (!reviewKey) return;
     
     try {
-      // Update local state immediately for UI responsiveness
-      setReviews(prevReviews => prevReviews.filter(rev => rev._key !== reviewKey));
-
-      // Get the latest document data
       const product = await sanityClient.getDocument(id);
       if (!product) throw new Error("Product not found");
+
+      // Update local state immediately
+      setReviews(prevReviews => prevReviews.filter(rev => rev._key !== reviewKey));
 
       // Filter out the review with the matching key
       const updatedReviews = product.review.filter((rev: Review) => rev._key !== reviewKey);
 
-      // Update the document with the new reviews array
-      await sanityClient
-        .patch(id)
-        .set({ review: updatedReviews })
-        .commit();
+      const updatedProduct = {
+        ...product,
+        review: updatedReviews,
+      };
 
-      // Fetch the latest data after successful deletion
-      await fetchLatestReviews();
-      
+      await sanityClient.createOrReplace(updatedProduct);
       toast.success("Review deleted successfully");
     } catch (error) {
-      // Fetch latest data even on error to ensure consistency
-      await fetchLatestReviews();
+      // Revert local state if the server update fails
+      setReviews(initialReviews || []);
       toast.error("Failed to delete review");
       console.error("Error deleting review:", error);
     }
@@ -134,12 +118,10 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
         review: product.review ? product.review.concat(reviewData) : [reviewData],
       };
 
-      await sanityClient.createOrReplace(updatedProduct);
-      
-      // Fetch latest reviews after successful addition
-      await fetchLatestReviews();
-      
-      return updatedProduct;
+      const result = await sanityClient.createOrReplace(updatedProduct);
+      // Update local state with the new review
+      setReviews(prevReviews => [...prevReviews, reviewData]);
+      return result;
     } catch (error) {
       console.error("Error adding review to product:", error);
       throw error;
