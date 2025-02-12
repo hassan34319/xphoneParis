@@ -19,130 +19,31 @@ type Props = {
   id: string;
   currentUser: User | null;
   review?: Review[];
-  onReviewsUpdate: (updatedReviews: Review[]) => void;
 };
 
-function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onReviewsUpdate }: Props) {
-  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+function ProductReview({ id, currentUser, review }: Props) {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [pendingOperations, setPendingOperations] = useState<Set<string>>(new Set());
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   // Check if current user is admin
   const isAdmin = currentUser?.firstName === "Ali" && currentUser?.lastName === "Imran";
 
-  const updateReviewsState = useCallback((newReviews: Review[]) => {
-    setReviews(newReviews);
-    onReviewsUpdate(newReviews);
-  }, [onReviewsUpdate]);
-
-  const handleDeleteReview = async (key: string) => {
-    if (!key || pendingOperations.has(key)) return;
-
-    try {
-      setPendingOperations(prev => new Set([...prev, key]));
-
-      // Optimistically update UI
-      const updatedReviews = reviews.filter(rev => rev._key !== key);
-      updateReviewsState(updatedReviews);
-
-      // Correct Sanity mutation syntax
-      await sanityClient
-        .patch(id) // Document ID to patch
-        .unset([`review[_key=="${key}"]`]) // Remove the review with matching _key
-        .commit() // Perform the patch
-        .then(() => {
-          toast.success("Review deleted successfully");
-        })
-        .catch((error) => {
-          console.error("Sanity mutation error:", error);
-          // Revert optimistic update on error
-          updateReviewsState(reviews);
-          toast.error("Failed to delete review");
-          throw error; // Re-throw to be caught by outer catch
-        });
-
-    } catch (error) {
-      console.error("Error deleting review:", error);
-      // Revert optimistic update
-      updateReviewsState(reviews);
-      toast.error("Failed to delete review");
-    } finally {
-      setPendingOperations(prev => {
-        const next = new Set(prev);
-        next.delete(key);
-        return next;
-      });
-    }
-  };
-
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-    if (!currentUser || isSubmitting || !rating || !reviewText.trim()) {
-      toast.error("Please provide both rating and review text");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-
-      const newReview: Review = {
-        _key: `review-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        user: `${currentUser.firstName} ${currentUser.lastName}`,
-        rating,
-        reviewText: reviewText.trim(),
-        date: new Date().toISOString(),
-        status: "pending",
-        images: uploadedImages,
-      };
-
-      // Correct Sanity mutation syntax for adding a review
-      await sanityClient
-        .patch(id)
-        .setIfMissing({ review: [] })
-        .append('review', [newReview])
-        .commit()
-        .then(() => {
-          updateReviewsState([...reviews, newReview]);
-          toast.success("Review added successfully");
-          
-          // Reset form
-          setReviewText("");
-          setRating(0);
-          setUploadedImages([]);
-        })
-        .catch((error) => {
-          console.error("Sanity mutation error:", error);
-          toast.error("Failed to add review");
-          throw error;
-        });
-
-    } catch (error) {
-      console.error("Error adding review:", error);
-      toast.error("Failed to add review");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const formatDateToNormalDate = (dateString: string) => {
+  function formatDateToNormalDate(dateString: string) {
     const months = [
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ];
     const date = new Date(dateString);
     return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-  };
+  }
 
   const handleImageClick = (imageUrl: string) => {
     setSelectedImage(imageUrl);
   };
 
   const handleCloseModal = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Stop event propagation
     setSelectedImage(null);
   };
 
@@ -175,6 +76,73 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
 
   const handleReviewTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(event.target.value);
+  };
+  const handleDeleteReview = async (reviewKey: string | undefined) => {
+    if (!reviewKey) return;
+    
+    try {
+      const product = await sanityClient.getDocument(id);
+      if (!product) throw new Error("Product not found");
+
+      // Filter out the review with the matching key
+      const updatedReviews = product.review.filter((rev: Review) => rev._key !== reviewKey);
+
+      const updatedProduct = {
+        ...product,
+        review: updatedReviews,
+      };
+
+      await sanityClient.createOrReplace(updatedProduct);
+      toast.success("Review deleted successfully");
+      
+      // You might want to refresh the reviews here or update the local state
+    } catch (error) {
+      toast.error("Failed to delete review");
+      console.error("Error deleting review:", error);
+    }
+  };
+
+  const addReviewToProduct = async (productId: string, reviewData: Review) => {
+    try {
+      const product = await sanityClient.getDocument(productId);
+      if (!product) throw new Error("Product not found");
+
+      const updatedProduct = {
+        ...product,
+        review: product.review ? product.review.concat(reviewData) : [reviewData],
+      };
+
+      return await sanityClient.createOrReplace(updatedProduct);
+    } catch (error) {
+      console.error("Error adding review to product:", error);
+      throw error;
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!currentUser) return;
+
+    try {
+      const reviewData: Review = {
+        _key: Date.now().toString(),
+        user: `${currentUser.firstName} ${currentUser.lastName}`,
+        rating,
+        reviewText,
+        date: new Date().toISOString(),
+        status: "pending",
+        images: uploadedImages,
+      };
+
+      await addReviewToProduct(id, reviewData);
+      toast.success("Review added successfully");
+      setReviewText("");
+      setRating(0);
+      setUploadedImages([]);
+    } catch (error) {
+      toast.error("Failed to add review");
+      console.error("Error adding review:", error);
+    }
   };
 
   return (
@@ -210,7 +178,7 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
       )}
 
       {/* Reviews Display */}
-      {reviews?.map((rev) => (
+      {review?.map((rev) => (
         <article key={rev._key} className="mt-10 w-11/12 block md:hidden border-t-[0.5px] border-black border-opacity-50 pt-10">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-4">
@@ -232,20 +200,12 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
             </div>
             {isAdmin && (
               <button
-                onClick={() => rev._key && handleDeleteReview(rev._key)}
+                onClick={() => handleDeleteReview(rev._key)}
                 className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100 transition-colors"
-                disabled={pendingOperations.has(rev._key || '')}
               >
-                {pendingOperations.has(rev._key || '') ? (
-                  <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                )}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
               </button>
             )}
           </div>
@@ -369,11 +329,10 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
           </div>
 
           <button
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Review'}
+            Submit Review
           </button>
             
         </div>
@@ -382,4 +341,4 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
   );
 }
 
-export default ProductReviewMobile;
+export default ProductReview;
