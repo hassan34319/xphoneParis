@@ -49,11 +49,11 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
       const updatedReviews = reviews.filter(rev => rev._key !== key);
       updateReviewsState(updatedReviews);
 
-      // Create proper Sanity mutation
-      const transaction = sanityClient
-        .patch(id)
-        .unset([`review[_key=="${key}"]`])
-        .commit()
+      // Correct Sanity mutation syntax
+      await sanityClient
+        .patch(id) // Document ID to patch
+        .unset([`review[_key=="${key}"]`]) // Remove the review with matching _key
+        .commit() // Perform the patch
         .then(() => {
           toast.success("Review deleted successfully");
         })
@@ -62,9 +62,8 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
           // Revert optimistic update on error
           updateReviewsState(reviews);
           toast.error("Failed to delete review");
+          throw error; // Re-throw to be caught by outer catch
         });
-
-      await transaction;
 
     } catch (error) {
       console.error("Error deleting review:", error);
@@ -100,8 +99,8 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
         images: uploadedImages,
       };
 
-      // Create proper Sanity mutation for adding review
-      const transaction = sanityClient
+      // Correct Sanity mutation syntax for adding a review
+      await sanityClient
         .patch(id)
         .setIfMissing({ review: [] })
         .append('review', [newReview])
@@ -109,6 +108,8 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
         .then(() => {
           updateReviewsState([...reviews, newReview]);
           toast.success("Review added successfully");
+          
+          // Reset form
           setReviewText("");
           setRating(0);
           setUploadedImages([]);
@@ -116,9 +117,8 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
         .catch((error) => {
           console.error("Sanity mutation error:", error);
           toast.error("Failed to add review");
+          throw error;
         });
-
-      await transaction;
 
     } catch (error) {
       console.error("Error adding review:", error);
