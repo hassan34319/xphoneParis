@@ -1,4 +1,4 @@
-import { FormEvent, useState, useCallback } from "react";
+import { FormEvent, useState } from "react";
 import { renderRatingStars } from "../utils/stars";
 import Image from "next/image";
 import { sanityClient } from "../../lib/sanityClient";
@@ -21,11 +21,13 @@ type Props = {
   review?: Review[];
 };
 
-function ProductReview({ id, currentUser, review }: Props) {
+function ProductReview({ id, currentUser, review: initialReviews }: Props) {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<Review[]>(initialReviews || []);
+  
   // Check if current user is admin
   const isAdmin = currentUser?.firstName === "Ali" && currentUser?.lastName === "Imran";
 
@@ -43,7 +45,7 @@ function ProductReview({ id, currentUser, review }: Props) {
   };
 
   const handleCloseModal = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Stop event propagation
+    e.stopPropagation();
     setSelectedImage(null);
   };
 
@@ -77,12 +79,16 @@ function ProductReview({ id, currentUser, review }: Props) {
   const handleReviewTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(event.target.value);
   };
+
   const handleDeleteReview = async (reviewKey: string | undefined) => {
     if (!reviewKey) return;
     
     try {
       const product = await sanityClient.getDocument(id);
       if (!product) throw new Error("Product not found");
+
+      // Update local state immediately
+      setReviews(prevReviews => prevReviews.filter(rev => rev._key !== reviewKey));
 
       // Filter out the review with the matching key
       const updatedReviews = product.review.filter((rev: Review) => rev._key !== reviewKey);
@@ -94,9 +100,9 @@ function ProductReview({ id, currentUser, review }: Props) {
 
       await sanityClient.createOrReplace(updatedProduct);
       toast.success("Review deleted successfully");
-      
-      // You might want to refresh the reviews here or update the local state
     } catch (error) {
+      // Revert local state if the server update fails
+      setReviews(initialReviews || []);
       toast.error("Failed to delete review");
       console.error("Error deleting review:", error);
     }
@@ -112,7 +118,10 @@ function ProductReview({ id, currentUser, review }: Props) {
         review: product.review ? product.review.concat(reviewData) : [reviewData],
       };
 
-      return await sanityClient.createOrReplace(updatedProduct);
+      const result = await sanityClient.createOrReplace(updatedProduct);
+      // Update local state with the new review
+      setReviews(prevReviews => [...prevReviews, reviewData]);
+      return result;
     } catch (error) {
       console.error("Error adding review to product:", error);
       throw error;
@@ -178,7 +187,7 @@ function ProductReview({ id, currentUser, review }: Props) {
       )}
 
       {/* Reviews Display */}
-      {review?.map((rev) => (
+      {reviews?.map((rev) => (
         <article key={rev._key} className="mt-10 w-11/12 block md:hidden border-t-[0.5px] border-black border-opacity-50 pt-10">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-4">
@@ -260,40 +269,45 @@ function ProductReview({ id, currentUser, review }: Props) {
 
       {/* Add Review Form */}
       {currentUser && (
-        <div className="bg-gray-100 p-4 rounded mt-8 w-full md:hidden">
-          <h3 className="text-xl font-medium mb-4">Write a Review</h3>
+        <form onSubmit={handleSubmit} className="mt-8 p-6 bg-white rounded-lg shadow-sm">
+          <h3 className="text-xl font-medium mb-6">Write a Review</h3>
           
           <div className="mb-4">
-            <span className="text-gray-700 block mb-2">Rating:</span>
-            <div className="flex items-center">
+            <label className="block text-gray-700 mb-2">Rating</label>
+            <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((value) => (
-                <svg
+                <button
                   key={value}
-                  className={`w-4 h-4 cursor-pointer ${
-                    value <= rating ? "text-yellow-400" : "text-gray-300"
-                  }`}
+                  type="button"
                   onClick={() => handleRatingChange(value)}
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 20"
+                  className="focus:outline-none"
                 >
-                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                </svg>
+                  <svg
+                    className={`w-6 h-6 ${
+                      value <= rating ? "text-yellow-400" : "text-gray-300"
+                    }`}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </button>
               ))}
             </div>
           </div>
 
           <div className="mb-4">
-            <span className="text-gray-700 block mb-2">Review:</span>
+            <label className="block text-gray-700 mb-2">Review</label>
             <textarea
-              className="w-full h-20 p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              rows={4}
               value={reviewText}
               onChange={handleReviewTextChange}
-            ></textarea>
+              placeholder="Write your review here..."
+            />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <label className="block text-gray-700 mb-2">Images</label>
             <input
               type="file"
@@ -304,7 +318,7 @@ function ProductReview({ id, currentUser, review }: Props) {
             />
             
             {uploadedImages.length > 0 && (
-              <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
                 {uploadedImages.map((img, index) => (
                   <div key={index} className="relative aspect-square group">
                     <Image
@@ -335,7 +349,7 @@ function ProductReview({ id, currentUser, review }: Props) {
             Submit Review
           </button>
             
-        </div>
+        </form>
       )}
     </>
   );
