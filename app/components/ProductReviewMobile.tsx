@@ -49,34 +49,28 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
       const updatedReviews = reviews.filter(rev => rev._key !== key);
       updateReviewsState(updatedReviews);
 
-      // Update Sanity
-      const mutation = {
-        patch: {
-          id,
-          unset: [`review[_key=="${key}"]`]
-        }
-      };
+      // Create proper Sanity mutation
+      const transaction = sanityClient
+        .patch(id)
+        .unset([`review[_key=="${key}"]`])
+        .commit()
+        .then(() => {
+          toast.success("Review deleted successfully");
+        })
+        .catch((error) => {
+          console.error("Sanity mutation error:", error);
+          // Revert optimistic update on error
+          updateReviewsState(reviews);
+          toast.error("Failed to delete review");
+        });
 
-      await sanityClient.mutate([mutation]);
-
-      // Verify deletion
-      const result = await sanityClient.fetch(`
-        *[_type == "product" && _id == $id][0] {
-          review
-        }
-      `, { id });
-
-      if (result && Array.isArray(result.review)) {
-        updateReviewsState(result.review);
-        toast.success("Review deleted successfully");
-      } else {
-        throw new Error("Failed to verify deletion");
-      }
+      await transaction;
 
     } catch (error) {
       console.error("Error deleting review:", error);
-      toast.error("Failed to delete review");
+      // Revert optimistic update
       updateReviewsState(reviews);
+      toast.error("Failed to delete review");
     } finally {
       setPendingOperations(prev => {
         const next = new Set(prev);
@@ -106,40 +100,29 @@ function ProductReviewMobile({ id, currentUser, review: initialReviews = [], onR
         images: uploadedImages,
       };
 
-      // Update Sanity
-      const mutation = {
-        patch: {
-          id,
-          insert: {
-            after: 'review[-1]',
-            items: [newReview]
-          }
-        }
-      };
+      // Create proper Sanity mutation for adding review
+      const transaction = sanityClient
+        .patch(id)
+        .setIfMissing({ review: [] })
+        .append('review', [newReview])
+        .commit()
+        .then(() => {
+          updateReviewsState([...reviews, newReview]);
+          toast.success("Review added successfully");
+          setReviewText("");
+          setRating(0);
+          setUploadedImages([]);
+        })
+        .catch((error) => {
+          console.error("Sanity mutation error:", error);
+          toast.error("Failed to add review");
+        });
 
-      await sanityClient.mutate([mutation]);
-
-      // Verify addition
-      const result = await sanityClient.fetch(`
-        *[_type == "product" && _id == $id][0] {
-          review
-        }
-      `, { id });
-
-      if (result && Array.isArray(result.review)) {
-        updateReviewsState(result.review);
-        toast.success("Review added successfully");
-        setReviewText("");
-        setRating(0);
-        setUploadedImages([]);
-      } else {
-        throw new Error("Failed to verify addition");
-      }
+      await transaction;
 
     } catch (error) {
       console.error("Error adding review:", error);
       toast.error("Failed to add review");
-      updateReviewsState(reviews);
     } finally {
       setIsSubmitting(false);
     }
