@@ -21,11 +21,13 @@ type Props = {
   review?: Review[];
 };
 
-function ProductReview({ id, currentUser, review }: Props) {
+function ProductReview({ id, currentUser, review: initialReviews }: Props) {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<Review[]>(initialReviews || []);
+  
   // Check if current user is admin
   const isAdmin = currentUser?.firstName === "Ali" && currentUser?.lastName === "Imran";
 
@@ -43,7 +45,7 @@ function ProductReview({ id, currentUser, review }: Props) {
   };
 
   const handleCloseModal = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Stop event propagation
+    e.stopPropagation();
     setSelectedImage(null);
   };
 
@@ -77,12 +79,16 @@ function ProductReview({ id, currentUser, review }: Props) {
   const handleReviewTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(event.target.value);
   };
+
   const handleDeleteReview = async (reviewKey: string | undefined) => {
     if (!reviewKey) return;
     
     try {
       const product = await sanityClient.getDocument(id);
       if (!product) throw new Error("Product not found");
+
+      // Update local state immediately
+      setReviews(prevReviews => prevReviews.filter(rev => rev._key !== reviewKey));
 
       // Filter out the review with the matching key
       const updatedReviews = product.review.filter((rev: Review) => rev._key !== reviewKey);
@@ -94,9 +100,9 @@ function ProductReview({ id, currentUser, review }: Props) {
 
       await sanityClient.createOrReplace(updatedProduct);
       toast.success("Review deleted successfully");
-      
-      // You might want to refresh the reviews here or update the local state
     } catch (error) {
+      // Revert local state if the server update fails
+      setReviews(initialReviews || []);
       toast.error("Failed to delete review");
       console.error("Error deleting review:", error);
     }
@@ -112,7 +118,10 @@ function ProductReview({ id, currentUser, review }: Props) {
         review: product.review ? product.review.concat(reviewData) : [reviewData],
       };
 
-      return await sanityClient.createOrReplace(updatedProduct);
+      const result = await sanityClient.createOrReplace(updatedProduct);
+      // Update local state with the new review
+      setReviews(prevReviews => [...prevReviews, reviewData]);
+      return result;
     } catch (error) {
       console.error("Error adding review to product:", error);
       throw error;
@@ -155,7 +164,7 @@ function ProductReview({ id, currentUser, review }: Props) {
         >
           <div 
             className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center"
-            onClick={e => e.stopPropagation()} // Prevent closing when clicking the image container
+            onClick={e => e.stopPropagation()}
           >
             <button
               onClick={handleCloseModal}
@@ -178,7 +187,7 @@ function ProductReview({ id, currentUser, review }: Props) {
       )}
 
       {/* Reviews Display */}
-      {review?.map((rev) => (
+      {reviews.map((rev) => (
         <article key={rev._key} className="mt-10 p-6 bg-white rounded-lg shadow-sm">
           <div className="flex items-center mb-4 space-x-4">
             <Image
