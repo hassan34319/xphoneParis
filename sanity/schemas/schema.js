@@ -20,7 +20,8 @@ import contactPage from "./contactPage";
 import qualityPage from "./qualityPage";
 import grades from "./grades";
 import post from "./post";
+import allpages from "./allpages";
 export default createSchema({
   name: "default",
-  types: schemaTypes.concat([product, variant,code,categoryReal,brandReal, accessories,banner,publication,comment,review,subcategory,scrollingReviews, menuCategory, quiSommes, nosmagsin, contactPage, qualityPage,grades, post ]),
+  types: schemaTypes.concat([product, variant,code,categoryReal,brandReal, accessories,banner,publication,comment,review,subcategory,scrollingReviews, menuCategory, quiSommes, nosmagsin, contactPage, qualityPage,grades, post, allpages ]),
 });

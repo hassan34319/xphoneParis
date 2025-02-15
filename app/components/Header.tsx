@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { BiUser, BiShoppingBag } from "react-icons/bi";
 import {
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import SidebarModal from "./SidebarModal";
 import { SafeUser } from "../utils/types";
 import useLoginModal from "../../hooks/useLoginModal";
+import { sanityClient } from "../../lib/sanityClient";
 
 interface NavbarProps {
   currentUser?: SafeUser | null;
@@ -24,6 +25,11 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
   const loginModal = useLoginModal();
+  const [pages, setPages] = useState<Array<{
+    title: string;
+    pageName: { current: string };
+    order: number;
+  }>>([]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -35,6 +41,29 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
       setSearch("");
     }
   };
+  const getPages = async () => {
+    const pages = await sanityClient.fetch(`
+      *[_type == "page"] | order(order asc) {
+        title,
+        "pageName": pageName.current,
+        order
+      }
+    `);
+    return pages;
+  };
+
+  useEffect(() => {
+    const fetchPages = async () => {
+      try {
+        const pagesData = await getPages();
+        setPages(pagesData);
+      } catch (error) {
+        console.error('Error fetching pages:', error);
+      }
+    };
+
+    fetchPages();
+  }, []);
 
   return (
     <header className="top-0 z-30 flex w-full font-sans items-center justify-between bg-white p-4 font-extrabold">
@@ -229,6 +258,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
         menuCategories={menuCategories}
+        pages={pages}
       />
     </header>
   );

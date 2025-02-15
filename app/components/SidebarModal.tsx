@@ -6,6 +6,11 @@ interface NavbarProps {
     title: string;
     products: { name: string; _id: string }[];
   }[];
+  pages: {
+    title: string;
+    pageName: { current: string };
+    order: number;
+  }[];
   isOpen: boolean;
   toggleSidebar: () => void;
 }
@@ -14,6 +19,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
   isOpen,
   toggleSidebar,
   menuCategories,
+  pages,
 }) => {
   const [isSubModalOpen, setIsSubModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("");
@@ -21,6 +27,10 @@ const SidebarModal: React.FC<NavbarProps> = ({
 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const subModalRef = useRef<HTMLDivElement>(null);
+
+  // Sort pages by order
+  const sortedPages = [...(pages || [])].sort((a, b) => a.order - b.order);
+  
 
   useEffect(() => {
     if (isOpen || isSubModalOpen) {
@@ -72,6 +82,11 @@ const SidebarModal: React.FC<NavbarProps> = ({
     setIsSubModalOpen(false);
     setActiveCategory("");
   };
+  const uniqueMenuCategories = Array.from(
+    new Set(menuCategories.map(cat => cat.title))
+  ).map(title => 
+    menuCategories.find(cat => cat.title === title)
+  );
 
   return (
     <>
@@ -104,21 +119,21 @@ const SidebarModal: React.FC<NavbarProps> = ({
             />
           </svg>
         </button>
-
+        
         <div className="p-4">
           <div className="flex justify-center">
             <img src="/logo0.jpeg" alt="" className="flex items-center w-[10rem] md:w-[10rem]" />
           </div>
           
           <ul className="pl-4 mt-2">
-            {menuCategories.map((category) => (
+            {uniqueMenuCategories.map((category) => (
               <li
-                key={category.title}
-                className={`flex items-center py-2 border-t border-b border-gray-200 cursor-pointer ${
-                  activeCategory === category.title ? "bg-gray-100" : ""
-                }`}
-                onClick={() => handleCategoryClick(category.title)}
-              >
+              key={`category-${category?.title}-${category?.title}`} // Added index to make it unique
+              className={`flex items-center py-2 border-t border-gray-200 cursor-pointer ${
+                activeCategory === category.title ? "bg-gray-100" : ""
+              }`}
+              onClick={() => handleCategoryClick(category.title)}
+            >
                 <span className="mr-2">{category.title}</span>
                 <svg
                   className={`w-4 h-4 ml-auto fill-current -rotate-90 ${
@@ -131,6 +146,19 @@ const SidebarModal: React.FC<NavbarProps> = ({
                 </svg>
               </li>
             ))}
+            {sortedPages.map((page) => (
+              <li>
+              <Link
+                key={page.pageName.current}
+                href={`/${page.pageName}`}
+                className="flex items-center py-2 border-t border-b border-gray-200 cursor-pointer hover:bg-gray-100"
+                onClick={toggleSidebar}
+              >
+                <span className="mr-2">{page.title}</span>
+              </Link>
+              </li>
+            ))}
+            
           </ul>
         </div>
       </div>
@@ -186,7 +214,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
                   </div>
                 </h2>
                 <ul className="pl-4 mt-2">
-                  {menuCategories
+                  {uniqueMenuCategories
                     .find((category) => category.title === activeCategory)
                     ?.products.map((product) => (
                       <Link

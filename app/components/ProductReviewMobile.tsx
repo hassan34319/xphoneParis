@@ -234,7 +234,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
               {rev.images.map((img, index) => (
                 <div
                   key={index}
-                  className="relative cursor-pointer group h-[15vh] w-[20%]"
+                  className="relative cursor-pointer group h-[15vh] w-[20%] aspect-square "
                   onClick={() => handleImageClick(img)}
                 >
                   <div className="absolute inset-1 p-0.5">
@@ -243,7 +243,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
                         src={img}
                         alt={`Review image ${index + 1}`}
                         fill
-                        className="object-contain"
+                        className="object-cover rounded-lg transition-transform group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 rounded-sm transition-opacity" />
                     </div>

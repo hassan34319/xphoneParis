@@ -48,14 +48,14 @@ export default async function RootLayout({
   // Fetch categories
 
 
-  const queryMenuCategories = `*[_type == "menuCategory"]{
+  const queryMenuCategories = `*[_type == "menuCategory"] | order(priority asc) {
     _id,
     title,
     products[]-> {
       _id,
       name // Assuming 'name' is a field in the product document
     }
-  }`; 
+  }`;
 
   const MenuCategories = await sanityClient.fetch(queryMenuCategories)
 

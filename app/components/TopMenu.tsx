@@ -4,6 +4,7 @@ import { categories as predefined_categories } from "./Categories";
 import SidebarModal from "./SidebarModal";
 import { Open_Sans } from 'next/font/google';
 import { Poppins } from 'next/font/google';
+import { sanityClient } from "../../lib/sanityClient";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -38,12 +39,41 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [visibleCategories, setVisibleCategories] = useState(12);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [pages, setPages] = useState<Array<{
+    title: string;
+    pageName: { current: string };
+    order: number;
+  }>>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const allCategories: CategoryItem[] = [
     { title: "Bon plans", search: "", customLink: "/#bon-plans" },
     ...predefined_categories
   ];
+
+  const getPages = async () => {
+    const pages = await sanityClient.fetch(`
+      *[_type == "page"] | order(order asc) {
+        title,
+        "pageName": pageName.current,
+        order
+      }
+    `);
+    return pages;
+  };
+
+  useEffect(() => {
+    const fetchPages = async () => {
+      try {
+        const pagesData = await getPages();
+        setPages(pagesData);
+      } catch (error) {
+        console.error('Error fetching pages:', error);
+      }
+    };
+
+    fetchPages();
+  }, []);
 
   const handleSectionClick = (e: React.MouseEvent<HTMLAnchorElement>, customLink: string) => {
     if (window.location.pathname === '/') {
@@ -191,6 +221,7 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
         menuCategories={menuCategories}
+        pages={pages}
       />
     </div>
   );
