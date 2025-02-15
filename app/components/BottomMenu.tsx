@@ -15,7 +15,7 @@ const BottomMenu = () => {
         <div className="flex flex-col items-center justify-center text-sm space-y-1 lg:text-md xl:text-lg">
             <Link className="text-center"  href={"/qui_sommes"}>Qui sommes nous?</Link>
             <Link className="text-center"  href={"/notre_quality"}>Notre qualité</Link>
-            <Link className="text-center"  href={"/nos_magasin"}>Nos magasin</Link>
+            <Link className="text-center"  href={"/nos_magasin"}>Nos magasins</Link>
             <Link className="text-center"  href={"/nos_grades"}>Nos grades</Link>
         </div>
       </div>

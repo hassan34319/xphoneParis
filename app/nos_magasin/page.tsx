@@ -2,7 +2,6 @@ import { sanityClient } from "../../lib/sanityClient";
 import Image from 'next/image';
 import { urlFor } from '../../lib/sanityClient';
 
-// Types for media content only
 interface NosmagasinMedia {
   logo: any;
   store1: any;
@@ -14,78 +13,114 @@ async function Nosmagasin() {
   const mediaData: NosmagasinMedia = await sanityClient.fetch(query);
 
   return (
-    <div className="flex flex-col items-center px-4 py-8 space-y-8 max-w-6xl mx-auto bg-white">
-      <h1 className="text-4xl font-extrabold text-center tracking-wider ">Nos Magasin</h1>
-      
-      <div className="flex justify-center w-full px-4">
-      <div className=" p-2 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-lg xl:max-w-xl ">
+    <div className="w-full bg-white">
+      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        {/* Logo and Rating */}
+        <div className="flex flex-col items-center">
+          <div className="w-full max-w-[350px] md:max-w-md">
+            <Image
+              src={urlFor(mediaData.logo).url()}
+              alt="XPhones Logo"
+              width={400}
+              height={100}
+              className="w-full h-auto object-contain"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* Main Title */}
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-center ">Nos magasins</h1>
+
+        {/* Store Title */}
+        <div className="text-center space-y-2">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-red-600">XPhones Paris</h2>
+          <p className="text-xl md:text-2xl lg:text-3xl font-bold text-red-600">
+            Des boutiques à votre service et des prix Imbattables
+          </p>
+        </div>
+
+        {/* First Description */}
+        <p className="text-lg md:text-xl lg:text-2xl text-center font-semibold">
+          Chez XPhones, nous avons révolutionné l'achat de produits high-tech
+          Nos deux boutiques vous offrent la possibilité de voir et tester les
+          produits avant de les acheter, avec l'accompagnement de nos
+          experts sur place et beaucoup moins cher que sur les Marketplaces.
+        </p>
+
+        {/* First Store */}
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-full max-w-[300px] md:max-w-md">
+            <Image
+              src={urlFor(mediaData.store1).url()}
+              alt="XPhones Canal Saint Martin"
+              width={500}
+              height={300}
+              className="w-full h-auto object-cover"
+              priority
+            />
+          </div>
+          <div className="text-center space-y-1">
+            <p className="text-lg md:text-xl lg:text-2xl text-blue-600 font-bold">Xphones CANAL SAINT MARTIN</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">86 quai de jemmapes</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">75010 Paris</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">Ouvert du Lundi au Samedi</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">11h-19h</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">Service client: 01 45 45 13 28</p>
+          </div>
+        </div>
+
+        {/* Service Description */}
+        <p className="text-lg md:text-xl lg:text-2xl text-center font-extrabold">
+          En plus de cela, vous bénéficiez d'un service après-vente immédiat et personnalisé, 
+          un avantage que beaucoup de plateformes en ligne ne peuvent pas proposer.
+        </p>
+
+        {/* Second Store */}
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-full max-w-[300px] md:max-w-md">
+            <Image
+              src={urlFor(mediaData.store2).url()}
+              alt="XPhones Voltaire"
+              width={500}
+              height={300}
+              className="w-full h-auto object-cover"
+              priority
+            />
+          </div>
+          <div className="text-center space-y-1">
+            <p className="text-lg md:text-xl lg:text-2xl text-blue-600 font-bold">Xphones VOLTAIRE</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">6 rue Voltaire</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">75011 Paris</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">Ouvert du Lundi au Samedi</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">11h-19h</p>
+            <p className="text-base md:text-lg lg:text-xl text-blue-600">Service client: 01 45 45 13 28</p>
+          </div>
+        </div>
+
+        {/* Marketplace Comparison */}
+        <p className="text-lg md:text-xl lg:text-2xl text-center font-extrabold">
+          Contrairement aux autres vendeurs en ligne qui agissent comme des intermédiaires, 
+          passant par des plateformes comme Amazon, Cdiscount ou Backmarket, avec des commissions supplémentaires, 
+          nous vendons directement en magasin. Cela nous permet de proposer les meilleurs prix du marché, 
+          sans les coûts cachés des intermédiaires, tout en garantissant une proximité et une transparence totale.
+        </p>
+
+        <div className="max-w-[350px] md:max-w-2xl mx-auto">
           <Image 
-            src={urlFor(mediaData.logo).url()}
-            alt="XPhones Logo"
-            width={800}
-            height={400}
-            className="w-full h-auto object-contain"
+            src="/OPTEZ-POUR-L-ORIGINAL-21.jpg"
+            alt="Map"
+            width={400}
+            height={240}
+            className="w-full h-auto object-cover"
             priority
           />
         </div>
-      </div>
 
-      <p className="text-l text-lg xl:text-xl text-center max-w-3xl">XPhones Paris: Des boutiques à votre service et des prix Imbattables</p>
-      
-      <p className="text-l text-lg xl:text-xl text-center max-w-3xl">
-        Chez XPhones, nous avons révolutionné l'achat de produits high-tech à Paris. Nos deux boutiques vous offrent la possibilité de voir et tester les produits avant de les acheter, avec l'accompagnement de nos experts sur place. En plus de cela, vous bénéficiez d'un service après-vente immédiat et personnalisé, un avantage que beaucoup de plateformes en ligne ne peuvent pas proposer.
-      </p>
-      
-      <p className="text-l text-lg xl:text-xl text-center max-w-3xl">
-        Contrairement aux autres vendeurs en ligne qui agissent comme des intermédiaires, passant par des plateformes comme Amazon, Cdiscount ou Backmarket, avec des commissions supplémentaires, nous vendons directement en magasin. Cela nous permet de proposer les meilleurs prix du marché, sans les coûts cachés des intermédiaires, tout en garantissant une proximité et une transparence totale.
-      </p>
-
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-8 w-full max-w-4xl">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="rounded-3xl overflow-hidden  w-full max-w-md ">
-            <Image
-              src={urlFor(mediaData.store1).url()}
-              alt="XPhones Store Republique"
-              width={600}
-              height={400}
-              className="w-full h-full object-cover"
-              priority
-            />
-          </div>
-          <div className="text-center">
-            <h2 className="text-md xl:text-xl font-bold text-blue-700">
-              Xphones CANAL SAINT MARTIN <br />
-              86 quai de jemmapes <br />
-              75010 Paris <br />
-              Ouvert du Lundi au Samedi <br />
-              11h-18h <br />
-              Service client: 01 42 77 13 63
-            </h2>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center space-y-4">
-          <div className="rounded-3xl overflow-hidden  w-full max-w-md">
-            <Image
-              src={urlFor(mediaData.store2).url()}
-              alt="XPhones Store Nation"
-              width={600}
-              height={400}
-              className="w-full h-full object-cover"
-              priority
-            />
-          </div>
-          <div className="text-center">
-            <h2 className="text-md xl:text-xl font-bold text-blue-700">
-              Xphones VOLTAIRE <br />
-              6 rue Voltaire <br />
-              75011 Paris <br />
-              Ouvert du Lundi au Samedi <br />
-              11h-19h <br />
-              Service client: 01 45 45 13 28
-            </h2>
-          </div>
-        </div>
+        {/* Final CTA */}
+        <p className="text-xl md:text-2xl lg:text-3xl text-center font-semibold">
+          Venez découvrir nos boutiques et profitez des meilleurs prix high-tech à Paris.
+        </p>
       </div>
     </div>
   );

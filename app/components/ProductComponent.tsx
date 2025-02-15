@@ -63,26 +63,27 @@ function ProductComponent({ product, currentUser }: Props) {
           </div>
 
           {/* Right Side: Product Selection & Reviews */}
-          <div className="flex flex-col">
-            {product && (
-              <ProductSelection
-                product={product}
-                setImage={setImage}
-                selectedColor={selectedColor}
-                selectedCapacity={selectedCapacity}
-                selectedGrade={selectedGrade}
-              />
-            )}
 
-            {/* Desktop Reviews (Hidden on Small Screens) */}
-            <div className="hidden lg:block mt-10">
-              <ProductReview
-                id={product._id!}
-                currentUser={currentUser}
-                review={product.review}
-              />
-            </div>
-          </div>
+          <div className="flex flex-col">
+  {product && (
+    <ProductSelection
+      product={product}
+      setImage={setImage}
+      selectedColor={selectedColor}
+      selectedCapacity={selectedCapacity}
+      selectedGrade={selectedGrade}
+    />
+  )}
+
+  {/* Desktop Reviews (Hidden on Small Screens) */}
+  <div className="hidden lg:block mt-10 self-start w-[60%]"> 
+    <ProductReview
+      id={product._id!}
+      currentUser={currentUser}
+      review={product.review}
+    />
+  </div>
+</div>
         </div>
 
         {/* Mobile Reviews (Visible Only on Small Screens) */}

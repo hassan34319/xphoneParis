@@ -106,9 +106,8 @@ const SidebarModal: React.FC<NavbarProps> = ({
         </button>
 
         <div className="p-4">
-          {/* <h2 className="font-bold text-lg text-[#AE3033]">Categories</h2> */}
           <div className="flex justify-center">
-          <img src="/logo0.jpeg" alt="" className="flex items-center w-[10rem] md:w-[10rem]" />
+            <img src="/logo0.jpeg" alt="" className="flex items-center w-[10rem] md:w-[10rem]" />
           </div>
           
           <ul className="pl-4 mt-2">
@@ -166,27 +165,26 @@ const SidebarModal: React.FC<NavbarProps> = ({
           <div className="p-4">
             {activeCategory && (
               <>
-             
-             <h2 className="font-bold text-lg text-[#AE3033] relative flex items-center justify-center">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 text-[#AE3033] cursor-pointer absolute left-0"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-    onClick={closeSubModal}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9.75 19.5L3 12l6.75-7.5M3 12h18"
-    />
-  </svg>
-  <div>
-    {activeCategory}
-  </div>
-</h2>
+                <h2 className="font-bold text-lg text-[#AE3033] relative flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-[#AE3033] cursor-pointer absolute left-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    onClick={closeSubModal}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.75 19.5L3 12l6.75-7.5M3 12h18"
+                    />
+                  </svg>
+                  <div>
+                    {activeCategory}
+                  </div>
+                </h2>
                 <ul className="pl-4 mt-2">
                   {menuCategories
                     .find((category) => category.title === activeCategory)
@@ -194,21 +192,12 @@ const SidebarModal: React.FC<NavbarProps> = ({
                       <Link
                         key={product._id}
                         href={`/products/${product._id}`}
-                        className={`flex items-center py-2 border-t border-b border-gray-200 cursor-pointer ${
+                        className={`block py-2 border-t border-b border-gray-200 cursor-pointer ${
                           activeProduct === product._id ? "bg-gray-100" : ""
                         }`}
                         onClick={() => handleProductClick(product._id)}
                       >
-                        <span className="mr-2">{product.name}</span>
-                        <svg
-                          className={`w-4 h-4 ml-auto fill-current -rotate-90 ${
-                            activeProduct === product._id ? "transform rotate-0" : ""
-                          }`}
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M6 9l6 6 6-6z" />
-                        </svg>
+                        <span>{product.name}</span>
                       </Link>
                     ))}
                 </ul>
