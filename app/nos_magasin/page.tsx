@@ -52,7 +52,7 @@ async function Nosmagasin() {
         <div className="flex flex-col items-center space-y-4">
           <div className="w-full max-w-[300px] md:max-w-md">
             <Image
-              src={urlFor(mediaData.store1).url()}
+              src={urlFor(mediaData.store2).url()}
               alt="XPhones Canal Saint Martin"
               width={500}
               height={300}
@@ -80,7 +80,7 @@ async function Nosmagasin() {
         <div className="flex flex-col items-center space-y-4">
           <div className="w-full max-w-[300px] md:max-w-md">
             <Image
-              src={urlFor(mediaData.store2).url()}
+              src={urlFor(mediaData.store1).url()}
               alt="XPhones Voltaire"
               width={500}
               height={300}

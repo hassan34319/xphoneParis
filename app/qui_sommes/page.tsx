@@ -59,7 +59,6 @@ async function QuiSommes() {
       {/* Office Video */}
       <div className="w-full max-w-[800px] mb-10">
         <video
-          autoPlay
           muted
           loop
           playsInline
@@ -182,13 +181,13 @@ async function QuiSommes() {
       {/* Marketplace Comparisons */}
       <div className="w-full max-w-4xl space-y-14 mb-14">
         {/* <div className="text-center"> */}
-          <div className="flex justify-center">
+          <div className="flex justify-center ">
             <Image 
               src={urlFor(mediaData.marketplaceImages[0]).url()}
               alt="Amazon Logo"
               width={400}
               height={100}
-              className="max-w-[500px] h-auto mb-4"
+              className="max-w-[500px] h-auto -mb-4"
             />
            
           </div>
@@ -204,13 +203,13 @@ async function QuiSommes() {
         {/* </div> */}
 
         <div className="text-center">
-          <div className="flex justify-center">
+          <div className="flex justify-center -mr-6">
             <Image 
               src={urlFor(mediaData.marketplaceImages[1]).url()}
               alt="Back Market Logo"
-              width={400}
-              height={100}
-              className="max-w-[500px] h-auto mb-4"
+              width={600}
+              height={200}
+              className="max-w-[600px] h-auto mb-4 object-fill"
             />
           
           </div>
@@ -225,7 +224,7 @@ async function QuiSommes() {
 
         </div>
         <div className="text-center">
-          <div className="flex justify-center">
+          <div className="flex justify-center -mr-6">
             <Image 
               src={urlFor(mediaData.marketplaceImages[3]).url()}
               alt="Cdiscount Logo"
@@ -250,11 +249,11 @@ async function QuiSommes() {
         </div>
 
         <div className="text-center">
-          <div className="flex justify-center">
+          <div className="flex justify-center -ml-4">
             <Image 
               src={urlFor(mediaData.marketplaceImages[2]).url()}
               alt="Rakuten Logo"
-              width={400}
+              width={450}
               height={100}
               className="max-w-[500px] h-auto mb-4"
             />
@@ -296,7 +295,7 @@ async function QuiSommes() {
         <div className="text-center">
           <div className="max-w-md mx-auto">
             <Image 
-              src={urlFor(mediaData.storeImages[0]).url()}
+              src={urlFor(mediaData.storeImages[1]).url()}
               alt="Xphones Voltaire Store"
               width={400}
               height={240}
@@ -316,7 +315,7 @@ async function QuiSommes() {
         <div className="text-center">
           <div className="max-w-md mx-auto">
             <Image 
-              src={urlFor(mediaData.storeImages[1]).url()}
+              src={urlFor(mediaData.storeImages[0]).url()}
               alt="Xphones Canal Saint Martin Store"
               width={400}
               height={240}
