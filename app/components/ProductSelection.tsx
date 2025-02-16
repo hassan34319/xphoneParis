@@ -162,7 +162,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
       case "argent":
         return "#C0C0C0";
       case "blanc":
-        return "#FFFFFF";
+        return "#EBE8E2";
       case "bleu":
         return "#0000FF";
       case "gris":
