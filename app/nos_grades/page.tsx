@@ -2,7 +2,6 @@ import { sanityClient } from "../../lib/sanityClient";
 import { urlFor } from "../../lib/sanityClient";
 import Image from 'next/image';
 
-// Types for the grades data
 interface GradeImage {
   _key: string;
   image: any;
@@ -41,7 +40,6 @@ async function GradesPage() {
   }`;
   
   const data: GradesPageData = await sanityClient.fetch(query);
-  
 
   const renderStars = (rating: number) => {
     return (
@@ -61,73 +59,58 @@ async function GradesPage() {
   };
 
   return (
-    <div className="flex flex-col items-center px-4 py-8 max-w-7xl mx-auto bg-white">
-        <h1 className="text-4xl text-center tracking-wider mb-3 font-extrabold">
-        {data.mainTitle || "Nos Grades"}
-      </h1>
-
-      <div className="flex justify-center w-full px-4 mb-4">
-      <div className=" p-2 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-lg xl:max-w-xl ">
+    <div className="flex flex-col items-center px-4 py-8 max-w-8xl mx-auto bg-white">
+      {/* Logo and Rating Section */}
+      <div className="w-full mb-4">
+        <div className="relative w-full h-16 sm:h-28 md:h-36">
           <Image 
-            src={urlFor(data.logo).url()} 
-            
+            src="/logo111.jpg"
             alt="XPhones Logo"
-            width={500}
-            height={300}
-            className="w-full h-auto object-contain"
+            fill
+            className="object-contain"
+            priority
           />
         </div>
       </div>
 
+      {/* Main Title */}
+      <h2 className="flex justify-center text-2xl sm:text-3xl md:text-4xl font-bold mb-4  sm:mb-6">Nos Grades</h2>
 
-      
-      
-      
-      <p className="text-lg xl:text-xl text-center max-w-4xl mb-12">
-  Nos appareils d'origine sont soigneusement classés en  
-  <span className="text-purple-500 font-bold"> trois grades esthétiques</span>  pour s'adapter à tous les  
-  <span className="text-green-500 font-bold"> goûts et budgets.</span>
-  <br /><br />
-  Que vous optiez pour un modèle en Bon état, un Très bon état ou Comme neuf, vous bénéficiez toujours d'un  
-  <span className="text-yellow-500 font-bold"> appareil fonctionnel</span> à un  
-  <span className="text-red-500 font-bold"> prix attractif avec une garantie de 1 an.</span>
-  <br /><br />
-  Chaque produit a été vérifié pour garantir une qualité optimale, alors profitez de l'occasion pour obtenir un excellent appareil 
-  <span className="text-blue-500 font-bold"> à moindre coût!</span> 
-</p>
+      <p className="text-xl xl:text-2xl text-center max-w-4xl mb-12">
+        Nos appareils d'origine sont soigneusement classés en  
+        <span className="text-purple-500 font-bold"> trois grades esthétiques</span>  pour s'adapter à tous les  
+        <span className="text-green-500 font-bold"> goûts et budgets.</span>
+        <br /><br />
+        Que vous optiez pour un modèle en Bon état, un Très bon état ou Comme neuf, vous bénéficiez toujours d'un  
+        <span className="text-yellow-500 font-bold"> appareil fonctionnel</span> à un  
+        <span className="text-red-500 font-bold"> prix attractif avec une garantie de 1 an.</span>
+        <br /><br />
+        Chaque produit a été vérifié pour garantir une qualité optimale, alors profitez de l'occasion pour obtenir un excellent appareil 
+        <span className="text-blue-500 font-bold"> à moindre coût!</span> 
+      </p>
 
-
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-3/4">
-        {data.grades?.map((grade, index) => (
+      <div className="flex flex-col gap-8 w-full max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
+        {data.grades?.map((grade) => (
           <div 
             key={grade._key}
-            className={`flex flex-col  items-center p-6 border-2 border-black rounded-lg ${
-              index === data.grades.length - 1 && data.grades.length % 2 !== 0
-                ? "lg:col-span-2 lg:max-w-2xl lg:mx-auto"
-                : ""
-            }`}
+            className="flex flex-col items-center p-6 border-2 border-black rounded-lg"
           >
             <h2 className="text-2xl font-bold mb-4 text-blue-800">{grade.title}</h2>
             
-
             <div className="mb-4">
               {renderStars(grade.starRating)}
             </div>
             
-
             <p className="text-center text-lg xl:text-xl mb-6">
               {grade.description}
             </p>
             
-
             <div className="flex w-full gap-4 ">
-
-              <div className="flex flex-col gap-4 flex-1">
+              <div className="flex flex-col  gap-4 flex-1">
                 {grade.images?.slice(0, 2).map((img) => (
                   <div 
                     key={img._key}
-                    className=" rounded-lg overflow-hidden "
+                    className="rounded-lg overflow-hidden"
                   >
                     <img
                       src={urlFor(img.image).url()}
@@ -138,10 +121,9 @@ async function GradesPage() {
                 ))}
               </div>
               
-
               {grade.images?.[2] && (
                 <div className="flex-1 flex items-center">
-                  <div className=" rounded-lg overflow-hidden ">
+                  <div className="rounded-lg overflow-hidden">
                     <img
                       src={urlFor(grade.images[2].image).url()}
                       alt={`${grade.title} example`}

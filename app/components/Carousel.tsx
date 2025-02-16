@@ -24,21 +24,43 @@ type Banner = {
 type Props = {
   Banners: Banner[];
 };
+
 const Carousel: React.FC<Props> = ({ Banners }) => {
-  console.log("I am banner", Banners);
   const mappedBanners = Banners.map((banner) => ({
     ...banner,
     mobileBanner: urlFor(banner.mobileBanner).url(),
     desktopBanner: urlFor(banner.desktopBanner).url(),
   }));
+
   const isDesktop = useMediaQuery({ minWidth: 1020 });
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
   }, []);
+
   return (
-    <div>
+    <div className="carousel-container">
+      <style jsx global>{`
+        .carousel-container .swiper-button-prev,
+        .carousel-container .swiper-button-next {
+          width: 40px;
+          height: 40px;
+          background-color: rgba(0, 0, 0, 0.8);
+          border-radius: 50%;
+          color: white;
+        }
+
+        .carousel-container .swiper-button-prev:after,
+        .carousel-container .swiper-button-next:after {
+          font-size: 20px;
+        }
+
+        .carousel-container .swiper-button-disabled {
+          opacity: 0.5;
+        }
+      `}</style>
+      
       <Swiper
         className="w-full mx-auto flex flex-row justify-center items-center mt-0"
         modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -50,30 +72,24 @@ const Carousel: React.FC<Props> = ({ Banners }) => {
         navigation
       >
         {mappedBanners.map((banner) => (
-          <SwiperSlide key={banner._id} className="">
+          <SwiperSlide key={banner._id}>
             <Link href={banner.link}>
-                <div className="h-[34rem] md:h-[20rem] lg:h-[24rem] xl:h-[35rem] relative">
+              <div className="h-[34rem] md:h-[20rem] lg:h-[24rem] xl:h-[35rem] relative">
                 {hydrated && (
                   <Image
-                    src={
-                      isDesktop
-                        ? banner.desktopBanner
-                        : banner.mobileBanner
-                    }
+                    src={isDesktop ? banner.desktopBanner : banner.mobileBanner}
                     alt="banner"
                     fill
                     className="object-fill"
                   />
                 )}
-                </div>
+              </div>
             </Link>
           </SwiperSlide>
         ))}
       </Swiper>
     </div>
-    
   );
 };
 
-export default Carousel
-
+export default Carousel;

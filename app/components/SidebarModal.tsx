@@ -1,5 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { Button } from "react-bootstrap";
+
 
 interface NavbarProps {
   menuCategories: {
@@ -122,7 +124,15 @@ const SidebarModal: React.FC<NavbarProps> = ({
         
         <div className="p-4">
           <div className="flex justify-center">
-            <img src="/logo0.jpeg" alt="" className="flex items-center w-[10rem] md:w-[10rem]" />
+          <Button 
+  href="/" 
+  onClick={() => {
+    setIsSubModalOpen(false);
+    toggleSidebar();
+  }}
+>
+  <img src="/logo0.jpeg" alt="Logo" className="flex items-center w-[10rem] md:w-[10rem]" />
+</Button>
           </div>
           
           <ul className="pl-4 mt-2">
