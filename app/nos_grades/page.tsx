@@ -89,11 +89,11 @@ async function GradesPage() {
         <span className="text-blue-500 font-bold"> à moindre coût!</span> 
       </p>
 
-      <div className="flex flex-col gap-8 w-full max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
+      <div className="flex flex-col gap-8 w-full max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
         {data.grades?.map((grade) => (
           <div 
             key={grade._key}
-            className="flex flex-col items-center p-6 border-2 border-black rounded-lg"
+            className="flex flex-col items-center p-6 border-2  rounded-lg"
           >
             <h2 className="text-2xl font-bold mb-4 text-blue-800">{grade.title}</h2>
             
