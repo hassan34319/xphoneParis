@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useEffect, useState } from "react";
-import { urlFor } from "../../lib/sanityClient";
+import { sanityClient, urlFor } from "../../lib/sanityClient";
 import { product } from "../utils/types";
 import { useRouter } from "next/navigation";
 import ClientOnly from "./ClientOnly";
@@ -42,11 +42,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     getImage();
   }, [product.variants]);
 
+  console.log("hello these are product ids", product._id);
+  async function deleteProduct(productId) {
+    try {
+      await sanityClient.delete(productId);
+      console.log(`Product with ID ${productId} deleted successfully.`);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  }
+  deleteProduct("drafts.1dac007e-a521-4595-aedd-0a66d3df34f6")
+
   return (
     <ClientOnly>
       <div
         className="bg-white rounded-xl p-2 flex flex-col cursor-pointer shadow-lg w-80 lg:h-[24rem] xl:h-[26rem] mb-6 hover:shadow-xl"
         onClick={() => router.push(`/products/${product._id}`)}
+        
       >
         <img
           src={image}

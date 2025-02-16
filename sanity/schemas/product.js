@@ -96,4 +96,17 @@ export default {
       of: [{ type: "review" }]
     },
   ],
-};
+  preview: {
+    select: {
+      title: 'name',
+      subtitle: 'brand'
+    }
+  },
+  actions: [
+    {
+      name: 'delete',
+      title: 'Delete',
+      type: 'delete',
+    }
+  ]
+}
