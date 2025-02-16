@@ -135,18 +135,9 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
       throw error;
     }
   };
-  const CustomFileUpload = ({ onUpload }) => {
-    const fileInputRef = useRef(null);
   
-    const handleClick = () => {
-      fileInputRef.current.click();
-    };
   
-    const handleChange = (e) => {
-      if (onUpload) {
-        onUpload(e);
-      }
-    };
+    
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
