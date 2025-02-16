@@ -192,7 +192,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-4">
               <Image
-                className="rounded-full"
+                className="rounded-full "
                 src="/prof.png"
                 alt="pic"
                 width={40}
@@ -320,7 +320,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
             {uploadedImages.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
                 {uploadedImages.map((img, index) => (
-                  <div key={index} className="relative aspect-square group">
+                  <div key={index} className="relative aspect-square cursor-pointer group">
                     <Image
                       src={img}
                       alt={`Upload preview ${index + 1}`}

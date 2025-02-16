@@ -286,14 +286,24 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-700 mb-2">Images</label>
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-            />
+          <label className="block text-gray-700 mb-2">Images</label>
+<div className="relative">
+  <label
+    htmlFor="file-upload"
+    className="cursor-pointer bg-black text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-gray-800"
+  >
+    Upload Your Images
+  </label>
+  <input
+    id="file-upload"
+    type="file"
+    multiple
+    accept="image/*"
+    onChange={handleImageUpload}
+    className="hidden"
+  />
+</div>
+
             
             {uploadedImages.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
