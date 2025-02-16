@@ -303,7 +303,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
               rows={4}
               value={reviewText}
               onChange={handleReviewTextChange}
-              placeholder="Write your review here..."
+              placeholder="Écris ta critique en français..."
             />
           </div>
 
