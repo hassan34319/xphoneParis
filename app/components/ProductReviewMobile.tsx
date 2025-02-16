@@ -261,7 +261,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
           )}
 
           <aside className="mt-6">
-            <p className="mt-1 text-xs text-gray-500">19 personnes out trouvé cet avis utile</p>
+            <p className="mt-1 text-xs text-gray-500">19 personnes ont trouvé cet avis utile</p>
             <div className="flex items-center mt-3 space-x-3 divide-x divide-gray-200">
               <button className="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 font-medium rounded-lg text-xs px-2 py-1.5">
                 Utile
@@ -310,7 +310,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
               rows={4}
               value={reviewText}
               onChange={handleReviewTextChange}
-              placeholder="Écris ta critique en français..."
+              placeholder="Écrivez votre avis ici..."
             />
           </div>
 
