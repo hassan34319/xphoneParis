@@ -63,8 +63,8 @@ async function QuiSommes() {
           loop
           playsInline
           controls={true}
+          poster="/thumbnail.png"
           className="w-full h-auto rounded-lg"
-          poster={urlFor(mediaData.heroVideo).url()}
         >
           <source src="/video1.mp4" type="video/mp4" />
         </video>
