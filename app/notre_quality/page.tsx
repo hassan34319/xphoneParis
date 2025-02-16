@@ -21,7 +21,7 @@ function ProductPage() {
       <h2 className="flex justify-center text-2xl sm:text-3xl md:text-4xl font-bold mb-4  sm:mb-6">Notre Qualité</h2>
 
       {/* Initial Description */}
-      <div className="text-center mb-8 text-xl sm:text-2xl md:text-3xl  sm:mb-8 max-w-5xl">
+      <div className="text-center mb-8 text-xl sm:text-2xl md:text-3xl  sm:mb-8 max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-5xl">
         <p className="mb-4">
           Nous <span className="text-red-500">vendons</span> exclusivement des appareils d'origine, jamais{' '}
           <span className="text-blue-500">modifiés</span>,{' '}
@@ -116,7 +116,7 @@ function ProductPage() {
       </div>
 
       {/* Final Quality Message */}
-      <div className="text-center text-xl sm:text-2xl md:text-3xl mb-12 max-w-5xl">
+      <div className="text-center text-xl sm:text-2xl md:text-3xl mb-12 max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-5xl">
         <p>
           En <span className="text-purple-500">sélectionnant</span> nos{' '}
           <span className="text-blue-500">produits</span>, vous optez pour une{' '}
