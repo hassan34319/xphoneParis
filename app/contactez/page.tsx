@@ -171,6 +171,9 @@ async function ContactPage() {
               <span className="text-blue-500">Voltaire</span>
             </p>
             <p className="text-blue-500 text-xl sm:text-2xl md:text-3xl">75011 Paris</p>
+            <br />
+            <br />
+            <br />
           </div>
         </div>
       </div>

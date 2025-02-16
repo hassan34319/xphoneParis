@@ -71,8 +71,11 @@ const DeliveryInfoPage = () => {
             className="w-full h-full object-cover"
           />
         </div>
-        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto">
+        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto ">
           Le délai de préparation est de 24 à 48 heures afin de garantir un contrôle qualité rigoureux. Chaque smartphone est testé, nettoyé et soigneusement emballé pour respecter les normes XPHONES. Ce processus assure un appareil prêt à l'emploi dès réception.
+        <br />
+        <br />
+        <br />
         </p>
       </div>
     </div>
