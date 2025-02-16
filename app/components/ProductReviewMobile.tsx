@@ -209,7 +209,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
                 <p className="text-black">
                   {rev.user}
                   <time className="block text-sm text-gray-500">
-                    Reviewed on {formatDateToNormalDate(rev.date)}
+                    Avis laissé le {formatDateToNormalDate(rev.date)}
                   </time>
                 </p>
               </div>
