@@ -5,7 +5,7 @@ import React from 'react';
 
 const DeliveryInfoPage = () => {
   return (
-    <div className="w-full max-w-8xl mx-auto p-4 space-y-8 bg-white">
+    <div className="w-full max-w-8xl mx-auto  space-y-8 bg-white">
       {/* Logo and Rating Section */}
       <div className="w-full mb-4">
         <div className="relative w-full h-16 sm:h-28 md:h-36">
@@ -21,7 +21,7 @@ const DeliveryInfoPage = () => {
       </div>
       {/* Livraison Section */}
       <div className="space-y-6">
-        <h2 className="flex justify-center text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">LIVRAISON</h2>
+        <h2 className="flex justify-center text-2xl sm:text-3xl md:text-4xl font-bold mb-4  sm:mb-6">LIVRAISON</h2>
         <div className="relative w-full aspect-square mx-auto  overflow-hidden max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
           <img 
             src="/OPTEZ-POUR-L-ORIGINAL-84.jpg"
