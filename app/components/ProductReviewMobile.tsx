@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useRef } from "react";
 import { renderRatingStars } from "../utils/stars";
 import Image from "next/image";
 import { sanityClient } from "../../lib/sanityClient";
@@ -135,6 +135,18 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
       throw error;
     }
   };
+  const CustomFileUpload = ({ onUpload }) => {
+    const fileInputRef = useRef(null);
+  
+    const handleClick = () => {
+      fileInputRef.current.click();
+    };
+  
+    const handleChange = (e) => {
+      if (onUpload) {
+        onUpload(e);
+      }
+    };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -317,19 +329,23 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
 
           <div className="mb-6">
           <label className="block text-gray-700 mb-2">Images</label>
-          <label
-    htmlFor="file-upload"
-    className="cursor-pointer bg-blue-400 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-800"
-  >
-    Poster des images
-  </label>
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-            />
+      <div className="relative">
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleChange}
+          className="hidden"
+        />
+        <button
+          onClick={handleClick}
+          type="button"
+          className="w-full px-4 py-2 text-sm font-semibold text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Upload Images New
+        </button>
+        </div>
             
             {uploadedImages.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
