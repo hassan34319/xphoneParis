@@ -270,10 +270,10 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
       {/* Add Review Form */}
       {currentUser && (
         <form onSubmit={handleSubmit} className="mt-8 p-6 bg-white rounded-lg shadow-sm">
-          <h3 className="text-xl font-medium mb-6">Write a Review</h3>
+          <h3 className="text-xl font-medium mb-6">Laissez un avis</h3>
           
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Rating</label>
+            <label className="block text-gray-700 mb-2">Note</label>
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((value) => (
                 <button
@@ -297,7 +297,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Review</label>
+            <label className="block text-gray-700 mb-2">Avis</label>
             <textarea
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={4}
@@ -346,7 +346,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Submit Review
+            Soumettre l'avis
           </button>
             
         </form>

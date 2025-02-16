@@ -47,10 +47,11 @@ const SubscribeCard = () => {
         <div className="card px-8 py-4">
           <div className="card-text">
             <h1 className="text-xl md:text-2xl font-bold leading-tight text-gray-900">
-              Get the latest deals and offers right into your inbox!
+            Recevez les dernières offres et promotions directement dans votre boîte mail !
+
             </h1>
             <p className="text-base md:text-lg text-gray-700 mt-3">
-              Join the Xphones Family!
+            Rejoignez la famille Xphones !
             </p>
           </div>
 
@@ -58,7 +59,7 @@ const SubscribeCard = () => {
             <input
               type="email"
               className="border-l border-t border-b border-gray-200 rounded-l-md w-full text-base md:text-lg px-3 py-2"
-              placeholder="Enter Your Email"
+              placeholder="Entrez Votre Email"
               value={email}
               onChange={handleEmailChange}
             />
@@ -66,7 +67,7 @@ const SubscribeCard = () => {
               className="bg-red-500 hover:bg-red-600 hover:border-red-600 text-white font-bold capitalize px-3 py-2 text-base md:text-lg rounded-r-md border-t border-r border-b border-red-500"
               onClick={handleSubmit}
             >
-              subscribe
+              S'abonner
             </button>
           </div>
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
