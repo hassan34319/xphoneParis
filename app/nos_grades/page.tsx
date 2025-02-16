@@ -59,7 +59,7 @@ async function GradesPage() {
   };
 
   return (
-    <div className="flex flex-col items-center px-4 py-8 max-w-8xl mx-auto bg-white">
+    <div className="flex flex-col items-center  max-w-8xl mx-auto bg-white">
       {/* Logo and Rating Section */}
       <div className="w-full mb-4">
         <div className="relative w-full h-16 sm:h-28 md:h-36">
@@ -136,6 +136,8 @@ async function GradesPage() {
           </div>
         ))}
       </div>
+      <p> <br /> <br /> <br /> <br /> </p>
+
     </div>
   );
 }
