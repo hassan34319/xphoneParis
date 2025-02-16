@@ -44,7 +44,7 @@ async function ContactPage() {
       {/* Contact Section */}
       <div className="w-full space-y-4 sm:space-y-6 max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
         {/* Customer Service Image 1 */}
-        <div className="relative w-full aspect-[4/3]  overflow-hidden">
+        <div className="relative w-full aspect-[6/5]  overflow-hidden">
           <Image 
             src={urlFor(mediaData.phoneAgent).url()}
             alt="Customer Service"
@@ -73,7 +73,7 @@ async function ContactPage() {
         </div>
 
         {/* Customer Service Image 2 */}
-        <div className="relative w-full h-full aspect-[4/3]  overflow-hidden">
+        <div className="relative w-full h-full aspect-[6/5]   overflow-hidden">
           <Image 
             src={urlFor(mediaData.emailAgent).url()}
             alt="Phone Service"
@@ -103,7 +103,7 @@ async function ContactPage() {
         </div>
 
         {/* Customer Service Image 2 */}
-        <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden">
+        <div className="relative w-full aspect-[6/5]  rounded-2xl overflow-hidden">
           <Image 
             src="/OPTEZ-POUR-L-ORIGINAL-77.jpg"
             alt="Phone Service"

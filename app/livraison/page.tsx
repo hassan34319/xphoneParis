@@ -1,30 +1,82 @@
-const livraison = () => {
-    return (
-      <div className="mx-auto w-11/12 max-w-4xl rounded my-4 p-4 font-sans text-center">
-        <div className="mb-10">
-          <h1 className="text-lg lg:text-xl xl:text-3xl font-extrabold m-4">Dans quels pays faites-vous les livraisons ?</h1>
-          <p className="text-md lg:text-lg xl:text-2xl">
-            <strong>Text:</strong> Nous assurons la livraison dans plusieurs pays, notamment en France, en Belgique et en Suisse.
-            Chaque colis est soigneusement emballé pour garantir son intégrité lors de la livraison. Votre satisfaction reste notre priorité essentielle.
-          </p>
+import { sanityClient } from "../../lib/sanityClient";
+import Image from 'next/image';
+import { urlFor } from '../../lib/sanityClient';
+import React from 'react';
+
+const DeliveryInfoPage = () => {
+  return (
+    <div className="w-full max-w-8xl mx-auto p-4 space-y-8 bg-white">
+      {/* Logo and Rating Section */}
+      <div className="w-full mb-4">
+        <div className="relative w-full h-16 sm:h-28 md:h-36">
+          <Image 
+            src="/logo111.jpg"
+            alt="XPhones Logo"
+            fill
+            className="object-contain"
+            priority
+          />
         </div>
-  
-        <div className="mb-10">
-          <h1 className="text-lg font-extrabold m-4 lg:text-xl xl:text-3xl">Quels sont les délais de livraison chez XPhones ?</h1>
-          <p className="text-md lg:text-lg xl:text-2xl">Le délai de livraison est estimé à 24h.</p>
-        </div>
-  
-        <div className="mb-10">
-          <h1 className="text-lg font-extrabold m-4 lg:text-xl xl:text-3xl">Comment puis-je contacter la société XPhones ?</h1>
-          <p className="text-md lg:text-lg xl:text-2xl">
-            Pour contacter la société XPhones, plusieurs options s'offrent à vous : vous pouvez nous envoyer un email à l'adresse
-            <a href="mailto:contact@xphones.fr" className="text-blue-600 font-bold"> contact@xphones.fr </a> 
-            ou nous appeler aux numéros suivants : 01 45 45 13 63 ou 01 42 77 13 63.
-          </p>
+       
+      </div>
+      {/* Livraison Section */}
+      <div className="space-y-6">
+        <h2 className="flex justify-center text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">LIVRAISON</h2>
+        <div className="relative w-full aspect-square mx-auto  overflow-hidden max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
+          <img 
+            src="/OPTEZ-POUR-L-ORIGINAL-84.jpg"
+            alt="UPS Delivery"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
-    );
-  };
-  
-  export default livraison;
-  
+
+      {/* Question Section */}
+      <div className="space-y-6">
+        <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-center">Dans quels pays faites vous les livraisons ?</h3>
+        <div className="relative w-full aspect-square mx-auto  overflow-hidden max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
+          <img 
+            src="/OPTEZ-POUR-L-ORIGINAL-85.jpg"
+            alt="Delivery Countries"
+            className="w-full h-full "
+          />
+        </div>
+        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-2xl mx-auto">
+          Nous assurons la livraison dans l'union européenne. Chaque colis est soigneusement emballé pour garantir son intégrité lors de la livraison. Votre satisfaction reste notre priorité essentielle
+        </p>
+      </div>
+
+      {/* Delivery Times Section */}
+      <div className="space-y-6">
+        <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-center">Quels sont les délais de livraison chez Xphones ?</h3>
+        <div className="relative w-full aspect-square mx-auto  overflow-hidden max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
+          <img 
+            src="/OPTEZ-POUR-L-ORIGINAL-87.jpg"
+            alt="Delivery Times"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-2xl mx-auto">
+          Nous avons choisi UPS pour assurer une livraison rapide et sécurisée en 24 à 48 heures. Chaque colis est expédié contre signature et dispose d'un numéro de suivi en temps réel. Après avoir testé plusieurs transporteurs, UPS s'est révélé être le plus fiable, avec quasiment jamais de retard ni de perte.
+        </p>
+      </div>
+
+      {/* Preparation Times Section */}
+      <div className="space-y-6">
+        <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-center">Quels sont les délais de préparation chez Xphones ?</h3>
+        <div className="relative w-full aspect-square mx-auto  overflow-hidden max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
+          <img 
+            src="/OPTEZ-POUR-L-ORIGINAL-88.jpg"
+            alt="Preparation Times"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-2xl mx-auto">
+          Le délai de préparation est de 24 à 48 heures afin de garantir un contrôle qualité rigoureux. Chaque smartphone est testé, nettoyé et soigneusement emballé pour respecter les normes XPHONES. Ce processus assure un appareil prêt à l'emploi dès réception.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default DeliveryInfoPage;
