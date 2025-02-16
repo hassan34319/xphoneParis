@@ -317,6 +317,12 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
 
           <div className="mb-6">
           <label className="block text-gray-700 mb-2">Images</label>
+          <label
+    htmlFor="file-upload"
+    className="cursor-pointer bg-blue-400 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-800"
+  >
+    Poster des images
+  </label>
             <input
               type="file"
               multiple
