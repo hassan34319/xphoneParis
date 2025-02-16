@@ -56,21 +56,57 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
     setSelectedImage(null);
   };
 
+  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.target.files;
+  //   if (!files) return;
+
+  //   const newImages: string[] = [];
+  //   Array.from(files).forEach(file => {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       if (e.target?.result) {
+  //         newImages.push(e.target.result as string);
+  //         if (newImages.length === files.length) {
+  //           setUploadedImages(prev => [...prev, ...newImages]);
+  //         }
+  //       }
+  //     };
+  //     reader.readAsDataURL(file);
+  //   });
+  // };
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
 
+
     const newImages: string[] = [];
+    let processedFiles = 0;
+
     Array.from(files).forEach(file => {
+      // Add file size check
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast.error("Image trop grande. Maximum 5MB");
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
         if (e.target?.result) {
           newImages.push(e.target.result as string);
-          if (newImages.length === files.length) {
+          processedFiles++;
+          
+          if (processedFiles === files.length) {
             setUploadedImages(prev => [...prev, ...newImages]);
+
           }
         }
       };
+
+      reader.onerror = () => {
+        toast.error("Erreur lors du téléchargement de l'image");
+
+      };
+
       reader.readAsDataURL(file);
     });
   };

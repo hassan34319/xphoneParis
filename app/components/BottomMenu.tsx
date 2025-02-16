@@ -24,7 +24,7 @@ const BottomMenu = () => {
       <h1 className="text-xl text-center xl:text-2xl">BESOIN D'AIDE</h1>
       <div className="flex flex-col items-center justify-center text-sm space-y-1 lg:text-md xl:text-lg">
             <Link className="text-center"  href={"/contactez"}>Contactez-nous</Link>
-            <Link className="text-center" href={"/faq"}>Questions fréquente</Link>
+            <Link className="text-center" href={"/faq"}>Questions fréquentes</Link>
             <Link className="text-center" href={"/livraison"}>Livraison</Link>
         </div>
       </div>
