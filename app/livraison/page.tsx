@@ -41,7 +41,7 @@ const DeliveryInfoPage = () => {
             className="w-full h-full "
           />
         </div>
-        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-2xl mx-auto">
+        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto">
           Nous assurons la livraison dans l'union européenne. Chaque colis est soigneusement emballé pour garantir son intégrité lors de la livraison. Votre satisfaction reste notre priorité essentielle
         </p>
       </div>
@@ -56,7 +56,7 @@ const DeliveryInfoPage = () => {
             className="w-full h-full object-cover"
           />
         </div>
-        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-2xl mx-auto">
+        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto">
           Nous avons choisi UPS pour assurer une livraison rapide et sécurisée en 24 à 48 heures. Chaque colis est expédié contre signature et dispose d'un numéro de suivi en temps réel. Après avoir testé plusieurs transporteurs, UPS s'est révélé être le plus fiable, avec quasiment jamais de retard ni de perte.
         </p>
       </div>
@@ -71,7 +71,7 @@ const DeliveryInfoPage = () => {
             className="w-full h-full object-cover"
           />
         </div>
-        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-2xl mx-auto">
+        <p className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto">
           Le délai de préparation est de 24 à 48 heures afin de garantir un contrôle qualité rigoureux. Chaque smartphone est testé, nettoyé et soigneusement emballé pour respecter les normes XPHONES. Ce processus assure un appareil prêt à l'emploi dès réception.
         </p>
       </div>
