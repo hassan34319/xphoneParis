@@ -162,7 +162,7 @@ async function ContactPage() {
             />
           </div>
           <div className="text-center">
-            <h2 className="ext-xl sm:text-2xl md:text-3xl font-bold text-red-500">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-red-500">
               XPHONES STORE NATION
             </h2>
             <p className="mt-1 text-xl sm:text-2xl md:text-3xl">
