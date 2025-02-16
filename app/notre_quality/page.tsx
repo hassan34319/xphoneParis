@@ -45,7 +45,7 @@ function ProductPage() {
               className="w-full h-full"
             />
           </div>
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg text-red-500 text-center">produit reconditionné moins résistant</p>
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg text-center">produit reconditionné <span className='text-red-600'> moins résistant</span> </p>
         </div>
 
         {/* New Phone */}
@@ -57,7 +57,7 @@ function ProductPage() {
               className="w-full h-full"
             />
           </div>
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg text-green-500 text-center">produit d'origine plus résistant</p>
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg  text-center">produit d'origine <span className='text-green-500'> plus résistant</span></p>
         </div>
 
         {/* Wedding Photos Comparison */}
@@ -69,8 +69,8 @@ function ProductPage() {
               className="w-full h-full"
             />
           </div>
-          <p className= "text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg text-red-500 text-center">
-            Photo prise avec un téléphone reconditionné moins précis et moins détaillé
+          <p className= "text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg  text-center">
+            Photo prise avec un téléphone reconditionné <span className='text-red-500'> moins précis et moins détaillé</span>
           </p>
         </div>
 
@@ -82,8 +82,8 @@ function ProductPage() {
               className="w-full h-full"
             />
           </div>
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg text-green-500 text-center">
-            Photo prise avec un téléphone d'origine : plus net et détaillé
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg  text-center">
+            Photo prise avec un téléphone d'origine : <span className='text-green-500'> plus net et détaillé</span> 
           </p>
         </div>
 
@@ -96,8 +96,8 @@ function ProductPage() {
               className="w-full h-full"
             />
           </div>
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg text-red-500 text-center">
-            Produit reconditionné : duré de vie de la batterie réduite
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg  text-center">
+            Produit reconditionné : duré de vie de la <span className='text-red-500'> batterie réduite</span> 
           </p>
         </div>
 
@@ -109,8 +109,8 @@ function ProductPage() {
               className="w-full h-full "
             />
           </div>
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg text-green-500 text-center">
-            Produit d'origine : Longévité de la batterie augmenté
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl italic max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg  text-center">
+            Produit d'origine : Longévité de la <span className='text-green-500'> batterie augmenté</span>
           </p>
         </div>
       </div>
