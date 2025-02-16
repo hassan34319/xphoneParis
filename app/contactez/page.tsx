@@ -33,7 +33,7 @@ async function ContactPage() {
       </div>
 
       {/* Main Title */}
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">CONTACTEZ NOUS</h1>
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">CONTACTEZ NOUS</h1>
 
       {/* Description */}
       <p className="text-xl sm:text-2xl md:text-3xl text-center mb-6 sm:mb-8 max-w-5xl">
@@ -42,7 +42,7 @@ async function ContactPage() {
       </p>
 
       {/* Contact Section */}
-      <div className="w-full space-y-4 sm:space-y-6 max-w-[500px]">
+      <div className="w-full space-y-4 sm:space-y-6 max-w-[300px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
         {/* Customer Service Image 1 */}
         <div className="relative w-full aspect-[4/3]  overflow-hidden">
           <Image 
@@ -54,7 +54,7 @@ async function ContactPage() {
         </div>
 
         {/* Email Contact */}
-        <div className="flex justify-center items-center space-x-2 py-2 max-w-[500px]">
+        <div className="flex justify-center items-center space-x-2 py-2 ">
           <div className="w-10 h-8 sm:w-14 sm:h-10">
             <Image 
               src={urlFor(mediaData.emailIcon).url()}
@@ -133,7 +133,7 @@ async function ContactPage() {
               src={urlFor(mediaData.storeRepublique).url()}
               alt="XPhones Store Republique"
               fill
-              className="object-cover"
+              className=""
             />
           </div>
           
@@ -158,7 +158,7 @@ async function ContactPage() {
               src={urlFor(mediaData.storeNation).url()}
               alt="XPhones Store Nation"
               fill
-              className="object-cover"
+              className=""
             />
           </div>
           <div className="text-center">
