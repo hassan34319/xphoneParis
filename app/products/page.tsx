@@ -14,8 +14,8 @@ async function ProductsPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const { search } = searchParams;
-  const query = `*[_type == 'product' && name  match '${search}' || brand match '${search}' 
-|| category match '${search}']`;
+  const query = `*[_type == 'product' && (name match '${search}' || brand match '${search}' || category match '${search}')] | order(name asc)`;
+
   const products: product[] = await sanityClient.fetch(query);
 
   return (

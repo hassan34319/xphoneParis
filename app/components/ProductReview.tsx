@@ -31,14 +31,14 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
   // Check if current user is admin
   const isAdmin = currentUser?.firstName === "Ali" && currentUser?.lastName === "Imran";
 
-  function formatDateToNormalDate(dateString: string) {
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-    const date = new Date(dateString);
-    return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-  }
+  // function formatDateToNormalDate(dateString: string) {
+  //   const months = [
+  //     "January", "February", "March", "April", "May", "June",
+  //     "July", "August", "September", "October", "November", "December"
+  //   ];
+  //   const date = new Date(dateString);
+  //   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+  // }
 
   const handleImageClick = (imageUrl: string) => {
     setSelectedImage(imageUrl);
@@ -78,6 +78,13 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
 
   const handleReviewTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(event.target.value);
+  };
+  const formatDateToNormalDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("fr-FR", {
+      year: "numeric",
+      month: "long", // Full month name (e.g., janvier, février)
+      day: "numeric",
+    });
   };
 
   const handleDeleteReview = async (reviewKey: string | undefined) => {
@@ -200,7 +207,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
             <div>
               <p className="font-medium text-gray-900">{rev.user}</p>
               <time className="text-sm text-gray-500">
-                Reviewed on {formatDateToNormalDate(rev.date)}
+                Avis laissé le {formatDateToNormalDate(rev.date)}
               </time>
             </div>
             {isAdmin && (
@@ -281,7 +288,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
               rows={4}
               value={reviewText}
               onChange={handleReviewTextChange}
-              placeholder="Écris ta critique en français..."
+              placeholder="Écrivez votre avis ici..."
             />
           </div>
 
@@ -292,7 +299,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
     htmlFor="file-upload"
     className="cursor-pointer bg-blue-400 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-800"
   >
-    Upload Your Images
+    Poster des images
   </label>
   <input
     id="file-upload"

@@ -31,14 +31,21 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
   // Check if current user is admin
   const isAdmin = currentUser?.firstName === "Ali" && currentUser?.lastName === "Imran";
 
-  function formatDateToNormalDate(dateString: string) {
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-    const date = new Date(dateString);
-    return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-  }
+  // function formatDateToNormalDate(dateString: string) {
+  //   const months = [
+  //     "January", "February", "March", "April", "May", "June",
+  //     "July", "August", "September", "October", "November", "December"
+  //   ];
+  //   const date = new Date(dateString);
+  //   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+  // }
+  const formatDateToNormalDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("fr-FR", {
+      year: "numeric",
+      month: "long", // Full month name (e.g., janvier, février)
+      day: "numeric",
+    });
+  };
 
   const handleImageClick = (imageUrl: string) => {
     setSelectedImage(imageUrl);
@@ -254,13 +261,13 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
           )}
 
           <aside className="mt-6">
-            <p className="mt-1 text-xs text-gray-500">19 people found this helpful</p>
+            <p className="mt-1 text-xs text-gray-500">19 personnes out trouvé cet avis utile</p>
             <div className="flex items-center mt-3 space-x-3 divide-x divide-gray-200">
               <button className="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 font-medium rounded-lg text-xs px-2 py-1.5">
-                Helpful
+                Utile
               </button>
               <button className="pl-4 text-sm font-medium text-blue-600 hover:underline">
-                Report abuse
+                Signaler un abus
               </button>
             </div>
           </aside>
@@ -313,7 +320,7 @@ function ProductReview({ id, currentUser, review: initialReviews }: Props) {
     htmlFor="file-upload"
     className="cursor-pointer bg-blue-400 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-800"
   >
-    poster des images
+    Poster des images
   </label>
   <input
     id="file-upload"

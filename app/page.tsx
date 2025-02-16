@@ -14,7 +14,8 @@ import ScrollingReviews from "./components/ScrollingReviews";
 type Props = {};
 
 async function Home({}: Props) {
-  const phonesQuery = '*[_type == "product" && category == "smartphone"]';
+  const phonesQuery = '*[_type == "product" && category == "smartphone"] | order(name desc)';
+
   const audioQuery = '*[_type == "product" && category == "audio"]';
   const jeuxVideoQuery = '*[_type == "product" && category == "jeuxVideo"]';
   const televisionsQuery = '*[_type == "product" && category == "television"]';
@@ -51,10 +52,15 @@ async function Home({}: Props) {
   const publications = await sanityClient.fetch(query);
   console.log(publications)
   const currentUser = await getCurrentUser();
+  const shuffledReviews =
+  scrollingReviews.length > 0 && scrollingReviews[0].reviews
+    ? [...scrollingReviews[0].reviews].sort(() => Math.random() - 0.5)
+    : [];
+
   return (
     <div className="h-full mb-10">
       <Carousel Banners={banners} />
-    <ScrollingReviews scrollingReviews={scrollingReviews[0].reviews}/>
+    <ScrollingReviews scrollingReviews={shuffledReviews}/>
       <section id="bon-plans" className="flex flex-col">
         {/* <section id="bon-plans"> */}
         <Categories2
