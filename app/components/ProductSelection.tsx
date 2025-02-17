@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SelectionButton from "./SelectionButton";
 import { urlFor } from "../../lib/sanityClient";
 import { useStateContext } from "../context/stateContext";
@@ -27,27 +27,68 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   const [productImage, setProductImage] = useState(
     urlFor(product.variants[0].image).url()
   );
+  
+  // Use refs to track current external props to compare against internal state
+  const externalPropsRef = useRef({
+    color: initialColor,
+    capacity: initialCapacity,
+    grade: initialGrade
+  });
+
+  // Use refs for internal state to prevent useEffect trigger
+  const internalStateRef = useRef({
+    color: initialColor,
+    capacity: initialCapacity,
+    grade: initialGrade
+  });
+  
+  // Flag to prevent useEffect from running during initialization
+  const isInitialMount = useRef(true);
+  
+  // Flag to identify if we're currently updating from external props
+  const updatingFromExternalProps = useRef(false);
+  
+  // Actual state variables - these drive the UI
   const [selectedColor, setSelectedColor] = useState(initialColor);
   const [selectedCapacity, setSelectedCapacity] = useState(initialCapacity);
   const [selectedGrade, setSelectedGrade] = useState(initialGrade);
 
+  // This useEffect updates internal state when external props change
   useEffect(() => {
-    setSelectedColor(initialColor);
-    setSelectedCapacity(initialCapacity);
-    setSelectedGrade(initialGrade);
-  }, [initialColor, initialCapacity, initialGrade]);
-
-  // This useEffect will trigger onVariantChange whenever a selection changes
-  useEffect(() => {
-    if (onVariantChange) {
-      onVariantChange(selectedColor, selectedGrade, selectedCapacity);
+    // Check if external props have changed from what we've seen before
+    if (
+      initialColor !== externalPropsRef.current.color ||
+      initialCapacity !== externalPropsRef.current.capacity ||
+      initialGrade !== externalPropsRef.current.grade
+    ) {
+      // Update our reference to current external props
+      externalPropsRef.current = {
+        color: initialColor,
+        capacity: initialCapacity,
+        grade: initialGrade
+      };
       
-      // Find the matching variant and set its image
+      // Mark that we're updating from external props
+      updatingFromExternalProps.current = true;
+      
+      // Update internal state to match new props
+      setSelectedColor(initialColor);
+      setSelectedCapacity(initialCapacity);
+      setSelectedGrade(initialGrade);
+      
+      // Update our internal state ref
+      internalStateRef.current = {
+        color: initialColor,
+        capacity: initialCapacity,
+        grade: initialGrade
+      };
+      
+      // Find and update the image
       const matchingVariant = product.variants.find(
-        (v: any) => 
-          v.color.toLowerCase() === selectedColor.toLowerCase() &&
-          v.capacity == selectedCapacity &&
-          v.grade == selectedGrade
+        (v: any) =>
+          v.color.toLowerCase() === initialColor.toLowerCase() &&
+          v.capacity == initialCapacity &&
+          v.grade == initialGrade
       );
       
       if (matchingVariant) {
@@ -55,8 +96,44 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
         setImage(newImage);
         setProductImage(newImage);
       }
+      
+      // Reset the flag after processing
+      updatingFromExternalProps.current = false;
     }
-  }, [selectedColor, selectedCapacity, selectedGrade, onVariantChange, product.variants, setImage]);
+  }, [initialColor, initialCapacity, initialGrade, product.variants, setImage]);
+
+  // This useEffect calls onVariantChange ONLY when internal state changes from user actions
+  useEffect(() => {
+    // Skip during initial mount
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    // Skip if we're currently updating from external props
+    if (updatingFromExternalProps.current) {
+      return;
+    }
+
+    // Compare current state with our internal state reference
+    if (
+      selectedColor !== internalStateRef.current.color ||
+      selectedCapacity !== internalStateRef.current.capacity ||
+      selectedGrade !== internalStateRef.current.grade
+    ) {
+      // Update our internal state reference
+      internalStateRef.current = {
+        color: selectedColor,
+        capacity: selectedCapacity,
+        grade: selectedGrade
+      };
+      
+      // Only call onVariantChange if it's a user-initiated change
+      if (onVariantChange) {
+        onVariantChange(selectedColor, selectedGrade, selectedCapacity);
+      }
+    }
+  }, [selectedColor, selectedCapacity, selectedGrade, onVariantChange]);
 
   const price = product.variants
     .filter(

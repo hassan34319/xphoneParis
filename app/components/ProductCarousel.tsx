@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { urlFor } from "../../lib/sanityClient";
 
@@ -24,6 +24,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [allImages, setAllImages] = useState<any[]>([]);
   const itemsPerPage = 3;
+  const prevSelectionRef = useRef({ color: selectedColor, grade: selectedGrade, capacity: selectedCapacity });
 
   useEffect(() => {
     const processedImages = variants.reduce((acc: any[], variant) => {
@@ -34,7 +35,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         _key: `main-${variant.color}-${variant.grade}-${variant.capacity}`,
         isMain: true
       });
-
+      
       // Add additional images if they exist
       if (variant.additionalImages && Array.isArray(variant.additionalImages)) {
         variant.additionalImages.forEach((addImage: any, idx: number) => {
@@ -46,22 +47,32 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           });
         });
       }
+      
       return acc;
     }, []);
-
+    
     setAllImages(processedImages);
-
-    // Find and scroll to the selected variant's image
-    const selectedImageIndex = processedImages.findIndex(img => 
-      img.variant.color.toLowerCase() === selectedColor.toLowerCase() &&
-      img.variant.grade === selectedGrade &&
-      img.variant.capacity == selectedCapacity
-    );
-
-    if (selectedImageIndex !== -1) {
-      // Calculate the right page to show to make the selected image visible
-      const targetIndex = Math.max(0, Math.min(selectedImageIndex, processedImages.length - itemsPerPage));
-      setCurrentIndex(targetIndex);
+    
+    // Find and scroll to the selected variant's image ONLY if the selection has changed
+    if (
+      selectedColor !== prevSelectionRef.current.color ||
+      selectedGrade !== prevSelectionRef.current.grade ||
+      selectedCapacity !== prevSelectionRef.current.capacity
+    ) {
+      const selectedImageIndex = processedImages.findIndex(img =>
+        img.variant.color.toLowerCase() === selectedColor.toLowerCase() &&
+        img.variant.grade === selectedGrade &&
+        img.variant.capacity == selectedCapacity
+      );
+      
+      if (selectedImageIndex !== -1) {
+        // Calculate the right page to show to make the selected image visible
+        const targetIndex = Math.max(0, Math.min(selectedImageIndex, processedImages.length - itemsPerPage));
+        setCurrentIndex(targetIndex);
+      }
+      
+      // Update the ref with the current selection
+      prevSelectionRef.current = { color: selectedColor, grade: selectedGrade, capacity: selectedCapacity };
     }
   }, [variants, selectedColor, selectedGrade, selectedCapacity]);
 
@@ -74,13 +85,20 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   };
 
   const handleImageClick = (imageData: any) => {
-    const variantImage = urlFor(imageData.image).url();
-    handleVariantClick(variantImage);
-    onVariantSelect(
-      imageData.variant.color,
-      imageData.variant.grade,
-      imageData.variant.capacity
-    );
+    // Prevent calling onVariantSelect if the selection hasn't actually changed
+    if (
+      imageData.variant.color.toLowerCase() !== selectedColor.toLowerCase() ||
+      imageData.variant.grade !== selectedGrade ||
+      imageData.variant.capacity != selectedCapacity
+    ) {
+      const variantImage = urlFor(imageData.image).url();
+      handleVariantClick(variantImage);
+      onVariantSelect(
+        imageData.variant.color,
+        imageData.variant.grade,
+        imageData.variant.capacity
+      );
+    }
   };
 
   const isVariantSelected = (imageData: any) => {
@@ -109,6 +127,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           </svg>
         </button>
       )}
+      
       <div className="flex gap-2 transition-transform duration-300 mx-6">
         {allImages
           .slice(currentIndex, currentIndex + itemsPerPage)
@@ -133,6 +152,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
             </div>
           ))}
       </div>
+      
       {currentIndex < allImages.length - itemsPerPage && (
         <button
           onClick={handleNext}
