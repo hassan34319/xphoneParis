@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import ProductSelection from "./ProductSelection";
 import { product } from "../utils/types";
 import { urlFor } from "../../lib/sanityClient";
@@ -31,90 +31,43 @@ function ProductComponent({ product, currentUser }: Props) {
     capacity: product.variants[0].capacity,
     grade: product.variants[0].grade
   });
-
-  // Add a ref to track source of update
-  const updateSource = useRef<string | null>(null);
-  const isInitialMount = useRef(true);
-
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
-  }, []);
-
-  // Handle thumbnail click in carousel
-  const handleVariantClick = (variantImage: string) => {
-    updateSource.current = 'carousel';
-    const variant = product.variants.find(
-      v => urlFor(v.image).url() === variantImage
+  
+  // Track current image separately
+  const [currentImage, setCurrentImage] = useState<string>(urlFor(product.variants[0].image).url());
+  
+  // Use memoized functions to prevent unnecessary re-renders
+  const findVariant = useCallback((color: string, grade: string, capacity: string) => {
+    return product.variants.find(v => 
+      v.color.toLowerCase() === color.toLowerCase() &&
+      v.grade === grade &&
+      v.capacity == capacity
     );
+  }, [product.variants]);
+
+  // Handle image click from carousel - just update image, don't change variant selection
+  const handleImageClick = useCallback((imageUrl: string) => {
+    setCurrentImage(imageUrl);
+  }, []);
+  
+  // Handle full variant selection from carousel - update both image and variant data
+  const handleVariantSelect = useCallback((color: string, grade: string, capacity: string) => {
+    const variant = findVariant(color, grade, capacity);
     
     if (variant) {
       setCurrentVariant({
-        image: variantImage,
-        color: variant.color,
-        capacity: variant.capacity,
-        grade: variant.grade
-      });
-    }
-  };
-
-  // Handle variant selection from carousel
-  const handleVariantSelect = (color: string, grade: string, capacity: string) => {
-    if (updateSource.current === 'selection') {
-      updateSource.current = null;
-      return;
-    }
-
-    updateSource.current = 'carousel';
-    const variant = product.variants.find(
-      v => 
-        v.color.toLowerCase() === color.toLowerCase() &&
-        v.grade === grade &&
-        v.capacity == capacity
-    );
-
-    if (variant) {
-      setCurrentVariant({
         image: urlFor(variant.image).url(),
         color: variant.color,
         capacity: variant.capacity,
         grade: variant.grade
       });
+      setCurrentImage(urlFor(variant.image).url());
     }
-  };
-
-  // Handle updates from ProductSelection
-  const handleProductSelectionChange = (color: string, grade: string, capacity: string) => {
-    if (updateSource.current === 'carousel') {
-      updateSource.current = null;
-      return;
-    }
-
-    updateSource.current = 'selection';
-    const variant = product.variants.find(
-      v => 
-        v.color.toLowerCase() === color.toLowerCase() &&
-        v.grade === grade &&
-        v.capacity == capacity
-    );
-
-    if (variant) {
-      setCurrentVariant({
-        image: urlFor(variant.image).url(),
-        color: variant.color,
-        capacity: variant.capacity,
-        grade: variant.grade
-      });
-    }
-  };
-
-  // Handle image updates
-  const handleImageUpdate = (image: string) => {
-    if (updateSource.current === 'carousel') return;
-    setCurrentVariant(prev => ({ ...prev, image }));
-  };
+  }, [findVariant]);
+  
+  // Handle variant selection from dropdown - same implementation for consistency
+  const handleDropdownVariantChange = useCallback((color: string, grade: string, capacity: string) => {
+    handleVariantSelect(color, grade, capacity);
+  }, [handleVariantSelect]);
 
   return (
     <ClientOnly>
@@ -124,7 +77,7 @@ function ProductComponent({ product, currentUser }: Props) {
           <div className="flex flex-col items-center">
             <div className="relative h-[24rem] w-full flex justify-center">
               <Image
-                src={currentVariant.image}
+                src={currentImage}
                 alt="Product Image"
                 className="object-contain"
                 fill
@@ -133,8 +86,8 @@ function ProductComponent({ product, currentUser }: Props) {
             <div className="mt-4 -ml-8">
               <ProductCarousel
                 variants={product.variants}
-                handleVariantClick={handleVariantClick}
-                currentImage={currentVariant.image}
+                handleVariantClick={handleImageClick}
+                currentImage={currentImage}
                 onVariantSelect={handleVariantSelect}
                 selectedColor={currentVariant.color}
                 selectedGrade={currentVariant.grade}
@@ -151,8 +104,8 @@ function ProductComponent({ product, currentUser }: Props) {
                 selectedColor={currentVariant.color}
                 selectedCapacity={currentVariant.capacity}
                 selectedGrade={currentVariant.grade}
-                setImage={handleImageUpdate}
-                onVariantChange={handleProductSelectionChange}
+                setImage={handleImageClick}
+                onVariantChange={handleDropdownVariantChange}
               />
             )}
             {/* Desktop Reviews */}

@@ -25,7 +25,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   const [allImages, setAllImages] = useState<any[]>([]);
   const itemsPerPage = 3;
   const prevSelectionRef = useRef({ color: selectedColor, grade: selectedGrade, capacity: selectedCapacity });
-
+  
+  // Process images on mount and when variants change
   useEffect(() => {
     const processedImages = variants.reduce((acc: any[], variant) => {
       // Add main image
@@ -52,29 +53,33 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     }, []);
     
     setAllImages(processedImages);
-    
-    // Find and scroll to the selected variant's image ONLY if the selection has changed
+  }, [variants]);
+
+  // Handle selection changes separately to avoid cascading effects
+  useEffect(() => {
+    // Only scroll to selected variant if the selection has actually changed
     if (
       selectedColor !== prevSelectionRef.current.color ||
       selectedGrade !== prevSelectionRef.current.grade ||
       selectedCapacity !== prevSelectionRef.current.capacity
     ) {
-      const selectedImageIndex = processedImages.findIndex(img =>
+      // Find the main image for the selected variant
+      const selectedImageIndex = allImages.findIndex(img =>
         img.variant.color.toLowerCase() === selectedColor.toLowerCase() &&
         img.variant.grade === selectedGrade &&
-        img.variant.capacity == selectedCapacity
+        img.variant.capacity == selectedCapacity &&
+        img.isMain
       );
       
       if (selectedImageIndex !== -1) {
-        // Calculate the right page to show to make the selected image visible
-        const targetIndex = Math.max(0, Math.min(selectedImageIndex, processedImages.length - itemsPerPage));
+        // Calculate the page to show the selected image
+        const targetIndex = Math.max(0, Math.min(selectedImageIndex, allImages.length - itemsPerPage));
         setCurrentIndex(targetIndex);
       }
       
-      // Update the ref with the current selection
       prevSelectionRef.current = { color: selectedColor, grade: selectedGrade, capacity: selectedCapacity };
     }
-  }, [variants, selectedColor, selectedGrade, selectedCapacity]);
+  }, [selectedColor, selectedGrade, selectedCapacity, allImages]);
 
   const handleNext = () => {
     setCurrentIndex(prev => Math.min(prev + 1, allImages.length - itemsPerPage));
@@ -85,14 +90,18 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   };
 
   const handleImageClick = (imageData: any) => {
-    // Prevent calling onVariantSelect if the selection hasn't actually changed
-    if (
-      imageData.variant.color.toLowerCase() !== selectedColor.toLowerCase() ||
-      imageData.variant.grade !== selectedGrade ||
-      imageData.variant.capacity != selectedCapacity
-    ) {
-      const variantImage = urlFor(imageData.image).url();
-      handleVariantClick(variantImage);
+    const imageUrl = urlFor(imageData.image).url();
+    
+    // First, update the image display
+    handleVariantClick(imageUrl);
+    
+    // Then, conditionally update variant selection to avoid double state updates
+    const isAlreadySelected = 
+      imageData.variant.color.toLowerCase() === selectedColor.toLowerCase() &&
+      imageData.variant.grade === selectedGrade &&
+      imageData.variant.capacity == selectedCapacity;
+      
+    if (!isAlreadySelected) {
       onVariantSelect(
         imageData.variant.color,
         imageData.variant.grade,
@@ -129,7 +138,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       )}
       
       <div className="flex gap-2 transition-transform duration-300 mx-6">
-        {allImages
+        {allImages.length > 0 && allImages
           .slice(currentIndex, currentIndex + itemsPerPage)
           .map((imageData) => (
             <div
@@ -153,7 +162,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           ))}
       </div>
       
-      {currentIndex < allImages.length - itemsPerPage && (
+      {allImages.length > 0 && currentIndex < allImages.length - itemsPerPage && (
         <button
           onClick={handleNext}
           className="absolute right-2 z-10 p-1 bg-white rounded-full shadow-md hover:bg-gray-100 transform translate-x-1/2"

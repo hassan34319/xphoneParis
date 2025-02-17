@@ -427,10 +427,12 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                   className="hidden"
                 />
                 <div className="flex items-center justify-center text-lg">
-                  <span
-                    className="w-4 h-4 rounded-full inline-block mr-2"
-                    style={{ backgroundColor: getColorCode(color) }}
-                  ></span>
+                <span
+          className={`w-4 h-4 rounded-full inline-block mr-2 ${
+            color.toLowerCase().startsWith('blanc') ? 'border border-black' : ''
+          }`}
+          style={{ backgroundColor: getColorCode(color) }}
+        ></span>
                   {String(color).charAt(0).toUpperCase() +
                     String(color).split(" ")[0].slice(1)}
                 </div>
