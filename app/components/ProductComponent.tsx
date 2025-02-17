@@ -17,76 +17,109 @@ type Props = {
 };
 
 function ProductComponent({ product, currentUser }: Props) {
-  const [image, setImage] = useState<string>(urlFor(product.variants[0].image).url());
-  const [selectedColor, setSelectedColor] = useState(product.variants[0].color);
-  const [selectedCapacity, setSelectedCapacity] = useState(product.variants[0].capacity);
-  const [selectedGrade, setSelectedGrade] = useState(product.variants[0].grade);
+  // Initialize state with the first variant
+  const [currentVariant, setCurrentVariant] = useState({
+    image: urlFor(product.variants[0].image).url(),
+    color: product.variants[0].color,
+    capacity: product.variants[0].capacity,
+    grade: product.variants[0].grade
+  });
 
+  // Handle thumbnail click in carousel
   const handleVariantClick = (variantImage: string) => {
-    setImage(variantImage);
+    // Find the variant that matches this image
+    const variant = product.variants.find(
+      v => urlFor(v.image).url() === variantImage
+    );
+    
+    if (variant) {
+      setCurrentVariant({
+        image: variantImage,
+        color: variant.color,
+        capacity: variant.capacity,
+        grade: variant.grade
+      });
+    }
   };
 
+  // Handle variant selection from carousel or product selection
   const handleVariantSelect = (color: string, grade: string, capacity: string) => {
-    setSelectedColor(color);
-    setSelectedGrade(grade);
-    setSelectedCapacity(capacity);
+    const variant = product.variants.find(
+      v => 
+        v.color.toLowerCase() === color.toLowerCase() &&
+        v.grade === grade &&
+        v.capacity == capacity
+    );
+
+    if (variant) {
+      setCurrentVariant({
+        image: urlFor(variant.image).url(),
+        color: variant.color,
+        capacity: variant.capacity,
+        grade: variant.grade
+      });
+    }
+  };
+
+  // Handle updates from ProductSelection
+  const handleProductSelectionChange = (newImage: string) => {
+    setCurrentVariant(prev => ({
+      ...prev,
+      image: newImage
+    }));
   };
 
   return (
     <ClientOnly>
       <div className="w-11/12 mx-auto bg-white p-4 rounded mt-10 mb-10">
-        {/* Product Info Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Side: Image & Carousel */}
           <div className="flex flex-col items-center">
             <div className="relative h-[24rem] w-full flex justify-center">
               <Image
-                src={image}
+                src={currentVariant.image}
                 alt="Product Image"
                 className="object-contain"
                 fill
               />
             </div>
-            {/* Product Variant Carousel */}
             <div className="mt-4 -ml-8">
               <ProductCarousel
                 variants={product.variants}
                 handleVariantClick={handleVariantClick}
-                currentImage={image}
+                currentImage={currentVariant.image}
                 onVariantSelect={handleVariantSelect}
-                product={product}
-                selectedColor={selectedColor}
-                selectedGrade={selectedGrade}
-                selectedCapacity={selectedCapacity}
+                selectedColor={currentVariant.color}
+                selectedGrade={currentVariant.grade}
+                selectedCapacity={currentVariant.capacity}
               />
             </div>
           </div>
 
           {/* Right Side: Product Selection & Reviews */}
-
           <div className="flex flex-col">
-  {product && (
-    <ProductSelection
-      product={product}
-      setImage={setImage}
-      selectedColor={selectedColor}
-      selectedCapacity={selectedCapacity}
-      selectedGrade={selectedGrade}
-    />
-  )}
-
-  {/* Desktop Reviews (Hidden on Small Screens) */}
-  <div className="hidden lg:block mt-10 self-start w-[60%]"> 
-    <ProductReview
-      id={product._id!}
-      currentUser={currentUser}
-      review={product.review}
-    />
-  </div>
-</div>
+            {product && (
+              <ProductSelection
+                product={product}
+                setImage={handleProductSelectionChange}
+                selectedColor={currentVariant.color}
+                selectedCapacity={currentVariant.capacity}
+                selectedGrade={currentVariant.grade}
+                onVariantChange={handleVariantSelect}
+              />
+            )}
+            {/* Desktop Reviews */}
+            <div className="hidden lg:block mt-10 self-start w-[60%]">
+              <ProductReview
+                id={product._id!}
+                currentUser={currentUser}
+                review={product.review}
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Mobile Reviews (Visible Only on Small Screens) */}
+        {/* Mobile Reviews */}
         <div className="block lg:hidden mt-10">
           <ProductReviewMobile
             id={product._id!}
@@ -94,7 +127,6 @@ function ProductComponent({ product, currentUser }: Props) {
             review={product.review}
           />
         </div>
-
         <Script
           src="https://upload-widget.cloudinary.com/global/all.js"
           type="text/javascript"
@@ -104,4 +136,4 @@ function ProductComponent({ product, currentUser }: Props) {
   );
 }
 
-export default ProductComponent
+export default ProductComponent;

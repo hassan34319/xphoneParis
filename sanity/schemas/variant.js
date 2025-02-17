@@ -38,7 +38,7 @@ export default {
     },
     {
       name: "additionalImages",
-      title: "Additional Images",
+      title: "Additional Image",
       type: "array",
       of: [{ type: "image", options: { hotspot: true } }],
     },

@@ -2,43 +2,68 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { urlFor } from "../../lib/sanityClient";
 
-const ProductCarousel = ({
+interface ProductCarouselProps {
+  variants: any[];
+  handleVariantClick: (image: string) => void;
+  currentImage: string;
+  onVariantSelect: (color: string, grade: string, capacity: string) => void;
+  selectedColor: string;
+  selectedGrade: string;
+  selectedCapacity: string;
+}
+
+const ProductCarousel: React.FC<ProductCarouselProps> = ({
   variants,
   handleVariantClick,
   currentImage,
   onVariantSelect,
-  product,
   selectedColor,
   selectedGrade,
   selectedCapacity
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [allImages, setAllImages] = useState([]);
+  const [allImages, setAllImages] = useState<any[]>([]);
   const itemsPerPage = 3;
 
   useEffect(() => {
-    const processedImages = variants.reduce((acc, variant) => {
+    const processedImages = variants.reduce((acc: any[], variant) => {
+      // Add main image
       acc.push({
         image: variant.image,
         variant,
-        _key: `main-${variant.color}-${variant.grade}-${variant.capacity}`
+        _key: `main-${variant.color}-${variant.grade}-${variant.capacity}`,
+        isMain: true
       });
 
+      // Add additional images if they exist
       if (variant.additionalImages && Array.isArray(variant.additionalImages)) {
-        variant.additionalImages.forEach((addImage, idx) => {
+        variant.additionalImages.forEach((addImage: any, idx: number) => {
           acc.push({
             image: addImage,
             variant,
-            _key: `additional-${variant.color}-${variant.grade}-${variant.capacity}-${idx}`
+            _key: `additional-${variant.color}-${variant.grade}-${variant.capacity}-${idx}`,
+            isMain: false
           });
         });
       }
-
       return acc;
     }, []);
 
     setAllImages(processedImages);
-  }, [variants]);
+
+    // Find and scroll to the selected variant's image
+    const selectedImageIndex = processedImages.findIndex(img => 
+      img.variant.color.toLowerCase() === selectedColor.toLowerCase() &&
+      img.variant.grade === selectedGrade &&
+      img.variant.capacity == selectedCapacity
+    );
+
+    if (selectedImageIndex !== -1) {
+      // Calculate the right page to show to make the selected image visible
+      const targetIndex = Math.max(0, Math.min(selectedImageIndex, processedImages.length - itemsPerPage));
+      setCurrentIndex(targetIndex);
+    }
+  }, [variants, selectedColor, selectedGrade, selectedCapacity]);
 
   const handleNext = () => {
     setCurrentIndex(prev => Math.min(prev + 1, allImages.length - itemsPerPage));
@@ -48,7 +73,7 @@ const ProductCarousel = ({
     setCurrentIndex(prev => Math.max(0, prev - 1));
   };
 
-  const handleImageSelection = (imageData) => {
+  const handleImageClick = (imageData: any) => {
     const variantImage = urlFor(imageData.image).url();
     handleVariantClick(variantImage);
     onVariantSelect(
@@ -58,12 +83,17 @@ const ProductCarousel = ({
     );
   };
 
-  const isVariantSelected = (variant) => {
+  const isVariantSelected = (imageData: any) => {
+    const variant = imageData.variant;
     return (
-      variant.color === selectedColor &&
+      variant.color.toLowerCase() === selectedColor.toLowerCase() &&
       variant.grade === selectedGrade &&
-      variant.capacity === selectedCapacity
+      variant.capacity == selectedCapacity
     );
+  };
+
+  const isCurrentImage = (imageData: any) => {
+    return urlFor(imageData.image).url() === currentImage;
   };
 
   return (
@@ -79,18 +109,19 @@ const ProductCarousel = ({
           </svg>
         </button>
       )}
-
       <div className="flex gap-2 transition-transform duration-300 mx-6">
         {allImages
           .slice(currentIndex, currentIndex + itemsPerPage)
           .map((imageData) => (
             <div
               key={imageData._key}
-              onClick={() => handleImageSelection(imageData)}
+              onClick={() => handleImageClick(imageData)}
               className={`relative w-16 h-16 border-2 rounded-lg cursor-pointer transition-all ${
-                isVariantSelected(imageData.variant)
-                  ? "border-blue-500 shadow-lg"
-                  : "border-gray-200 hover:border-blue-300"
+                isVariantSelected(imageData)
+                  ? isCurrentImage(imageData)
+                    ? 'border-blue-500 shadow-lg ring-2 ring-blue-300'
+                    : 'border-blue-300 shadow-md'
+                  : 'border-gray-200 hover:border-blue-300'
               }`}
             >
               <Image
@@ -102,7 +133,6 @@ const ProductCarousel = ({
             </div>
           ))}
       </div>
-
       {currentIndex < allImages.length - itemsPerPage && (
         <button
           onClick={handleNext}

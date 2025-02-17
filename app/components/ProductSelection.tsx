@@ -12,6 +12,7 @@ interface ProductSelectionProps {
   selectedGrade: string;
   setImage: (image: string) => void;
   product: any;
+  onVariantChange?: (color: string, grade: string, capacity: string) => void;
 }
 
 const ProductSelection: React.FC<ProductSelectionProps> = ({
@@ -20,6 +21,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   selectedColor: initialColor,
   selectedCapacity: initialCapacity,
   selectedGrade: initialGrade,
+  onVariantChange,
 }) => {
   const { addToCart, cartItems } = useStateContext();
   const [productImage, setProductImage] = useState(
@@ -35,10 +37,31 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
     setSelectedGrade(initialGrade);
   }, [initialColor, initialCapacity, initialGrade]);
 
+  // This useEffect will trigger onVariantChange whenever a selection changes
+  useEffect(() => {
+    if (onVariantChange) {
+      onVariantChange(selectedColor, selectedGrade, selectedCapacity);
+      
+      // Find the matching variant and set its image
+      const matchingVariant = product.variants.find(
+        (v: any) => 
+          v.color.toLowerCase() === selectedColor.toLowerCase() &&
+          v.capacity == selectedCapacity &&
+          v.grade == selectedGrade
+      );
+      
+      if (matchingVariant) {
+        const newImage = urlFor(matchingVariant.image).url();
+        setImage(newImage);
+        setProductImage(newImage);
+      }
+    }
+  }, [selectedColor, selectedCapacity, selectedGrade, onVariantChange, product.variants, setImage]);
+
   const price = product.variants
     .filter(
       (variant: any) =>
-        selectedColor == variant.color &&
+        selectedColor.toLowerCase() === variant.color.toLowerCase() &&
         selectedCapacity == variant.capacity &&
         selectedGrade == variant.grade
     )
@@ -47,7 +70,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   const Availquantity = product.variants
     .filter(
       (variant: any) =>
-        selectedColor == variant.color &&
+        selectedColor.toLowerCase() === variant.color.toLowerCase() &&
         selectedCapacity == variant.capacity &&
         selectedGrade == variant.grade
     )
@@ -56,7 +79,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   const cartQuantity = cartItems.reduce((quantity: number, item: any) => {
     if (
       item.productId === product._id &&
-      item.color === selectedColor &&
+      item.color.toLowerCase() === selectedColor.toLowerCase() &&
       item.capacity === selectedCapacity &&
       item.grade === selectedGrade
     ) {
@@ -68,13 +91,17 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   const quantity = Availquantity - cartQuantity;
 
   const uniqueColors = [
-    ...new Set(product.variants.map((variant: any) => variant.color)),
+    ...new Set(
+      product.variants
+        .map((variant: any) => variant.color.trim().toLowerCase())
+        .filter((color: string) => color !== '')
+    ),
   ];
 
   const uniqueCapacities = [
     ...new Set(
       product.variants
-        .filter((variant: any) => variant.color == selectedColor)
+        .filter((variant: any) => variant.color.toLowerCase() === selectedColor.toLowerCase())
         .map((variant: any) => variant.capacity)
     ),
   ];
@@ -84,7 +111,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
       product.variants
         .filter(
           (variant: any) =>
-            variant.color == selectedColor &&
+            variant.color.toLowerCase() === selectedColor.toLowerCase() &&
             variant.capacity == selectedCapacity
         )
         .map((variant: any) => [variant.grade, variant.price])
@@ -93,51 +120,76 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
 
   const colorChangeHandler = (color: string) => {
     setSelectedColor(color);
-    setImage(
-      urlFor(
-        product.variants
-          .filter((variant: any) => color == variant.color)
-          .map((variant: any) => variant.image)[0]
-      ).url()
+    const variant = product.variants.find(
+      (v: any) => v.color.toLowerCase() === color.toLowerCase()
     );
-    setProductImage(
-      urlFor(
-        product.variants
-          .filter((variant: any) => color == variant.color)
-          .map((variant: any) => variant.image)[0]
-      ).url()
-    );
+    
+    if (variant) {
+      setImage(urlFor(variant.image).url());
+      setProductImage(urlFor(variant.image).url());
 
-    setSelectedCapacity(
-      product.variants
-        .filter((variant: any) => variant.color == color)
-        .map((variant: any) => variant.capacity)[0]
-    );
+      // Find the first matching capacity for this color
+      const firstCapacity = product.variants
+        .filter((v: any) => v.color.toLowerCase() === color.toLowerCase())
+        .map((v: any) => v.capacity)[0];
+      setSelectedCapacity(firstCapacity);
 
-    setSelectedGrade(
-      product.variants
+      // Find the first matching grade for this color and capacity
+      const firstGrade = product.variants
         .filter(
-          (variant: any) =>
-            variant.color == color &&
-            variant.capacity ==
-              product.variants
-                .filter((variant: any) => variant.color == color)
-                .map((variant: any) => variant.capacity)[0]
+          (v: any) =>
+            v.color.toLowerCase() === color.toLowerCase() &&
+            v.capacity === firstCapacity
         )
-        .map((variant: any) => variant.grade)[0]
-    );
+        .map((v: any) => v.grade)[0];
+      setSelectedGrade(firstGrade);
+    }
   };
 
   const capacityChangeHandler = (capacity: number) => {
     setSelectedCapacity(capacity);
-    setSelectedGrade(
-      product.variants
-        .filter(
-          (variant: any) =>
-            variant.color == selectedColor && variant.capacity == capacity
-        )
-        .map((variant: any) => variant.grade)[0]
+    
+    // Find the first matching grade for this color and capacity
+    const firstGrade = product.variants
+      .filter(
+        (variant: any) =>
+          variant.color.toLowerCase() === selectedColor.toLowerCase() &&
+          variant.capacity === capacity
+      )
+      .map((variant: any) => variant.grade)[0];
+    setSelectedGrade(firstGrade);
+    
+    // Find and set the matching image
+    const matchingVariant = product.variants.find(
+      (v: any) => 
+        v.color.toLowerCase() === selectedColor.toLowerCase() &&
+        v.capacity === capacity &&
+        v.grade === firstGrade
     );
+    
+    if (matchingVariant) {
+      const newImage = urlFor(matchingVariant.image).url();
+      setImage(newImage);
+      setProductImage(newImage);
+    }
+  };
+  
+  const gradeChangeHandler = (grade: string) => {
+    setSelectedGrade(grade);
+    
+    // Find and set the matching image
+    const matchingVariant = product.variants.find(
+      (v: any) => 
+        v.color.toLowerCase() === selectedColor.toLowerCase() &&
+        v.capacity == selectedCapacity &&
+        v.grade === grade
+    );
+    
+    if (matchingVariant) {
+      const newImage = urlFor(matchingVariant.image).url();
+      setImage(newImage);
+      setProductImage(newImage);
+    }
   };
 
   const buyHandler = () => {
@@ -184,7 +236,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
       case "or":
         return "#D4AF37";
       case "graphite":
-        return "#41424C"
+        return "#41424C";
       default:
         return extractedColor;
     }
@@ -213,7 +265,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
                   {quantity <= 0 ? "Stock épuisé" : ""}
                 </h1>
               ) : (
-                <h1 className=" mt-2">
+                <h1 className="mt-2">
                   Quantité maximale disponible : {quantity}
                 </h1>
               )}
@@ -233,76 +285,80 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
         <div>
           <h1 className="lg:text-xl mt-10 mb-2">Condition</h1>
           <div className="flex flex-wrap md:gap-4 gap-2 mb-12">
-            {uniqueGradesAndPrices.map((gradeAndPrice: any) => {
-              return (
-                <SelectionButton
-                  key={gradeAndPrice[0]}
-                  selected={selectedGrade == gradeAndPrice[0]}
-                >
-                  <input
-                    type="radio"
-                    name="grade"
-                    value={gradeAndPrice[0]}
-                    checked={selectedGrade == gradeAndPrice[0]}
-                    onChange={(e) => setSelectedGrade(e.target.value)}
-                    className="hidden"
-                  />
-                  <h1 className="w-full text-lg whitespace-nowrap">
-                    {gradeAndPrice[0]}
-                  </h1>
-                  <h1 className="text-lg whitespace-nowrap">
-                    {gradeAndPrice[1]} &euro;
-                  </h1>
-                </SelectionButton>
-              );
-            })}
+            {uniqueGradesAndPrices.map((gradeAndPrice: any) => (
+              <SelectionButton
+                key={gradeAndPrice[0]}
+                selected={selectedGrade == gradeAndPrice[0]}
+              >
+                <input
+                  type="radio"
+                  name="grade"
+                  value={gradeAndPrice[0]}
+                  checked={selectedGrade == gradeAndPrice[0]}
+                  onChange={(e) => gradeChangeHandler(e.target.value)}
+                  className="hidden"
+                />
+                <h1 className="w-full text-lg whitespace-nowrap">
+                  {gradeAndPrice[0]}
+                </h1>
+                <h1 className="text-lg whitespace-nowrap">
+                  {gradeAndPrice[1]} &euro;
+                </h1>
+              </SelectionButton>
+            ))}
           </div>
 
           {uniqueCapacities.length > 0 && uniqueCapacities[0] !== 0 && (
-  <>
-    <h1 className="lg:text-xl my-2">Stockage</h1>
-    <div className="flex flex-wrap gap-4 mb-12">
-      {uniqueCapacities.map((capacity: any) => (
-        <SelectionButton key={capacity} selected={selectedCapacity == capacity}>
-          <input
-            type="radio"
-            name="capacity"
-            value={capacity}
-            checked={selectedCapacity == capacity}
-            onChange={(e) => capacityChangeHandler(parseInt(e.target.value))}
-            className="hidden"
-          />
-          <h1 className="text-lg">{capacity} Go</h1>
-        </SelectionButton>
-      ))}
-    </div>
-  </>
-)}
+            <>
+              <h1 className="lg:text-xl my-2">Stockage</h1>
+              <div className="flex flex-wrap gap-4 mb-12">
+                {uniqueCapacities.map((capacity: any) => (
+                  <SelectionButton
+                    key={capacity}
+                    selected={selectedCapacity == capacity}
+                  >
+                    <input
+                      type="radio"
+                      name="capacity"
+                      value={capacity}
+                      checked={selectedCapacity == capacity}
+                      onChange={(e) =>
+                        capacityChangeHandler(parseInt(e.target.value))
+                      }
+                      className="hidden"
+                    />
+                    <h1 className="text-lg">{capacity} Go</h1>
+                  </SelectionButton>
+                ))}
+              </div>
+            </>
+          )}
 
           <h1 className="lg:text-xl my-2">Couleur</h1>
           <div className="flex flex-wrap gap-4">
-            {uniqueColors.map((color: any) => {
-              return (
-                <SelectionButton key={color} selected={selectedColor == color}>
-                  <input
-                    type="radio"
-                    name="color"
-                    value={color}
-                    checked={selectedColor == color}
-                    onChange={(e) => colorChangeHandler(e.target.value)}
-                    className="hidden"
-                  />
-                  <div className="flex items-center justify-center text-lg">
-                    <span
-                      className="w-4 h-4 rounded-full inline-block mr-2"
-                      style={{ backgroundColor: getColorCode(color) }}
-                    ></span>
-                    {String(color).charAt(0).toUpperCase() +
-                      String(color).split(" ")[0].slice(1)}
-                  </div>
-                </SelectionButton>
-              );
-            })}
+            {uniqueColors.map((color: any) => (
+              <SelectionButton
+                key={color}
+                selected={selectedColor.toLowerCase() === color.toLowerCase()}
+              >
+                <input
+                  type="radio"
+                  name="color"
+                  value={color}
+                  checked={selectedColor.toLowerCase() === color.toLowerCase()}
+                  onChange={(e) => colorChangeHandler(e.target.value)}
+                  className="hidden"
+                />
+                <div className="flex items-center justify-center text-lg">
+                  <span
+                    className="w-4 h-4 rounded-full inline-block mr-2"
+                    style={{ backgroundColor: getColorCode(color) }}
+                  ></span>
+                  {String(color).charAt(0).toUpperCase() +
+                    String(color).split(" ")[0].slice(1)}
+                </div>
+              </SelectionButton>
+            ))}
           </div>
         </div>
       </div>
