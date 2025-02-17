@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ProductSelection from "./ProductSelection";
 import { product } from "../utils/types";
 import { urlFor } from "../../lib/sanityClient";
@@ -16,18 +16,36 @@ type Props = {
   currentUser: User | null;
 };
 
+type Variant = {
+  image: string;
+  color: string;
+  capacity: string;
+  grade: string;
+};
+
 function ProductComponent({ product, currentUser }: Props) {
   // Initialize state with the first variant
-  const [currentVariant, setCurrentVariant] = useState({
+  const [currentVariant, setCurrentVariant] = useState<Variant>({
     image: urlFor(product.variants[0].image).url(),
     color: product.variants[0].color,
     capacity: product.variants[0].capacity,
     grade: product.variants[0].grade
   });
 
+  // Add a ref to track source of update
+  const updateSource = useRef<string | null>(null);
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+  }, []);
+
   // Handle thumbnail click in carousel
   const handleVariantClick = (variantImage: string) => {
-    // Find the variant that matches this image
+    updateSource.current = 'carousel';
     const variant = product.variants.find(
       v => urlFor(v.image).url() === variantImage
     );
@@ -42,8 +60,14 @@ function ProductComponent({ product, currentUser }: Props) {
     }
   };
 
-  // Handle variant selection from carousel or product selection
+  // Handle variant selection from carousel
   const handleVariantSelect = (color: string, grade: string, capacity: string) => {
+    if (updateSource.current === 'selection') {
+      updateSource.current = null;
+      return;
+    }
+
+    updateSource.current = 'carousel';
     const variant = product.variants.find(
       v => 
         v.color.toLowerCase() === color.toLowerCase() &&
@@ -62,11 +86,34 @@ function ProductComponent({ product, currentUser }: Props) {
   };
 
   // Handle updates from ProductSelection
-  const handleProductSelectionChange = (newImage: string) => {
-    setCurrentVariant(prev => ({
-      ...prev,
-      image: newImage
-    }));
+  const handleProductSelectionChange = (color: string, grade: string, capacity: string) => {
+    if (updateSource.current === 'carousel') {
+      updateSource.current = null;
+      return;
+    }
+
+    updateSource.current = 'selection';
+    const variant = product.variants.find(
+      v => 
+        v.color.toLowerCase() === color.toLowerCase() &&
+        v.grade === grade &&
+        v.capacity == capacity
+    );
+
+    if (variant) {
+      setCurrentVariant({
+        image: urlFor(variant.image).url(),
+        color: variant.color,
+        capacity: variant.capacity,
+        grade: variant.grade
+      });
+    }
+  };
+
+  // Handle image updates
+  const handleImageUpdate = (image: string) => {
+    if (updateSource.current === 'carousel') return;
+    setCurrentVariant(prev => ({ ...prev, image }));
   };
 
   return (
@@ -101,11 +148,11 @@ function ProductComponent({ product, currentUser }: Props) {
             {product && (
               <ProductSelection
                 product={product}
-                setImage={handleProductSelectionChange}
                 selectedColor={currentVariant.color}
                 selectedCapacity={currentVariant.capacity}
                 selectedGrade={currentVariant.grade}
-                onVariantChange={handleVariantSelect}
+                setImage={handleImageUpdate}
+                onVariantChange={handleProductSelectionChange}
               />
             )}
             {/* Desktop Reviews */}
@@ -127,6 +174,8 @@ function ProductComponent({ product, currentUser }: Props) {
             review={product.review}
           />
         </div>
+        
+        {/* Cloudinary Script */}
         <Script
           src="https://upload-widget.cloudinary.com/global/all.js"
           type="text/javascript"
