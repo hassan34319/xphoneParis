@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { BiUser, BiShoppingBag } from "react-icons/bi";
 import {
@@ -13,6 +13,7 @@ import SidebarModal from "./SidebarModal";
 import { SafeUser } from "../utils/types";
 import useLoginModal from "../../hooks/useLoginModal";
 import { sanityClient } from "../../lib/sanityClient";
+import { debounce } from "lodash";
 
 interface NavbarProps {
   currentUser?: SafeUser | null;
@@ -35,12 +36,15 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const searchHandler = () => {
-    if (search) {
-      router.push(`/products?search=${search}`);
-      setSearch("");
-    }
-  };
+  const searchHandler = useCallback(
+    debounce(() => {
+      if (search) {
+        router.push(`/products?search=${search}`);
+        setSearch("");
+      }
+    }, 300),
+    [search, router]
+  );
   const getPages = async () => {
     const pages = await sanityClient.fetch(`
       *[_type == "page"] | order(order asc) {
@@ -166,7 +170,10 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
         </div>
 
         <div className="hidden flex-1 items-center justify-center mt-4 sm:mr-4 md:mt-0 md:flex md:self-center">
-          <form className="flex items-center w-full max-w-xl">
+          <form className="flex items-center w-full max-w-xl" onSubmit={(e) => {
+    e.preventDefault();
+    searchHandler();
+  }}>
             <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3">
                 <DevicePhoneMobileIcon className="w-4 h-4 text-gray-500" />

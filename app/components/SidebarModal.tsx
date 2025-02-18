@@ -70,8 +70,14 @@ const SidebarModal: React.FC<NavbarProps> = ({
   }, [isOpen, isSubModalOpen, toggleSidebar]);
 
   const handleCategoryClick = (category: string) => {
-    setActiveCategory(category);
-    setIsSubModalOpen(true);
+    // Only modification: Toggle submodal when the same category is clicked
+    if (activeCategory === category && isSubModalOpen) {
+      setIsSubModalOpen(false);
+      setActiveCategory("");
+    } else {
+      setActiveCategory(category);
+      setIsSubModalOpen(true);
+    }
   };
 
   const handleProductClick = (productId: string) => {

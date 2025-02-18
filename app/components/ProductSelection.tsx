@@ -411,34 +411,38 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
             </>
           )}
 
-          <h1 className="lg:text-xl my-2">Couleur</h1>
-          <div className="flex flex-wrap gap-4">
-            {uniqueColors.map((color: any) => (
-              <SelectionButton
-                key={color}
-                selected={selectedColor.toLowerCase() === color.toLowerCase()}
-              >
-                <input
-                  type="radio"
-                  name="color"
-                  value={color}
-                  checked={selectedColor.toLowerCase() === color.toLowerCase()}
-                  onChange={(e) => colorChangeHandler(e.target.value)}
-                  className="hidden"
-                />
-                <div className="flex items-center justify-center text-lg">
-                <span
-          className={`w-4 h-4 rounded-full inline-block mr-2 ${
-            color.toLowerCase().startsWith('blanc') ? 'border border-black' : ''
-          }`}
-          style={{ backgroundColor: getColorCode(color) }}
-        ></span>
-                  {String(color).charAt(0).toUpperCase() +
-                    String(color).split(" ")[0].slice(1)}
-                </div>
-              </SelectionButton>
-            ))}
-          </div>
+<h1 className="lg:text-xl my-2">Couleur</h1>
+<div className="flex flex-wrap gap-4">
+  {uniqueColors.map((color: any) => (
+    <SelectionButton
+      key={color}
+      selected={selectedColor.toLowerCase() === color.toLowerCase()}
+    >
+      <input
+        type="radio"
+        name="color"
+        value={color}
+        checked={selectedColor.toLowerCase() === color.toLowerCase()}
+        onChange={(e) => colorChangeHandler(e.target.value)}
+        className="hidden"
+      />
+      <div className="flex items-center text-lg min-w-[120px]">
+        <div className="flex-none w-10">
+          <span
+            className={`w-4 h-4 rounded-full inline-block ${
+              color.toLowerCase().startsWith('blanc') ? 'border border-black' : ''
+            }`}
+            style={{ backgroundColor: getColorCode(color) }}
+          ></span>
+        </div>
+        <span className="flex-grow">
+          {String(color).charAt(0).toUpperCase() +
+            String(color).split(" ")[0].slice(1)}
+        </span>
+      </div>
+    </SelectionButton>
+  ))}
+</div>
         </div>
       </div>
     </ClientOnly>
