@@ -17,10 +17,24 @@ import { debounce } from "lodash";
 
 interface NavbarProps {
   currentUser?: SafeUser | null;
-  menuCategories: { title: string; products: { name: string; _id: string }[] }[];
+  menuCategories: {
+    title: string;
+    hasSubcategories: boolean;
+    subcategories?: {
+      title: string;
+      _id: string;
+      products: { name: string; _id: string }[];
+    }[];
+    products?: { name: string; _id: string }[];
+  }[];
+  menuCategories2?: {
+    _id: string;
+    title: string;
+    products: { name: string; _id: string }[];
+  }[];
 }
 
-const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
+const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser, menuCategories2 }) => {
   const { totalQuantity } = useStateContext();
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -35,6 +49,7 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+ 
 
   const searchHandler = useCallback(
     debounce(() => {
@@ -55,6 +70,8 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
     `);
     return pages;
   };
+
+  
 
   useEffect(() => {
     const fetchPages = async () => {
@@ -262,11 +279,12 @@ const Header: React.FC<NavbarProps> = ({ menuCategories, currentUser }) => {
       </div>
 
       <SidebarModal
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        menuCategories={menuCategories}
-        pages={pages}
-      />
+  isOpen={isSidebarOpen}
+  toggleSidebar={toggleSidebar}
+  menuCategories={menuCategories}
+  menuCategories2={menuCategories2}
+  pages={pages}
+/>
     </header>
   );
 };

@@ -1,4 +1,4 @@
-export default {
+export const menuCategory = {
   name: 'menuCategory',
   title: 'Menu Category',
   type: 'document',
@@ -17,11 +17,27 @@ export default {
       validation: Rule => Rule.required().integer().min(0),
     },
     {
+      name: 'hasSubcategories',
+      title: 'Has Subcategories',
+      type: 'boolean',
+      description: 'Enable this if this category should show subcategories before products',
+      initialValue: false,
+    },
+    {
+      name: 'subcategories',
+      title: 'Subcategories',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'menuCategory2' }] }],
+      description: 'Select subcategories (if applicable)',
+      hidden: ({ document }) => !document?.hasSubcategories,
+    },
+    {
       name: 'products',
-      title: 'Products',
+      title: 'Direct Products',
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'product' }] }],
-      description: 'Select the products belonging to this category',
+      description: 'Select products (only if not using subcategories)',
+      hidden: ({ document }) => document?.hasSubcategories,
     },
   ],
   orderings: [
@@ -32,3 +48,5 @@ export default {
     }
   ]
 };
+
+export default menuCategory;

@@ -5,6 +5,7 @@ import SidebarModal from "./SidebarModal";
 import { Open_Sans } from 'next/font/google';
 import { Poppins } from 'next/font/google';
 import { sanityClient } from "../../lib/sanityClient";
+import { SafeUser } from "../utils/types";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -17,7 +18,22 @@ const openSans = Open_Sans({
 });
 
 interface NavbarProps {
-  menuCategories: { title: string; products: { name: string; _id: string }[] }[];
+  currentUser?: SafeUser | null;
+  menuCategories: {
+    title: string;
+    hasSubcategories: boolean;
+    subcategories?: {
+      title: string;
+      _id: string;
+      products: { name: string; _id: string }[];
+    }[];
+    products?: { name: string; _id: string }[];
+  }[];
+  menuCategories2?: {
+    _id: string;
+    title: string;
+    products: { name: string; _id: string }[];
+  }[];
 }
 
 interface BaseCategory {
@@ -35,7 +51,7 @@ const hasCustomLink = (category: CategoryItem): category is CustomCategory => {
   return 'customLink' in category;
 };
 
-const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
+const TopMenu: React.FC<NavbarProps> = ({ menuCategories, menuCategories2 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [visibleCategories, setVisibleCategories] = useState(12);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -218,11 +234,12 @@ const TopMenu: React.FC<NavbarProps> = ({ menuCategories }) => {
       </div>
 
       <SidebarModal
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        menuCategories={menuCategories}
-        pages={pages}
-      />
+  isOpen={isSidebarOpen}
+  toggleSidebar={toggleSidebar}
+  menuCategories={menuCategories}
+  menuCategories2={menuCategories2}
+  pages={pages}
+/>
     </div>
   );
 };

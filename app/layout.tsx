@@ -51,13 +51,30 @@ export default async function RootLayout({
   const queryMenuCategories = `*[_type == "menuCategory"] | order(priority asc) {
     _id,
     title,
-    products[]-> {
+    hasSubcategories,
+    subcategories,
+    products[]->{
       _id,
-      name // Assuming 'name' is a field in the product document
+      name
+      
     }
   }`;
 
   const MenuCategories = await sanityClient.fetch(queryMenuCategories)
+
+  
+
+// Fetch all menuCategory2 items
+const querymenuCategory2Items = `*[_type == "menuCategory2"] {
+  _id,
+  title,
+  products[]->{
+    name,
+    _id
+  }
+}`;
+
+const MenuCategories2 = await sanityClient.fetch(querymenuCategory2Items)
 
 
   return (
@@ -79,6 +96,7 @@ export default async function RootLayout({
               <Navbar
                 currentUser={currentUser}
                 menuCategories={MenuCategories}
+                menuCategories2={MenuCategories2}
               />
             </ClientOnly>
 

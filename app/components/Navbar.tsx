@@ -26,22 +26,48 @@ export type SafeUser = Omit<
   updatedAt: string;
   emailVerified: string | null;
 };
+interface Product {
+  name: string;
+  _id: string;
+}
+
+interface Subcategory {
+  title: string;
+  _id: string;
+  products: Product[];
+}
 
 interface NavbarProps {
   currentUser?: SafeUser | null;
-  menuCategories : { title: string; products: { name: string; _id: string }[] }[];
+  menuCategories: {
+    title: string;
+    hasSubcategories: boolean;
+    subcategories?: {
+      title: string;
+      _id: string;
+      products: { name: string; _id: string }[];
+    }[];
+    products?: { name: string; _id: string }[];
+  }[];
+  menuCategories2: {
+    _id: string;
+    title: string;
+    products: { name: string; _id: string }[];
+  }[];
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentUser, menuCategories }) => {
+const Navbar: React.FC<NavbarProps> = ({ currentUser, menuCategories, menuCategories2 }) => {
   const { totalQuantity } = useStateContext();
   const loginModal = useLoginModal();
-
   return (
-    // fixed top-0 left-0 w-full z-10
     <ClientOnly>
-      <nav className="bg-white shadow-lg  border-b-black border-2 md:border-0 mx-auto ">
-        <Header currentUser={currentUser} menuCategories={menuCategories}/>
-        <TopMenu menuCategories={menuCategories} />
+      <nav className="bg-white shadow-lg border-b-black border-2 md:border-0 mx-auto ">
+        <Header 
+          currentUser={currentUser} 
+          menuCategories={menuCategories}
+          menuCategories2={menuCategories2}
+        />
+        <TopMenu menuCategories={menuCategories} menuCategories2={menuCategories2} />
         <SearchBar/>
       </nav>
     </ClientOnly>

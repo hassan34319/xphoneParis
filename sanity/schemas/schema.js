@@ -12,8 +12,8 @@ import review from "./review";
 import banner from "./banner";
 import subcategory from "./subcategory"
 import scrollingReviews from "./scrollingReview"
-import menuCategory from "./menuCategory"
-import xphones from "./quiSommes";
+import { menuCategory } from "./menuCategory"
+import { menuCategory2 } from "./menuCategory2"
 import quiSommes from "./quiSommes";
 import nosmagsin from "./nosmagsin";
 import contactPage from "./contactPage";
@@ -21,7 +21,30 @@ import qualityPage from "./qualityPage";
 import grades from "./grades";
 import post from "./post";
 import allpages from "./allpages";
+
 export default createSchema({
   name: "default",
-  types: schemaTypes.concat([product, variant,code,categoryReal,brandReal, accessories,banner,publication,comment,review,subcategory,scrollingReviews, menuCategory, quiSommes, nosmagsin, contactPage, qualityPage,grades, post, allpages ]),
+  types: schemaTypes.concat([
+    product, 
+    variant,
+    code,
+    categoryReal,
+    brandReal, 
+    accessories,
+    banner,
+    publication,
+    comment,
+    review,
+    subcategory,
+    scrollingReviews, 
+    menuCategory, 
+    menuCategory2, 
+    quiSommes, 
+    nosmagsin, 
+    contactPage, 
+    qualityPage,
+    grades, 
+    post, 
+    allpages
+  ]),
 });

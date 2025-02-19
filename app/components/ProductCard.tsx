@@ -42,16 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     getImage();
   }, [product.variants]);
 
-  console.log("hello these are product ids", product._id);
-  async function deleteProduct(productId) {
-    try {
-      await sanityClient.delete(productId);
-      console.log(`Product with ID ${productId} deleted successfully.`);
-    } catch (error) {
-      console.error('Error deleting product:', error);
-    }
-  }
-  deleteProduct("drafts.1dac007e-a521-4595-aedd-0a66d3df34f6")
+
 
   return (
     <ClientOnly>
