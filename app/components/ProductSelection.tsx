@@ -437,7 +437,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
         </div>
         <span className="ml-28 sm:ml-12 md:ml-10 xl:ml-24">
           {String(color).charAt(0).toUpperCase() +
-            String(color).split(" ")[0].slice(1)}
+            String(color).split(' ')[0].slice(1)}
         </span>
       </div>
     </SelectionButton>
