@@ -426,16 +426,16 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
         onChange={(e) => colorChangeHandler(e.target.value)}
         className="hidden"
       />
-      <div className="flex items-center justify-center text-lg min-w-[120px] relative">
-        <div className="absolute left-32 sm:left-8 md:left-10 lg:left-20 xl:left-24 ">
+      <div className="flex items-center text-lg min-w-[120px] relative">
+        <div className="absolute left-6">
           <span
-            className={`w-4 h-4  rounded-full inline-block ${
+            className={`w-4 h-4 rounded-full inline-block ${
               color.toLowerCase().startsWith('blanc') ? 'border border-black' : ''
             }`}
             style={{ backgroundColor: getColorCode(color) }}
           ></span>
         </div>
-        <span className="ml-8">
+        <span className="ml-12">
           {String(color).charAt(0).toUpperCase() +
             String(color).split(" ")[0].slice(1)}
         </span>

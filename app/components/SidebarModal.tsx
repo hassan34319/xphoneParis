@@ -377,7 +377,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
       )}
 
       {/* Third Modal - Products from Subcategory */}
-      {/* {isThirdModalOpen && activeCategoryData?.hasSubcategories && (
+      {isThirdModalOpen && activeCategoryData?.hasSubcategories && (
     <div ref={thirdModalRef} className={`fixed top-0 md:top-[6rem] left-0 md:left-[35%] w-full md:w-[20%] h-full md:max-h-fit bg-white z-[60] shadow-lg overflow-y-auto md:rounded-b-xl`}>
 
           <button
@@ -438,7 +438,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
       </ul>
           </div>
         </div>
-      )} */}
+      )}
     </>
   );
 };
