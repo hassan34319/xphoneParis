@@ -426,7 +426,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
       
           <Link
             key={product._id}
-            href={`/`}
+            href={`/products/${product._id}`}
             className={`block py-2 border-t border-b border-gray-200 cursor-pointer ${
               activeProduct === product._id ? "bg-gray-100" : ""
             }`}
