@@ -276,7 +276,11 @@ const SidebarModal: React.FC<NavbarProps> = ({
                 <Link
                   href={`/${page.pageName}`}
                   className="flex items-center py-2 border-t border-b border-gray-200 cursor-pointer hover:bg-gray-100"
-                  onClick={toggleSidebar}
+                  onClick={() => {
+                    setIsSubModalOpen(false);
+                    setIsThirdModalOpen(false);
+                    toggleSidebar();
+                  }}
                 >
                   <span className="mr-2">{page.title}</span>
                 </Link>
