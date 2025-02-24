@@ -148,7 +148,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                 isVariantSelected(imageData)
                   ? isCurrentImage(imageData)
                     ? 'border-blue-500 shadow-lg ring-2 ring-blue-300'
-                    : 'border-blue-300 shadow-md'
+                    : 'border-gray-300 shadow-md'
                   : 'border-gray-200 hover:border-blue-300'
               }`}
             >

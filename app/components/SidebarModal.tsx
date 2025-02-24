@@ -421,7 +421,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
                   d="M9.75 19.5L3 12l6.75-7.5M3 12h18"
                 />
               </svg>
-              <div className="text-center max-w-xs">
+              <div className="text-center max-w-[18rem]">
                 {activeSubcategory}
               </div>
             </h2>
