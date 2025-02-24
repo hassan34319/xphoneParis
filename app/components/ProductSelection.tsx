@@ -286,36 +286,127 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   };
 
   const getColorCode = (colorName: string) => {
-    const extractedColor = colorName.toLowerCase().split(" ")[0];
-    switch (extractedColor) {
+    const normalizedColorName = colorName.toLowerCase();
+    
+    switch (normalizedColorName) {
+      // Apple Colors
+      case "noir sidéral":
+        return "#1A1A1A";
+      case "gris sidéral":
+        return "#54585A";
       case "argent":
         return "#C0C0C0";
       case "blanc":
-        return "#EBE8E2";
+        return "#FFFFFF";
+      case "or":
+        return "#D4AF37";
+      case "or rose":
+        return "#B76E79";
+      case "bleu alpin":
+        return "#8A9DB3";
+      case "bleu sierra":
+        return "#90A8C0";
+      case "bleu pacifique":
+        return "#5D768C";
       case "bleu":
         return "#0000FF";
-      case "gris":
-        return "#808080";
-      case "jaune":
-        return "#FFFF00";
-      case "marron":
-        return "#800000";
-      case "noir":
-        return "#000000";
-      case "orange":
-        return "#FFA500";
-      case "rose":
-        return "#FFC0CB";
+      case "bleu ciel":
+        return "#87CEEB";
+      case "rouge (product red)":
+        return "#A50011";
       case "rouge":
         return "#FF0000";
       case "vert":
         return "#00FF00";
-      case "or":
-        return "#D4AF37";
+      case "vert minuit":
+        return "#4C5B5D";
+      case "vert alpin":
+        return "#505F4E";
+      case "minuit":
+        return "#1C1C1E";
+      case "lumière stellaire":
+        return "#F8F7F2";
+      case "mauve":
+        return "#800080";
+      case "jaune":
+        return "#FFFF00";
+      case "corail":
+        return "#FF7F50";
+        
+      // Samsung Colors
+      case "noir carbone":
+        return "#232B2B";
+      case "noir fantôme":
+        return "#2B2B2B";
+      case "noir onyx":
+        return "#0F0F0F";
+      case "noir":
+        return "#000000";
+      case "blanc perle":
+        return "#F5F5F0";
+      case "blanc crème":
+        return "#FFF8DC";
+      case "gris titane":
+        return "#646464";
+      case "gris acier":
+        return "#71797E";
+      case "gris":
+        return "#808080";
+      case "bleu arctique":
+        return "#A5C4D4";
+      case "bleu marine":
+        return "#000080";
+      case "bleu corail":
+        return "#5D9CEC";
+      case "bleu bora":
+        return "#4CA5D8";
+      case "bleu lavande":
+        return "#CCCCFF";
+      case "bleu saphir":
+        return "#0F52BA";
+      case "vert émeraude":
+        return "#50C878";
+      case "vert menthe":
+        return "#98FFCC";
+      case "vert olive":
+        return "#808000";
+      case "cuivre bronze":
+        return "#B87333";
+      case "cuivre":
+        return "#B87333";
+      case "violet":
+        return "#8F00FF";
+      case "rose":
+        return "#FFC0CB";
+      case "bourgogne":
+        return "#800020";
       case "graphite":
         return "#41424C";
+      case "crème":
+        return "#FFFDD0";
+        
+      // Xiaomi/Redmi Colors
+      case "blanc lune":
+        return "#F4F4F4";
+      case "gris graphite":
+        return "#3D3D3D";
+      case "bleu polaire":
+        return "#DEEDF4";
+      case "bleu océan":
+        return "#006994";
+      case "bleu glacier":
+        return "#78A8C0";
+      case "bleu crépuscule":
+        return "#4E598C";
+      case "bleu céleste":
+        return "#2A52BE";
+      case "vert jade":
+        return "#00A36C";
+      case "rouge flamme":
+        return "#E25822";
+        
       default:
-        return extractedColor;
+        return "#CCCCCC"; // Default color for any unmatched colors
     }
   };
 

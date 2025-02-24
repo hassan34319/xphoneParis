@@ -333,7 +333,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
                   d="M9.75 19.5L3 12l6.75-7.5M3 12h18"
                 />
               </svg>
-              <div>
+              <div className="text-center max-w-xs">
                 {activeCategory}
               </div>
             </h2>
@@ -421,7 +421,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
                   d="M9.75 19.5L3 12l6.75-7.5M3 12h18"
                 />
               </svg>
-              <div>
+              <div className="text-center max-w-xs">
                 {activeSubcategory}
               </div>
             </h2>

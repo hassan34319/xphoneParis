@@ -59,7 +59,6 @@ async function QuiSommes() {
       {/* Office Video */}
       <div className="w-full max-w-[400px] sm:max-w-[600px] md:max-w-[800px] mb-6 sm:mb-10">
         <video
-          muted
           loop
           playsInline
           controls={true}
