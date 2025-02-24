@@ -297,7 +297,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
           className={`fixed top-0 md:top-[6rem] left-0 md:left-[15%] w-full md:w-[20%] h-full md:max-h-fit bg-white z-50 shadow-lg overflow-y-auto md:rounded-b-xl`}
         >
           <button
-            className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-transparent rounded-full cursor-pointer"
+            className="lg:hidden absolute top-0 right-0 z-10 m-4 p-2 bg-transparent rounded-full cursor-pointer"
             onClick={closeSubModal}
           >
             <svg
@@ -305,6 +305,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
+              onClick={closeSubModal}
             >
               <path
                 d="M6 18L18 6M6 6l12 12"
@@ -385,7 +386,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
     <div ref={thirdModalRef} className={`fixed top-0 md:top-[6rem] left-0 md:left-[35%] w-full md:w-[20%] h-full md:max-h-fit bg-white z-[60] shadow-lg overflow-y-auto md:rounded-b-xl`}>
 
           <button
-            className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-transparent rounded-full cursor-pointer"
+            className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-transparent rounded-full cursor-pointer z-10"
             onClick={closeThirdModal}
           >
             <svg
@@ -406,7 +407,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
 
           <div className="p-4">
             <h2 className="font-bold text-lg text-[#AE3033] relative flex items-center justify-center">
-              <svg
+            <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 text-[#AE3033] cursor-pointer absolute left-0"
                 fill="none"
