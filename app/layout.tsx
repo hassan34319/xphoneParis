@@ -79,7 +79,10 @@ const MenuCategories2 = await sanityClient.fetch(querymenuCategory2Items)
 
   return (
     <html lang="en">
+      <head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" href="/community.png" sizes="any" />
+      </head>
       <body className={font.className}>
         <Script
           src="//code.tidio.co/ooc6bralufcpukdjj03swqd2tnk19w9k.js"

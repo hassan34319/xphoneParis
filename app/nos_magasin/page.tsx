@@ -106,7 +106,7 @@ async function Nosmagasin() {
           sans les coûts cachés des intermédiaires, tout en garantissant une proximité et une transparence totale.
         </p>
 
-        <div className="max-w-[350px] md:max-w-2xl mx-auto">
+        {/* <div className="max-w-[350px] md:max-w-2xl mx-auto">
           <Image 
             src="/OPTEZ-POUR-L-ORIGINAL-21.jpg"
             alt="Map"
@@ -115,7 +115,7 @@ async function Nosmagasin() {
             className="w-full h-auto object-cover"
             priority
           />
-        </div>
+        </div> */}
 
         {/* Final CTA */}
         <p className="text-xl md:text-2xl lg:text-3xl text-center font-semibold">
