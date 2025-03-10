@@ -71,6 +71,7 @@ export async function POST(request: Request) {
     console.log("MAC result:", mac_result);
     
     // Prepare data for encryption - using full URLs with https
+    const unencrypt = `MerchantID=${process.env.NEXT_PUBLIC_MERCHANT_ID}&MsgVer=2.0&TransID=${TransactionId}&Amount=${amountInCents}&Currency=EUR&URLSuccess=${notifyURL}/api/success&URLFailure=${notifyURL}/api/failure&URLNotify=${notifyURL}/api/notify?hMac=${encodeURIComponent(hMacKey)}&Response=encrypt&MAC=${mac_result}&Language=en`;
     
     console.log("Data to encrypt:", unencrypt);
     
