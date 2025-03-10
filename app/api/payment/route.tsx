@@ -101,7 +101,7 @@ export async function POST(request: Request) {
       PayType,
     });
     
-    // Correct the payment gateway 
+    // Correct the payment gateway URL
     const redirectUrl = `https://paymentpage.axepta.bnpparibas.com/paymentPage.aspx?${queryParams}`;
     console.log("Redirecting to payment page:", redirectUrl);
     
