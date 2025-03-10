@@ -103,7 +103,7 @@ export async function POST(request: Request) {
     });
     
     // Make sure this is the correct payment gateway URL (check with your payment provider)
-    const redirectUrl = `https://paymentpage.axepta.bnpparibas.com/paymentPage.aspx?${queryParams}`;
+    const redirectUrl = `https://paymentpage.axepta.bnpparibas/paymentPage.aspx?${queryParams}`;
     console.log("Redirecting to payment page:", redirectUrl);
     
     return Response.redirect(redirectUrl, 302);
