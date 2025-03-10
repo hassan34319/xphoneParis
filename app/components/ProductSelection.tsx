@@ -5,6 +5,7 @@ import { urlFor } from "../../lib/sanityClient";
 import { useStateContext } from "../context/stateContext";
 import ClientOnly from "./ClientOnly";
 import Image from "next/image";
+import { useRouter } from "next/navigation"; // Import router for redirection
 
 interface ProductSelectionProps {
   selectedColor: string;
@@ -23,6 +24,7 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
   selectedGrade: initialGrade,
   onVariantChange,
 }) => {
+  const router = useRouter(); // Initialize router for navigation
   const { addToCart, cartItems } = useStateContext();
   const [productImage, setProductImage] = useState(
     urlFor(product.variants[0].image).url()
@@ -285,6 +287,24 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
     addToCart(item);
   };
 
+  // New handler for Buy Now button
+  const buyNowHandler = () => {
+    const item = {
+      image: productImage,
+      name: product.name,
+      productId: product._id,
+      color: selectedColor,
+      capacity: selectedCapacity,
+      grade: selectedGrade,
+      price,
+      quantity: 1,
+      maxQuantity: Availquantity,
+    };
+
+    addToCart(item);
+    router.push('/cart'); // Redirect to cart page after adding item
+  };
+
   const getColorCode = (colorName: string) => {
     const normalizedColorName = colorName.toLowerCase();
     
@@ -439,15 +459,29 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
               )}
             </div>
           </div>
-          <button
-            className={`mt-2 bg-black text-white px-8 py-2 rounded text-xl shadow-xl hover:shadow-2xl lg:w-1/3 lg:self-end ${
-              quantity <= 0 && "bg-gray-400 cursor-not-allowed"
-            }`}
-            onClick={buyHandler}
-            disabled={quantity <= 0}
-          >
-            Ajouter au panier
-          </button>
+          
+          {/* Buttons container */}
+          <div className="flex flex-col sm:flex-row gap-2 mt-2 lg:w-2/3 lg:self-end">
+            <button
+              className={`bg-black text-white px-8 py-2 rounded text-xl shadow-xl hover:shadow-2xl flex-1 ${
+                quantity <= 0 && "bg-gray-400 cursor-not-allowed"
+              }`}
+              onClick={buyHandler}
+              disabled={quantity <= 0}
+            >
+              Ajouter au panier
+            </button>
+            
+            <button
+              className={`bg-blue-600 text-white px-8 py-2 rounded text-xl shadow-xl hover:shadow-2xl hover:bg-blue-700 flex-1 ${
+                quantity <= 0 && "bg-gray-400 cursor-not-allowed"
+              }`}
+              onClick={buyNowHandler}
+              disabled={quantity <= 0}
+            >
+              Acheter maintenant
+            </button>
+          </div>
         </div>
 
         <div>
@@ -502,38 +536,38 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
             </>
           )}
 
-<h1 className="lg:text-xl my-2">Couleur</h1>
-<div className="flex flex-wrap gap-4">
-  {uniqueColors.map((color: any) => (
-    <SelectionButton
-      key={color}
-      selected={selectedColor.toLowerCase() === color.toLowerCase()}
-    >
-      <input
-        type="radio"
-        name="color"
-        value={color}
-        checked={selectedColor.toLowerCase() === color.toLowerCase()}
-        onChange={(e) => colorChangeHandler(e.target.value)}
-        className="hidden"
-      />
-      <div className="flex items-center text-lg min-w-[120px] relative">
-        <div className="absolute left-28 sm:left-6 md:left-4 xl:left-16">
-          <span
-            className={`w-4 h-4 rounded-full inline-block ${
-              color.toLowerCase().startsWith('blanc') ? 'border border-black' : ''
-            }`}
-            style={{ backgroundColor: getColorCode(color) }}
-          ></span>
-        </div>
-        <span className="ml-36 sm:ml-12 md:ml-10 xl:ml-24">
-          {String(color).charAt(0).toUpperCase() +
-            String(color).split(' ')[0].slice(1)}
-        </span>
-      </div>
-    </SelectionButton>
-  ))}
-</div>
+          <h1 className="lg:text-xl my-2">Couleur</h1>
+          <div className="flex flex-wrap gap-4">
+            {uniqueColors.map((color: any) => (
+              <SelectionButton
+                key={color}
+                selected={selectedColor.toLowerCase() === color.toLowerCase()}
+              >
+                <input
+                  type="radio"
+                  name="color"
+                  value={color}
+                  checked={selectedColor.toLowerCase() === color.toLowerCase()}
+                  onChange={(e) => colorChangeHandler(e.target.value)}
+                  className="hidden"
+                />
+                <div className="flex items-center text-lg min-w-[120px] relative">
+                  <div className="absolute left-28 sm:left-6 md:left-4 xl:left-16">
+                    <span
+                      className={`w-4 h-4 rounded-full inline-block ${
+                        color.toLowerCase().startsWith('blanc') ? 'border border-black' : ''
+                      }`}
+                      style={{ backgroundColor: getColorCode(color) }}
+                    ></span>
+                  </div>
+                  <span className="ml-36 sm:ml-12 md:ml-10 xl:ml-24">
+                    {String(color).charAt(0).toUpperCase() +
+                      String(color).split(' ')[0].slice(1)}
+                  </span>
+                </div>
+              </SelectionButton>
+            ))}
+          </div>
         </div>
       </div>
     </ClientOnly>

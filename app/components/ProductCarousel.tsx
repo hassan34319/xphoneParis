@@ -82,11 +82,45 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   }, [selectedColor, selectedGrade, selectedCapacity, allImages]);
 
   const handleNext = () => {
-    setCurrentIndex(prev => Math.min(prev + 1, allImages.length - itemsPerPage));
+    const newIndex = Math.min(currentIndex + 1, allImages.length - itemsPerPage);
+    setCurrentIndex(newIndex);
+    
+    // Update main image to the leftmost visible image in the carousel
+    if (allImages.length > 0 && newIndex < allImages.length) {
+      const leftmostImage = allImages[newIndex];
+      const imageUrl = urlFor(leftmostImage.image).url();
+      handleVariantClick(imageUrl);
+      
+      // Only update variant selection if different from current selection
+      if (!isVariantSelected(leftmostImage)) {
+        onVariantSelect(
+          leftmostImage.variant.color,
+          leftmostImage.variant.grade,
+          leftmostImage.variant.capacity
+        );
+      }
+    }
   };
 
   const handlePrev = () => {
-    setCurrentIndex(prev => Math.max(0, prev - 1));
+    const newIndex = Math.max(0, currentIndex - 1);
+    setCurrentIndex(newIndex);
+    
+    // Update main image to the leftmost visible image in the carousel
+    if (allImages.length > 0 && newIndex < allImages.length) {
+      const leftmostImage = allImages[newIndex];
+      const imageUrl = urlFor(leftmostImage.image).url();
+      handleVariantClick(imageUrl);
+      
+      // Only update variant selection if different from current selection
+      if (!isVariantSelected(leftmostImage)) {
+        onVariantSelect(
+          leftmostImage.variant.color,
+          leftmostImage.variant.grade,
+          leftmostImage.variant.capacity
+        );
+      }
+    }
   };
 
   const handleImageClick = (imageData: any) => {

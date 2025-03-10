@@ -26,6 +26,7 @@ async function OrderPage({}: Props) {
         "xphonesparis@gmail.com",
         "contact@xphones.com",
         "Hassaniqbal19343@gmail.com",
+        "alirules06@gmail.com",
       ].includes(currentUser.email ?? "")) {
         <div className="flex items-center justify-center h-screen">
         <div className="bg-white p-8 shadow-lg rounded-lg text-center">
