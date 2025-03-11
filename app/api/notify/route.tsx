@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
     }
     console.log(res_final.Status)
     // Update order status based on payment result
-    const status = res_final.Status === "ACCEPTED" ? "Processed" : "Failed" ;
+    const status = res_final.Status === "AUTHORIZED" ? "Processed" : "Failed" ;
     console.log(`Updating order ${TransID} status to ${status}`);
     
     const updatedOrder = await prisma.order.update({
