@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
       }
     }
-    
+    console.log(res_final.Status)
     // Update order status based on payment result
     const status = res_final.Status === "ACCEPTED" ? "Processed" : "Failed";
     console.log(`Updating order ${TransID} status to ${status}`);
