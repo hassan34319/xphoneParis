@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     const CustomField8 = formData.get('CustomField8') as string | null;
     const CustomField9 = formData.get('CustomField9') as string | null;
     const PayType = formData.get('PayType') as string | null;
-
+    console.log("order id")
     
       console.log("passed Cart",serializedData)
       
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
         process.env.NEXT_PUBLIC_MERCHANT_ID
       }&MsgVer=2.0&TransID=${TransactionId}&Amount=${
         Amount! * 100
-      }&Currency=EUR&URLSuccess=https://test-xphones.vercel.app/api/success&URLFailure=https://test-xphones.vercel.app/api/failure&URLNotify=https://test-xphones.vercel.app/api/notify?hMac=${hMacKey}&Response=encrypt&MAC=${mac_result}&Language=en`;
+      }&Currency=EUR&URLSuccess=https://test-xphones.vercel.app/api/success&URLFailure=https://test-xphones.vercel.app/api/success&URLNotify=https://test-xphones.vercel.app/api/notify?hMac=${hMacKey}&Response=encrypt&MAC=${mac_result}&Language=en`;
       console.log(unencrypt);
       const blowfish = new BlowfishTranslation(unencrypt);
       const encrypt_result = blowfish.encryptBlowfish();
