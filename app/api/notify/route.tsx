@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
     console.log("Parsed response:", res_final);
     
     const TransID = res_final.TransID;
+    console.log("TransId: ", TransID)
     
     if (!TransID) {
       console.error("TransID missing from response");
