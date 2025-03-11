@@ -153,9 +153,9 @@ export async function POST(request: NextRequest) {
     console.log("Order updated:", updatedOrder);
     
     // If payment failed, return early
-    // if (res_final.Status !== "ACCEPTED") {
-    //   return NextResponse.json({ success: false, status: "Payment failed" });
-    // }
+    if (res_final.Status !== "AUTHORIZED") {
+      return NextResponse.json({ success: false, status: "Payment failed" });
+    }
     
     // Continue with successful pay
     const dateObject = new Date(Date.now());
