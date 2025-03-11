@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, status: "Payment failed" });
     }
     
-    // Continue with successful payment processing
+    // Continue with successful pay
     const dateObject = new Date(Date.now());
     let date = dateObject.toISOString();
     
