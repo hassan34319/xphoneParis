@@ -1,12 +1,8 @@
 "use client";
-import { GetServerSideProps, NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-
-import { ParsedUrlQuery } from "querystring";
-import { BiPencil } from "react-icons/bi";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { BiPencil, BiChevronDown, BiChevronUp } from "react-icons/bi";
 import ClientOnly from "./ClientOnly";
 
 interface CartItem {
@@ -52,11 +48,19 @@ interface OrdersPageProps {
 
 const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
   const [ordersState, setOrdersState] = useState<Order[]>(orders);
+  const [expandedOrders, setExpandedOrders] = useState<{ [key: string]: boolean }>({});
+
+  const toggleOrderExpand = (orderId: string) => {
+    setExpandedOrders(prev => ({
+      ...prev,
+      [orderId]: !prev[orderId]
+    }));
+  };
 
   const handleEditStatus = (orderId: string) => {
     setOrdersState((prevOrders) =>
       prevOrders.map((order) =>
-        order.id === orderId ? { ...order, editableStatus: true } : order
+        order.id === orderId ? { ...order, editableStatus: true, updatedStatus: order.status } : order
       )
     );
   };
@@ -66,32 +70,30 @@ const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
       const order = ordersState.find((o) => o.id === orderId);
       if (!order) return;
 
-      // Send the request to the backend API to update the order status
       const response = await axios.post(`/api/order`, {
         orderId: orderId,
         status: order.updatedStatus,
       });
 
-      // Handle the response and update the orders state accordingly
-      // Assuming the response contains the updated order details
       const updatedOrder = response.data;
 
       setOrdersState((prevOrders) =>
         prevOrders.map((order) =>
           order.id === orderId
-            ? { ...order, ...updatedOrder, editableStatus: false }
+            ? { ...order, status: order.updatedStatus, editableStatus: false }
             : order
         )
       );
 
-      // Show a success toast or perform any other action
       toast.success("Order status updated successfully");
     } catch (error) {
-      // Handle the error
       console.error("Error updating order status:", error);
-      // Show an error toast or perform any other action
       toast.error("Failed to update order status");
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString();
   };
 
   return (
@@ -99,98 +101,165 @@ const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Orders</h1>
         <div className="overflow-x-auto">
-          <table className="w-full border">
+          <table className="w-full border bg-white shadow-md rounded-lg">
             <thead>
               <tr className="bg-gray-100">
-                <th className="py-2 px-4 border-b">Order ID</th>
-                <th className="py-2 px-4 border-b">Created At</th>
-                <th className="py-2 px-4 border-b">Updated At</th>
-                <th className="py-2 px-4 border-b">User Email</th>
-                <th className="py-2 px-4 border-b">Shipping Address</th>
-                <th className="py-2 px-4 border-b">Postal Code</th>
-                <th className="py-2 px-4 border-b">City</th>
-                <th className="py-2 px-4 border-b">Country</th>
-                <th className="py-2 px-4 border-b">First Name</th>
-                <th className="py-2 px-4 border-b">Last Name</th>
-                <th className="py-2 px-4 border-b">Phone Number</th>
-                <th className="py-2 px-4 border-b">Status</th>
-                <th className="py-2 px-4 border-b">Calculated Price</th>
-                <th className="py-2 px-4 border-b">Discount (in Euros)</th>
-                <th className="py-2 px-4 border-b">Promo</th>
-                <th className="py-2 px-4 border-b">Total Price</th>
-                <th className="py-2 px-4 border-b">Cart Items</th>
+                <th className="py-3 px-4 border-b text-left">Order Details</th>
+                <th className="py-3 px-4 border-b text-center">Status</th>
+                <th className="py-3 px-4 border-b text-center">Total</th>
+                <th className="py-3 px-4 border-b text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {ordersState.map((order) => (
-                <tr key={order.id}>
-                  <td className="py-2 px-4 border-b">{order.id}</td>
-                  <td className="py-2 px-4 border-b">
-                    {new Date(order.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="py-2 px-4 border-b">{order.updatedAt}</td>
-                  <td className="py-2 px-4 border-b">{order.user.email}</td>
-                  <td className="py-2 px-4 border-b">
-                    {order.user.shippingAdress}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {order.user.postalCode}
-                  </td>
-                  <td className="py-2 px-4 border-b">{order.user.city}</td>
-                  <td className="py-2 px-4 border-b">{order.user.country}</td>
-                  <td className="py-2 px-4 border-b">{order.user.firstName}</td>
-                  <td className="py-2 px-4 border-b">{order.user.lastName}</td>
-                  <td className="py-2 px-4 border-b">
-                    {order.user.phoneNumber}
-                  </td>
-                  <td className="py-2 px-4 border-b flex flex-row space-between">
-                    {order.editableStatus ? (
-                      <input
-                        type="text"
-                        value={order.updatedStatus}
-                        onChange={(e) =>
-                          setOrdersState((prevOrders) =>
-                            prevOrders.map((o) =>
-                              o.id === order.id
-                                ? { ...o, updatedStatus: e.target.value }
-                                : o
-                            )
-                          )
-                        }
-                      />
-                    ) : (
-                      order.status
-                    )}
-                    <button onClick={() => handleEditStatus(order.id)}>
-                      <BiPencil />
-                    </button>
-                    {order.editableStatus && (
-                      <button
-                        onClick={() => {
-                          handleSaveStatus(order.id);
-                        }}
-                      >
-                        Save
-                      </button>
-                    )}
-                  </td>
-
-                  <td className="py-2 px-4 border-b">{order.calculated} €</td>
-                  <td className="py-2 px-4 border-b">{order.discount} €</td>
-                  <td className="py-2 px-4 border-b">{order.promo} €</td>
-                  <td className="py-2 px-4 border-b">{order.total} €</td>
-                  <td className="py-2 px-4 border-b">
-                    {order.items.map((item) => (
-                      <div key={item.id}>
-                        <p>
-                          {item.name} {item.color} {item.capacity} x{" "}
-                          {item.quantity}{" "}
-                        </p>
-                        {/* Display other properties of the cart item */}
+                <>
+                  <tr 
+                    key={order.id}
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => toggleOrderExpand(order.id)}
+                  >
+                    <td className="py-4 px-4 border-b">
+                      <div className="flex items-center">
+                        {expandedOrders[order.id] ? (
+                          <BiChevronUp className="mr-2 text-gray-500" />
+                        ) : (
+                          <BiChevronDown className="mr-2 text-gray-500" />
+                        )}
+                        <div>
+                          <div className="font-medium">{order.id}</div>
+                          <div className="text-sm text-gray-500">
+                            {formatDate(order.createdAt)}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {order.user.firstName} {order.user.lastName}
+                          </div>
+                        </div>
                       </div>
-                    ))}
-                  </td>
-                </tr>
+                    </td>
+                    <td className="py-4 px-4 border-b text-center">
+                      <div className="flex items-center justify-center">
+                        {order.editableStatus ? (
+                          <input
+                            type="text"
+                            className="border rounded px-2 py-1 w-full"
+                            value={order.updatedStatus || ""}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) =>
+                              setOrdersState((prevOrders) =>
+                                prevOrders.map((o) =>
+                                  o.id === order.id
+                                    ? { ...o, updatedStatus: e.target.value }
+                                    : o
+                                )
+                              )
+                            }
+                          />
+                        ) : (
+                          <span className={`px-2 py-1 rounded text-sm ${
+                            order.status === 'Delivered' ? 'bg-green-100 text-green-800' : 
+                            order.status === 'Processing' ? 'bg-blue-100 text-blue-800' : 
+                            order.status === 'Shipped' ? 'bg-purple-100 text-purple-800' : 
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            {order.status}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 border-b text-center">
+                      <div className="font-medium">{order.total} €</div>
+                      {order.discount && (
+                        <div className="text-sm text-green-600">-{order.discount} €</div>
+                      )}
+                    </td>
+                    <td className="py-4 px-4 border-b text-center">
+                      {!order.editableStatus ? (
+                        <button 
+                          className="p-2 hover:bg-gray-100 rounded"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditStatus(order.id);
+                          }}
+                        >
+                          <BiPencil className="text-gray-600" />
+                        </button>
+                      ) : (
+                        <button
+                          className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSaveStatus(order.id);
+                          }}
+                        >
+                          Save
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                  {expandedOrders[order.id] && (
+                    <tr>
+                      <td colSpan={4} className="bg-gray-50 p-0">
+                        <div className="p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <h3 className="font-medium mb-2">Customer Details</h3>
+                              <div className="bg-white p-3 rounded border">
+                                <p><span className="font-medium">Name:</span> {order.user.firstName} {order.user.lastName}</p>
+                                <p><span className="font-medium">Email:</span> {order.user.email}</p>
+                                <p><span className="font-medium">Phone:</span> {order.user.phoneNumber}</p>
+                              </div>
+                            </div>
+                            <div>
+                              <h3 className="font-medium mb-2">Shipping Address</h3>
+                              <div className="bg-white p-3 rounded border">
+                                <p>{order.user.shippingAdress}</p>
+                                <p>{order.user.postalCode}, {order.user.city}</p>
+                                <p>{order.user.country}</p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <h3 className="font-medium mb-2">Order Items</h3>
+                          <div className="bg-white rounded border overflow-hidden">
+                            {order.items.map((item) => (
+                              <div key={item.id} className="p-3 border-b last:border-b-0 flex justify-between">
+                                <div>
+                                  <p className="font-medium">{item.name}</p>
+                                  <p className="text-sm text-gray-600">
+                                    {item.color} • {item.capacity}GB • Grade: {item.grade}
+                                  </p>
+                                </div>
+                                <div className="text-right">
+                                  <p>{item.price} € x {item.quantity}</p>
+                                  <p className="font-medium">{item.price * item.quantity} €</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          <div className="mt-4 bg-white p-3 rounded border flex flex-col items-end">
+                            <div className="w-48">
+                              <div className="flex justify-between">
+                                <span>Subtotal:</span>
+                                <span>{order.calculated} €</span>
+                              </div>
+                              {order.discount && (
+                                <div className="flex justify-between text-green-600">
+                                  <span>Discount {order.promo ? `(${order.promo})` : ''}:</span>
+                                  <span>-{order.discount} €</span>
+                                </div>
+                              )}
+                              <div className="flex justify-between font-bold mt-2 pt-2 border-t">
+                                <span>Total:</span>
+                                <span>{order.total} €</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
               ))}
             </tbody>
           </table>
