@@ -253,18 +253,18 @@ const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
                                 <span>Subtotal:</span>
                                 <span>{order.calculated} €</span>
                               </div>
-                              {order.discount && (
+                              {order.discount && order.discount>0 &&(
                                 <div className="flex justify-between text-green-600">
                                   <span>Discount:</span>
                                   <span>-{order.discount} €</span>
                                 </div>
                               )}
-
+                              {order.promo && (
                                 <div className="flex justify-between text-blue-600 text-sm">
                                   <span>Promo code:</span>
                                   <span>{order.promo}</span>
                                 </div>
-                              
+                              )}
                               <div className="flex justify-between font-bold mt-2 pt-2 border-t">
                                 <span>Total:</span>
                                 <span>{order.total} €</span>
