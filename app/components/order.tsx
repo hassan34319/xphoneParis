@@ -107,6 +107,7 @@ const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
                 <th className="py-3 px-4 border-b text-left">Order Details</th>
                 <th className="py-3 px-4 border-b text-center">Status</th>
                 <th className="py-3 px-4 border-b text-center">Total</th>
+                <th className="py-3 px-4 border-b text-center">Promo</th>
                 <th className="py-3 px-4 border-b text-center">Actions</th>
               </tr>
             </thead>
@@ -173,6 +174,15 @@ const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
                       )}
                     </td>
                     <td className="py-4 px-4 border-b text-center">
+                      {order.promo ? (
+                        <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-sm">
+                          {order.promo}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
+                    </td>
+                    <td className="py-4 px-4 border-b text-center">
                       {!order.editableStatus ? (
                         <button 
                           className="p-2 hover:bg-gray-100 rounded"
@@ -198,7 +208,7 @@ const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
                   </tr>
                   {expandedOrders[order.id] && (
                     <tr>
-                      <td colSpan={4} className="bg-gray-50 p-0">
+                      <td colSpan={5} className="bg-gray-50 p-0">
                         <div className="p-4">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
@@ -245,8 +255,14 @@ const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
                               </div>
                               {order.discount && (
                                 <div className="flex justify-between text-green-600">
-                                  <span>Discount {order.promo ? `(${order.promo})` : ''}:</span>
+                                  <span>Discount:</span>
                                   <span>-{order.discount} €</span>
+                                </div>
+                              )}
+                              {order.promo && (
+                                <div className="flex justify-between text-blue-600 text-sm">
+                                  <span>Promo code:</span>
+                                  <span>{order.promo}</span>
                                 </div>
                               )}
                               <div className="flex justify-between font-bold mt-2 pt-2 border-t">
