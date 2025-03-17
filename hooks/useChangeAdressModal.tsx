@@ -1,16 +1,17 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface AdressModalStore {
   isOpen: boolean;
-  onOpen: () => void;
+  userData: any | null; // Store user data (address)
+  onOpen: (data?: any) => void; // Accept data when opening
   onClose: () => void;
 }
 
 const useChangeAdressModal = create<AdressModalStore>((set) => ({
   isOpen: false,
-  onOpen: () => set({ isOpen: true }),
-  onClose: () => set({ isOpen: false })
+  userData: null,
+  onOpen: (data = null) => set({ isOpen: true, userData: data }),
+  onClose: () => set({ isOpen: false, userData: null }),
 }));
-
 
 export default useChangeAdressModal;
