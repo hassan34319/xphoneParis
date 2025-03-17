@@ -51,10 +51,10 @@ interface Order {
 
 interface UserPageProps {
   orders: Order[];
-  user : User
+  user: User;
 }
 
-const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
+const UserComponent: React.FC<UserPageProps> = ({ orders, user }) => {
   const [error, setError] = useState("");
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("profile");
@@ -63,22 +63,51 @@ const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
   };
 
   function signOutLogic() {
-    router.push('/')
-    signOut()
+    router.push('/');
+    signOut();
   }
 
   function changePage() {
     router.push("/");
   }
+  
   const changeAdressModal = useChangeAdressModal();
   const changePasswordModal = useChangePasswordModal();
   const loginModal = useLoginModal();
 
+  // Handle opening address modal with pre-filled data
+  const handleOpenAddressModal = () => {
+    // Set the current user data to the modal store
+    changeAdressModal.setUserData({
+      shippingAdress: user.shippingAdress,
+      postalCode: user.postalCode,
+      city: user.city,
+      country: user.country,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phoneNumber: user.phoneNumber,
+      email: user.email
+    });
+    
+    // Then open the modal
+    changeAdressModal.onOpen();
+  };
+
+  // Handle opening password modal with pre-filled email
+  const handleOpenPasswordModal = () => {
+    changePasswordModal.setUserData({
+      email: user.email,
+      userId: user.id
+    });
+    
+    changePasswordModal.onOpen();
+  };
+
   useEffect(() => {
     if (!user) {
-      loginModal.onOpen()
+      loginModal.onOpen();
     }
-  }, [user, router,loginModal]);
+  }, [user, router, loginModal]);
 
   return (
     <main className="w-full mt-6 ">
@@ -126,7 +155,7 @@ const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
                 <section className="bg-white rounded p-6 md:p-4 relative text-gray-500">
                   <button
                     className="absolute top-2 right-2 cursor-pointer"
-                    onClick={changePasswordModal.onOpen}
+                    onClick={handleOpenPasswordModal}
                   >
                     <BiPencil />
                   </button>
@@ -138,7 +167,7 @@ const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
                   <p>Nom : {user.lastName}</p>
                   <button
                     className="text-blue-500 underline mt-2"
-                    onClick={changePasswordModal.onOpen}
+                    onClick={handleOpenPasswordModal}
                   >
                     Changer le mot de passe
                   </button>
@@ -146,12 +175,12 @@ const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
 
                 {/* Section 2: Détails de facturation */}
                 <section className="bg-white rounded p-6 md:p-4 relative text-gray-500">
-                <button
-  className="absolute top-2 right-2 cursor-pointer"
-  onClick={() => changeAdressModal.onOpen(user)}
->
-  <BiPencil />
-</button>
+                  <button
+                    className="absolute top-2 right-2 cursor-pointer"
+                    onClick={handleOpenAddressModal}
+                  >
+                    <BiPencil />
+                  </button>
                   <h2 className="font-bold text-xl flex items-center justify-between text-black">
                     Détails de facturation
                   </h2>
@@ -168,7 +197,7 @@ const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
                 <section className="bg-white rounded p-6 md:p-4 relative text-gray-500">
                   <button
                     className="absolute top-2 right-2 cursor-pointer"
-                    onClick={changeAdressModal.onOpen}
+                    onClick={handleOpenAddressModal}
                   >
                     <BiPencil />
                   </button>
@@ -317,6 +346,5 @@ const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
     </main>
   );
 };
-
 
 export default UserComponent;
