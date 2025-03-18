@@ -148,7 +148,7 @@ const UserComponent: React.FC<UserPageProps> = ({ orders,user }) => {
                 <section className="bg-white rounded p-6 md:p-4 relative text-gray-500">
                 <button
   className="absolute top-2 right-2 cursor-pointer"
-  onClick={() => changeAdressModal.onOpen}
+  onClick={() => changeAdressModal.onOpen(user)}
 >
   <BiPencil />
 </button>
