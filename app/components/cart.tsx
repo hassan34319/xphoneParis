@@ -210,7 +210,7 @@ const Cart: React.FC<Props> = ({ promoCodes, currentUser }) => {
                   </button>
                   <button
                     className="text-md text-blue-700 cursor-pointer transition hover:underline "
-                    onClick={changeAdressModal.onOpen}
+                    onClick={() => changeAdressModal.onOpen(currentUser)}
                   >
                     Changement d`adresse?
                   </button>
