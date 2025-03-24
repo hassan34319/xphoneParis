@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import ProductSelection from "./ProductSelection";
 import { product } from "../utils/types";
 import { urlFor } from "../../lib/sanityClient";
@@ -10,6 +10,7 @@ import ProductReview from "./ProductReview";
 import ProductReviewMobile from "./ProductReviewMobile";
 import { User } from "@prisma/client";
 import ProductCarousel from "./ProductCarousel";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   product: product;
@@ -23,48 +24,121 @@ type Variant = {
   grade: string;
 };
 
-function ProductComponent({ product, currentUser }: Props) {
-  // Initialize state with the first variant
-  const [currentVariant, setCurrentVariant] = useState<Variant>({
-    image: urlFor(product.variants[0].image).url(),
-    color: product.variants[0].color,
-    capacity: product.variants[0].capacity,
-    grade: product.variants[0].grade
-  });
-  
-  // Track current image separately
-  const [currentImage, setCurrentImage] = useState<string>(urlFor(product.variants[0].image).url());
-  
-  // Use memoized functions to prevent unnecessary re-renders
-  const findVariant = useCallback((color: string, grade: string, capacity: string) => {
-    return product.variants.find(v => 
-      v.color.toLowerCase() === color.toLowerCase() &&
-      v.grade === grade &&
-      v.capacity == capacity
-    );
-  }, [product.variants]);
+// Helper function to safely convert any value to string for comparison
+const safeString = (value: any): string => {
+  if (value === null || value === undefined) return '';
+  return String(value).toLowerCase();
+};
 
-  // Handle image click from carousel - just update image, don't change variant selection
+function ProductComponent({ product, currentUser }: Props) {
+  const searchParams = useSearchParams();
+  const initialRenderRef = useRef(true);
+  
+  // Memoize in-stock variants to avoid re-filtering on every render
+  const inStockVariants = useMemo(() => {
+    return product.variants.filter(v => v.inStock !== false);
+  }, [product.variants]);
+  
+  // Find variant by color only - with safe string comparison
+  const findVariantByColor = useCallback((color: string) => {
+    return inStockVariants.find(v => 
+      safeString(v.color) === safeString(color)
+    );
+  }, [inStockVariants]);
+  
+  // Find variant by all properties - with safe string comparison
+  const findVariant = useCallback((color: string | null, capacity: string | null, grade: string | null) => {
+    // Filter conditions based on which parameters exist
+    return inStockVariants.find(v => {
+      // Safely compare strings regardless of type
+      const colorMatch = !color || safeString(v.color) === safeString(color);
+      const capacityMatch = !capacity || safeString(v.capacity) === safeString(capacity);
+      const gradeMatch = !grade || safeString(v.grade) === safeString(grade);
+      
+      return colorMatch && capacityMatch && gradeMatch;
+    });
+  }, [inStockVariants]);
+
+  // Initialize with URL parameters or default, using memoization to avoid recreation
+  const initialVariant = useMemo(() => {
+    const urlColor = searchParams.get('color');
+    const urlCapacity = searchParams.get('capacity');
+    const urlGrade = searchParams.get('grade');
+    
+    let matchingVariant = null;
+    
+    // Try to find a variant with the provided parameters
+    if (urlColor || urlCapacity || urlGrade) {
+      // Try to find a variant matching all provided parameters
+      matchingVariant = findVariant(urlColor, urlCapacity, urlGrade);
+      
+      // If we found a match
+      if (matchingVariant) {
+        return {
+          image: urlFor(matchingVariant.image).url(),
+          color: String(matchingVariant.color || ''),
+          capacity: String(matchingVariant.capacity || ''),
+          grade: String(matchingVariant.grade || '')
+        };
+      } else if (urlColor) {
+        // Fallback to just color if no match found with all parameters
+        const colorVariant = findVariantByColor(urlColor);
+        if (colorVariant) {
+          return {
+            image: urlFor(colorVariant.image).url(),
+            color: String(colorVariant.color || ''),
+            capacity: String(colorVariant.capacity || ''),
+            grade: String(colorVariant.grade || '')
+          };
+        }
+      }
+    }
+    
+    // Default to first in-stock variant, or first variant if none are in stock
+    const defaultVariant = inStockVariants.length > 0 ? inStockVariants[0] : product.variants[0];
+    return {
+      image: urlFor(defaultVariant.image).url(),
+      color: String(defaultVariant.color || ''),
+      capacity: String(defaultVariant.capacity || ''),
+      grade: String(defaultVariant.grade || '')
+    };
+  }, [searchParams, findVariant, findVariantByColor, inStockVariants, product.variants]);
+  
+  // Set states after memoizing initial values to avoid rerenders
+  const [currentVariant, setCurrentVariant] = useState<Variant>(initialVariant);
+  const [currentImage, setCurrentImage] = useState<string>(initialVariant.image);
+  
+  // Synchronize the state with URL params ONLY on first render
+  useEffect(() => {
+    if (initialRenderRef.current) {
+      setCurrentVariant(initialVariant);
+      setCurrentImage(initialVariant.image);
+      initialRenderRef.current = false;
+    }
+  }, [initialVariant]);
+  
+  // Handle image click from carousel
   const handleImageClick = useCallback((imageUrl: string) => {
     setCurrentImage(imageUrl);
   }, []);
   
-  // Handle full variant selection from carousel - update both image and variant data
+  // Handle variant selection with safe string conversion
   const handleVariantSelect = useCallback((color: string, grade: string, capacity: string) => {
-    const variant = findVariant(color, grade, capacity);
+    const variant = findVariant(color, capacity, grade);
     
     if (variant) {
+      const newImage = urlFor(variant.image).url();
       setCurrentVariant({
-        image: urlFor(variant.image).url(),
-        color: variant.color,
-        capacity: variant.capacity,
-        grade: variant.grade
+        image: newImage,
+        color: String(variant.color || ''),
+        capacity: String(variant.capacity || ''),
+        grade: String(variant.grade || '')
       });
-      setCurrentImage(urlFor(variant.image).url());
+      setCurrentImage(newImage);
     }
   }, [findVariant]);
   
-  // Handle variant selection from dropdown - same implementation for consistency
+  // Handle dropdown variant selection
   const handleDropdownVariantChange = useCallback((color: string, grade: string, capacity: string) => {
     handleVariantSelect(color, grade, capacity);
   }, [handleVariantSelect]);
@@ -85,7 +159,7 @@ function ProductComponent({ product, currentUser }: Props) {
             </div>
             <div className="mt-4 -ml-8">
               <ProductCarousel
-                variants={product.variants}
+                variants={inStockVariants}
                 handleVariantClick={handleImageClick}
                 currentImage={currentImage}
                 onVariantSelect={handleVariantSelect}

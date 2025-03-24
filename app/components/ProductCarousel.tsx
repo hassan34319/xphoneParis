@@ -25,10 +25,18 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   const [allImages, setAllImages] = useState<any[]>([]);
   const itemsPerPage = 3;
   const prevSelectionRef = useRef({ color: selectedColor, grade: selectedGrade, capacity: selectedCapacity });
+  const initialSyncDoneRef = useRef(false);
+  const isProgrammaticUpdateRef = useRef(false);
   
   // Process images on mount and when variants change
   useEffect(() => {
+    // Only process in-stock variants
     const processedImages = variants.reduce((acc: any[], variant) => {
+      // Skip variants that are explicitly marked as not in stock
+      if (variant.inStock === false) {
+        return acc;
+      }
+      
       // Add main image
       acc.push({
         image: variant.image,
@@ -55,8 +63,34 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     setAllImages(processedImages);
   }, [variants]);
 
-  // Handle selection changes separately to avoid cascading effects
+  // Initial sync with URL params - only run once
   useEffect(() => {
+    if (allImages.length > 0 && !initialSyncDoneRef.current) {
+      // Find the main image for the selected variant
+      const selectedImageIndex = allImages.findIndex(img =>
+        img.variant.color?.toLowerCase() === selectedColor?.toLowerCase() &&
+        String(img.variant.grade || '') === String(selectedGrade || '') &&
+        String(img.variant.capacity || '') === String(selectedCapacity || '') &&
+        img.isMain
+      );
+      
+      if (selectedImageIndex !== -1) {
+        // Calculate the page to show the selected image
+        const targetIndex = Math.max(0, Math.min(selectedImageIndex, allImages.length - itemsPerPage));
+        setCurrentIndex(targetIndex);
+        initialSyncDoneRef.current = true;
+      }
+    }
+  }, [allImages, selectedColor, selectedGrade, selectedCapacity, itemsPerPage]);
+
+  // Handle selection changes - only run when selection actually changes and not from arrow navigation
+  useEffect(() => {
+    // Skip if this is from arrow navigation
+    if (isProgrammaticUpdateRef.current) {
+      isProgrammaticUpdateRef.current = false;
+      return;
+    }
+    
     // Only scroll to selected variant if the selection has actually changed
     if (
       selectedColor !== prevSelectionRef.current.color ||
@@ -65,9 +99,9 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     ) {
       // Find the main image for the selected variant
       const selectedImageIndex = allImages.findIndex(img =>
-        img.variant.color.toLowerCase() === selectedColor.toLowerCase() &&
-        img.variant.grade === selectedGrade &&
-        img.variant.capacity == selectedCapacity &&
+        img.variant.color?.toLowerCase() === selectedColor?.toLowerCase() &&
+        String(img.variant.grade || '') === String(selectedGrade || '') &&
+        String(img.variant.capacity || '') === String(selectedCapacity || '') &&
         img.isMain
       );
       
@@ -79,46 +113,62 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       
       prevSelectionRef.current = { color: selectedColor, grade: selectedGrade, capacity: selectedCapacity };
     }
-  }, [selectedColor, selectedGrade, selectedCapacity, allImages]);
+  }, [selectedColor, selectedGrade, selectedCapacity, allImages, itemsPerPage]);
 
   const handleNext = () => {
-    const newIndex = Math.min(currentIndex + 1, allImages.length - itemsPerPage);
-    setCurrentIndex(newIndex);
-    
-    // Update main image to the leftmost visible image in the carousel
-    if (allImages.length > 0 && newIndex < allImages.length) {
-      const leftmostImage = allImages[newIndex];
-      const imageUrl = urlFor(leftmostImage.image).url();
-      handleVariantClick(imageUrl);
+    if (currentIndex < allImages.length - itemsPerPage) {
+      const newIndex = currentIndex + 1;
+      setCurrentIndex(newIndex);
       
-      // Only update variant selection if different from current selection
-      if (!isVariantSelected(leftmostImage)) {
-        onVariantSelect(
-          leftmostImage.variant.color,
-          leftmostImage.variant.grade,
-          leftmostImage.variant.capacity
-        );
+      // Update the main image to show the first image in the new set
+      if (allImages.length > 0 && newIndex < allImages.length) {
+        const nextImage = allImages[newIndex];
+        const imageUrl = urlFor(nextImage.image).url();
+        handleVariantClick(imageUrl);
+        
+        // Only update variant selection if needed
+        if (
+          nextImage.variant.color?.toLowerCase() !== selectedColor?.toLowerCase() ||
+          String(nextImage.variant.grade || '') !== String(selectedGrade || '') ||
+          String(nextImage.variant.capacity || '') !== String(selectedCapacity || '')
+        ) {
+          // Mark this update as programmatic to skip the effect
+          isProgrammaticUpdateRef.current = true;
+          onVariantSelect(
+            nextImage.variant.color,
+            nextImage.variant.grade,
+            nextImage.variant.capacity
+          );
+        }
       }
     }
   };
 
   const handlePrev = () => {
-    const newIndex = Math.max(0, currentIndex - 1);
-    setCurrentIndex(newIndex);
-    
-    // Update main image to the leftmost visible image in the carousel
-    if (allImages.length > 0 && newIndex < allImages.length) {
-      const leftmostImage = allImages[newIndex];
-      const imageUrl = urlFor(leftmostImage.image).url();
-      handleVariantClick(imageUrl);
+    if (currentIndex > 0) {
+      const newIndex = currentIndex - 1;
+      setCurrentIndex(newIndex);
       
-      // Only update variant selection if different from current selection
-      if (!isVariantSelected(leftmostImage)) {
-        onVariantSelect(
-          leftmostImage.variant.color,
-          leftmostImage.variant.grade,
-          leftmostImage.variant.capacity
-        );
+      // Update the main image to show the last image in the previous set
+      if (allImages.length > 0) {
+        const prevImage = allImages[newIndex];
+        const imageUrl = urlFor(prevImage.image).url();
+        handleVariantClick(imageUrl);
+        
+        // Only update variant selection if needed
+        if (
+          prevImage.variant.color?.toLowerCase() !== selectedColor?.toLowerCase() ||
+          String(prevImage.variant.grade || '') !== String(selectedGrade || '') ||
+          String(prevImage.variant.capacity || '') !== String(selectedCapacity || '')
+        ) {
+          // Mark this update as programmatic to skip the effect
+          isProgrammaticUpdateRef.current = true;
+          onVariantSelect(
+            prevImage.variant.color,
+            prevImage.variant.grade,
+            prevImage.variant.capacity
+          );
+        }
       }
     }
   };
@@ -131,11 +181,13 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     
     // Then, conditionally update variant selection to avoid double state updates
     const isAlreadySelected = 
-      imageData.variant.color.toLowerCase() === selectedColor.toLowerCase() &&
-      imageData.variant.grade === selectedGrade &&
-      imageData.variant.capacity == selectedCapacity;
+      imageData.variant.color?.toLowerCase() === selectedColor?.toLowerCase() &&
+      String(imageData.variant.grade || '') === String(selectedGrade || '') &&
+      String(imageData.variant.capacity || '') === String(selectedCapacity || '');
       
     if (!isAlreadySelected) {
+      // Mark this update as programmatic to skip the effect
+      isProgrammaticUpdateRef.current = true;
       onVariantSelect(
         imageData.variant.color,
         imageData.variant.grade,
@@ -147,9 +199,9 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   const isVariantSelected = (imageData: any) => {
     const variant = imageData.variant;
     return (
-      variant.color.toLowerCase() === selectedColor.toLowerCase() &&
-      variant.grade === selectedGrade &&
-      variant.capacity == selectedCapacity
+      variant.color?.toLowerCase() === selectedColor?.toLowerCase() &&
+      String(variant.grade || '') === String(selectedGrade || '') &&
+      String(variant.capacity || '') === String(selectedCapacity || '')
     );
   };
 
@@ -157,9 +209,13 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     return urlFor(imageData.image).url() === currentImage;
   };
 
+  // Determine if there are previous or next items to show
+  const hasPrevious = currentIndex > 0;
+  const hasNext = allImages.length > 0 && currentIndex < allImages.length - itemsPerPage;
+
   return (
     <div className="relative flex items-center gap-2 mt-4 ml-2">
-      {currentIndex > 0 && (
+      {hasPrevious && (
         <button
           onClick={handlePrev}
           className="absolute left-2 z-10 p-1 bg-white rounded-full shadow-md hover:bg-gray-100 transform -translate-x-1/2"
@@ -196,7 +252,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
           ))}
       </div>
       
-      {allImages.length > 0 && currentIndex < allImages.length - itemsPerPage && (
+      {hasNext && (
         <button
           onClick={handleNext}
           className="absolute right-2 z-10 p-1 bg-white rounded-full shadow-md hover:bg-gray-100 transform translate-x-1/2"
