@@ -3,6 +3,28 @@ import { product } from "../utils/types";
 import { urlFor } from "../../lib/sanityClient";
 import { useRouter } from "next/navigation";
 
+// Star Rating component matching the one from ProductCard
+const StarRating = ({ rating = 0, totalStars = 5 }) => {
+  return (
+    <div className="flex items-center mt-1 mb-1">
+      {Array.from({ length: totalStars }, (_, index) => (
+        <svg
+          key={index}
+          className={`w-4 h-4 ms-1 ${
+            index < rating ? "text-yellow-300" : "text-gray-300"
+          }`}
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 22 20"
+        >
+          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+        </svg>
+      ))}
+    </div>
+  );
+};
+
 interface ProductVariantGroupProps {
   baseProductName: string;
   products: product[];
@@ -100,46 +122,42 @@ const ProductVariantGroup: React.FC<ProductVariantGroupProps> = ({
           return (
             <div 
               key={`variant-${index}`}
-              className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+              className="bg-white rounded-xl p-2 flex flex-col cursor-pointer shadow-lg w-80 lg:h-[24rem] xl:h-[26rem] mb-6 hover:shadow-xl"
               onClick={handleCardClick}
             >
               {/* Product image */}
-              <div className="flex justify-center mb-4">
-                <img 
-                  src={imageUrl} 
-                  alt={variantTitle}
-                  className="object-contain h-40"
-                />
-              </div>
+              <img 
+                src={imageUrl} 
+                alt={variantTitle}
+                className="object-contain h-44 w-32 m-4 mx-auto"
+              />
               
               {/* Product details */}
-              <div>
-                <h3 className="font-bold text-lg line-clamp-2">{baseProductName}</h3>
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {variantColor && (
-                    <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">
-                      {variantColor}
+              <div className="flex flex-col gap-1 px-2">
+                <h1 className="text-2xl font-semibold line-clamp-3 min-h-[3rem]">
+                  {baseProductName}
+                </h1>
+                
+                {/* Display variant info as "brand" */}
+                <h2 className="text-xl text-gray-600">
+                  {[variantColor, variantCapacity, variantGrade].filter(Boolean).join(' - ')}
+                </h2>
+                
+                <div className="mt-1">
+                  <p className="text-gray-600 text-sm">A partir de:</p>
+                  <div className="flex flex-row gap-2 items-center">
+                    <span className="font-semibold text-2xl text-gray-400 line-through">
+                      {Math.round((variant.price * 1.2 + Number.EPSILON) * 100) / 100}
+                      &euro;
                     </span>
-                  )}
-                  {variantCapacity && (
-                    <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">
-                      {variantCapacity}
+                    <span className="font-semibold text-2xl">
+                      {Math.round((variant.price + Number.EPSILON) * 100) / 100}
+                      &euro;
                     </span>
-                  )}
-                  {variantGrade && (
-                    <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">
-                      {variantGrade}
-                    </span>
-                  )}
+                  </div>
                 </div>
-                <div className="flex flex-row gap-2 items-center mt-3">
-                  <span className="font-semibold text-gray-400 line-through">
-                    {Math.round((variant.price * 1.2 + Number.EPSILON) * 100) / 100}€
-                  </span>
-                  <span className="font-semibold text-xl">
-                    {Math.round((variant.price + Number.EPSILON) * 100) / 100}€
-                  </span>
-                </div>
+                
+                <StarRating rating={5} totalStars={5} />
               </div>
             </div>
           );
