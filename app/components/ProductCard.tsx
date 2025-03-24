@@ -34,7 +34,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const router = useRouter();
   const [image, setImage] = useState("");
-
+  
   useEffect(() => {
     const getImage = async () => {
       // Make sure we have variants and at least one with an image
@@ -43,12 +43,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         setImage(image);
       }
     };
+    
     getImage();
   }, [product.variants]);
-
+  
   // Check if product is in stock
   const isInStock = product.variants.some(variant => variant.quantity > 0);
-
+  
   // If product is not in stock, don't render the card
   if (!isInStock) {
     return null;
@@ -57,13 +58,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <ClientOnly>
       <div
-        className="bg-white rounded-xl p-2 flex flex-col cursor-pointer shadow-lg w-80 lg:h-96 xl:h-96 mb-6 hover:shadow-xl"
+        className="bg-white rounded-xl p-2 flex flex-col cursor-pointer shadow-lg w-80 lg:h-[24rem] xl:h-[26rem] mb-6 hover:shadow-xl"
         onClick={() => router.push(`/products/${product._id}`)}
       >
         <img
           src={image}
           alt="product image"
-          className="object-contain h-72 w-full m-4 mx-auto"
+          className="object-contain h-44 w-32 m-4 mx-auto"
         />
         <div className="flex flex-col gap-1 px-2">
           <h1 className="text-2xl font-semibold line-clamp-3 min-h-[3rem]">
