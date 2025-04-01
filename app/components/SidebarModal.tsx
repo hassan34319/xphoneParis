@@ -4,9 +4,6 @@ import { Button } from "react-bootstrap";
 import { SafeUser } from "../utils/types";
 import { useRouter } from 'next/navigation';
 
-// Inside your component
-
-
 interface NavbarProps {
   currentUser?: SafeUser | null;
   menuCategories: {
@@ -149,9 +146,13 @@ const SidebarModal: React.FC<NavbarProps> = ({
     setActiveProduct(productId);
     setIsSubModalOpen(false);
     setIsThirdModalOpen(false);
-    console.log("here you go bro:  ",productId);
+    console.log("Navigating to products page with product ID: ", productId);
     toggleSidebar();
+    
+    // Redirect to products page with query parameter instead of product component page
+    router.push(`/products?search=${productId}`);
   };
+
   const getProductIdFromReference = (referenceId: string) => {
     // Loop through all menuCategories2 to find matching product
     for (const category of menuCategories2) {
@@ -167,23 +168,20 @@ const SidebarModal: React.FC<NavbarProps> = ({
   };
   
   const handleProductClick2 = (e: React.MouseEvent, productId: string) => {
-    console.log("Prod clicked")
+    console.log("Product clicked")
     e.preventDefault(); // Prevent default link behavior
     
     const actualProductId = getProductIdFromReference(productId);
-    console.log("Reference ID:", productId);
-    console.log("Actual Product ID:", actualProductId);
+    
     
     setActiveProduct(actualProductId);
     setIsSubModalOpen(false);
     setIsThirdModalOpen(false);
     toggleSidebar();
     
-    router.push(`/products/${actualProductId}`);
+    // Changed from product component page to products page with query parameter
+    router.push(`/products?search=${productId}`);
   };
-
-
-  
 
   const closeSubModal = () => {
     setIsSubModalOpen(false);
@@ -366,11 +364,14 @@ const SidebarModal: React.FC<NavbarProps> = ({
                 activeCategoryData?.products?.map((product) => (
                   <Link
                     key={product._id}
-                    href={`/products/${product._id}`}
+                    href={`/products?search=${product.name}`}
                     className={`block py-2 border-t border-b border-gray-200 cursor-pointer ${
                       activeProduct === product._id ? "bg-gray-100" : ""
                     }`}
-                    onClick={() => handleProductClick(product._id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleProductClick(product.name);
+                    }}
                   >
                     <span>{product.name}</span>
                   </Link>
@@ -383,8 +384,10 @@ const SidebarModal: React.FC<NavbarProps> = ({
 
       {/* Third Modal - Products from Subcategory */}
       {isThirdModalOpen && activeCategoryData?.hasSubcategories && (
-    <div ref={thirdModalRef} className={`fixed top-0 md:top-[6rem] left-0 md:left-[35%] w-full md:w-[20%] h-full md:max-h-fit bg-white z-[60] shadow-lg overflow-y-auto md:rounded-b-xl`}>
-
+        <div 
+          ref={thirdModalRef} 
+          className={`fixed top-0 md:top-[6rem] left-0 md:left-[35%] w-full md:w-[20%] h-full md:max-h-fit bg-white z-[60] shadow-lg overflow-y-auto md:rounded-b-xl`}
+        >
           <button
             className="lg:hidden absolute top-0 right-0 m-4 p-2 bg-transparent rounded-full cursor-pointer z-10"
             onClick={closeThirdModal}
@@ -407,7 +410,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
 
           <div className="p-4">
             <h2 className="font-bold text-lg text-[#AE3033] relative flex items-center justify-center">
-            <svg
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 text-[#AE3033] cursor-pointer absolute left-0"
                 fill="none"
@@ -427,20 +430,19 @@ const SidebarModal: React.FC<NavbarProps> = ({
               </div>
             </h2>
             <ul className="pl-4 mt-2">
-        {activeSubcategoryData?.products.map((product) => (
-      
-          <Link
-            key={product._id}
-            href={`/products/${product._id}`}
-            className={`block py-2 border-t border-b border-gray-200 cursor-pointer ${
-              activeProduct === product._id ? "bg-gray-100" : ""
-            }`}
-            onClick={(e) => handleProductClick2(e, product._id)}
-          >
-            <span>{product.name}</span>
-          </Link>
-        ))}
-      </ul>
+              {activeSubcategoryData?.products.map((product) => (
+                <Link
+                  key={product._id}
+                  href={`/products?search=${product.name}`}
+                  className={`block py-2 border-t border-b border-gray-200 cursor-pointer ${
+                    activeProduct === product._id ? "bg-gray-100" : ""
+                  }`}
+                  onClick={(e) => handleProductClick(product.name)}
+                >
+                  <span>{product.name}</span>
+                </Link>
+              ))}
+            </ul>
           </div>
         </div>
       )}

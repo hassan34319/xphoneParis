@@ -32,10 +32,12 @@ async function ProductsPage({
       quantity
     }
   }`;
+  
   const products: product[] = await sanityClient.fetch(query);
+  
   // Group products by base name (for variants)
   const groupedProducts = groupProductsByBase(products);
-
+  
   return (
     <div className="w-11/12 mx-auto">
       <h1 className="text-3xl my-4 underline-offset-8 underline ">
@@ -49,12 +51,16 @@ async function ProductsPage({
         {Object.entries(groupedProducts).map(([baseProduct, productGroup]) => {
           // Check if product group has variants with color and capacity
           const hasVariants = productHasVariants(productGroup);
+          
           if (hasVariants) {
+            // Group variants by color and capacity
+            const groupedVariants = groupVariantsByColorAndCapacity(productGroup);
+            
             return (
               <ProductVariantGroup
                 key={baseProduct}
                 baseProductName={baseProduct}
-                products={productGroup}
+                products={groupedVariants}
               />
             );
           } else {
@@ -76,14 +82,18 @@ async function ProductsPage({
 // Function to group products by their base name
 function groupProductsByBase(products: product[]) {
   const grouped: { [key: string]: product[] } = {};
+  
   products.forEach(product => {
     // Extract base product name (remove variant-specific info)
     const baseProductName = extractBaseProductName(product.name);
+    
     if (!grouped[baseProductName]) {
       grouped[baseProductName] = [];
     }
+    
     grouped[baseProductName].push(product);
   });
+  
   return grouped;
 }
 
@@ -105,6 +115,44 @@ function productHasVariants(products: product[]) {
     }
   }
   return false;
+}
+
+// New function to group variants by color and capacity
+function groupVariantsByColorAndCapacity(products: product[]) {
+  const groupedProducts: product[] = [];
+  const colorCapacityMap: { [key: string]: boolean } = {};
+  
+  products.forEach(product => {
+    // Create a new product object to store the filtered variants
+    const newProduct: product = {
+      ...product,
+      variants: []
+    };
+    
+    // Filter variants to include only one per color/capacity combination
+    product.variants.forEach(variant => {
+      if (variant.color && variant.capacity) {
+        // Create a unique key for this color/capacity combination
+        const key = `${variant.color}-${variant.capacity}`;
+        
+        // If we haven't seen this combination yet, add it
+        if (!colorCapacityMap[key]) {
+          colorCapacityMap[key] = true;
+          newProduct.variants.push(variant);
+        }
+      } else {
+        // If variant doesn't have both color and capacity, include it anyway
+        newProduct.variants.push(variant);
+      }
+    });
+    
+    // Only add the product if it has variants after filtering
+    if (newProduct.variants.length > 0) {
+      groupedProducts.push(newProduct);
+    }
+  });
+  
+  return groupedProducts;
 }
 
 export default ProductsPage;
