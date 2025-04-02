@@ -14,26 +14,55 @@ async function ProductsPage({
   params: { search: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const { search } = searchParams;
-  const query = `*[_type == 'product' && (name match '${search}' || brand match '${search}' || category match '${search}')] | order(name asc) {
-    _id,
-    name,
-    brand,
-    category,
-    rating,
-    variants[] {
-      sub,
-      price,
-      capacity,
-      grade,
-      color,
-      image,
-      additionalImages,
-      quantity
-    }
-  }`;
+  const { search, exactName } = searchParams;
+  
+  // Different query based on whether we want exact match or partial match
+  let query;
+  
+  if (exactName) {
+    // Exact match query - match only products with the exact name
+    query = `*[_type == 'product' && name == '${exactName}'] | order(name asc) {
+      _id,
+      name,
+      brand,
+      category,
+      rating,
+      variants[] {
+        sub,
+        price,
+        capacity,
+        grade,
+        color,
+        image,
+        additionalImages,
+        quantity
+      }
+    }`;
+  } else {
+    // Partial match query (original behavior)
+    query = `*[_type == 'product' && (name match '${search}' || brand match '${search}' || category match '${search}')] | order(name asc) {
+      _id,
+      name,
+      brand,
+      category,
+      rating,
+      variants[] {
+        sub,
+        price,
+        capacity,
+        grade,
+        color,
+        image,
+        additionalImages,
+        quantity
+      }
+    }`;
+  }
   
   const products: product[] = await sanityClient.fetch(query);
+  
+  // For display purposes, use either exactName or search
+  const displaySearch = exactName || search;
   
   // Group products by base name (for variants)
   const groupedProducts = groupProductsByBase(products);
@@ -41,12 +70,12 @@ async function ProductsPage({
   return (
     <div className="w-11/12 mx-auto">
       <h1 className="text-3xl my-4 underline-offset-8 underline ">
-        {search}
+        {displaySearch}
       </h1>
-      <h2 className="text-xl text-gray-800 mb-4">
+      {/* <h2 className="text-xl text-gray-800 mb-4">
         {" "}
         {products && products.length} produits
-      </h2>
+      </h2> */}
       <div className="flex flex-col gap-4">
         {Object.entries(groupedProducts).map(([baseProduct, productGroup]) => {
           // Check if product group has variants with color and capacity

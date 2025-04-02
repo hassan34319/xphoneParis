@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import { product } from "../utils/types";
 import { urlFor } from "../../lib/sanityClient";
@@ -30,9 +31,9 @@ interface ProductVariantGroupProps {
   products: product[];
 }
 
-const ProductVariantGroup: React.FC<ProductVariantGroupProps> = ({ 
-  baseProductName, 
-  products 
+const ProductVariantGroup: React.FC<ProductVariantGroupProps> = ({
+  baseProductName,
+  products
 }) => {
   const router = useRouter();
   
@@ -71,7 +72,6 @@ const ProductVariantGroup: React.FC<ProductVariantGroupProps> = ({
       // Track the lowest price for each color+capacity combination
       if (variant.color && variant.capacity) {
         const key = `${variant.color}-${variant.capacity}`;
-        
         if (!lowestPricesByColorCapacity[key] || variant.price < lowestPricesByColorCapacity[key]) {
           lowestPricesByColorCapacity[key] = variant.price;
         }
@@ -89,12 +89,11 @@ const ProductVariantGroup: React.FC<ProductVariantGroupProps> = ({
   return (
     <div className="mb-8">
       <h2 className="text-2xl font-bold mb-4">{baseProductName}</h2>
-      
       {/* Grid of all variant cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {variants.map((variant, index) => {
           // Get variant details
-          const variantColor = variant.color ? `${variant.color}` : '';
+          const variantColor = variant.color || '';
           const variantCapacity = variant.capacity ? `${variant.capacity}GB` : '';
           const variantGrade = variant.grade ? `Grade ${variant.grade}` : '';
           
@@ -106,88 +105,68 @@ const ProductVariantGroup: React.FC<ProductVariantGroupProps> = ({
           }
           
           // Get image
-          const imageUrl = variant.image 
-            ? urlFor(variant.image).url() 
+          const imageUrl = variant.image
+            ? urlFor(variant.image).url()
             : '';
           
           // Construct variant title
           let variantTitle = baseProductName;
           if (variantColor || variantCapacity || variantGrade) {
             variantTitle += ' - ';
-            
             const parts = [];
             if (variantColor) parts.push(variantColor);
             if (variantCapacity) parts.push(variantCapacity);
             if (variantGrade) parts.push(variantGrade);
-            
             variantTitle += parts.join(' - ');
           }
           
           // Build the URL with query parameters for color and capacity
           const handleCardClick = () => {
             const queryParams = new URLSearchParams();
-            
             if (variant.color) {
               queryParams.append('color', variant.color.toLowerCase());
             }
-            
             if (variant.capacity) {
               queryParams.append('capacity', variant.capacity.toString());
             }
-            
             const queryString = queryParams.toString();
             const url = `/products/${variant.productId}${queryString ? `?${queryString}` : ''}`;
-            
             router.push(url);
           };
           
           return (
-            <div 
+            <div
               key={`variant-${index}`}
-              className="bg-white rounded-xl p-2 flex flex-col cursor-pointer shadow-lg w-80 h-[26rem] hover:shadow-xl transition-shadow duration-300"
+              className="bg-white rounded-xl p-2 flex flex-col cursor-pointer shadow-lg w-80 lg:h-[24rem] xl:h-[26rem] mb-6 hover:shadow-xl"
               onClick={handleCardClick}
             >
-              {/* Image container with fixed height */}
-              <div className="h-48 flex items-center justify-center overflow-hidden">
-                <img 
-                  src={imageUrl} 
-                  alt={variantTitle}
-                  className="object-contain h-full w-auto max-w-full"
-                />
-              </div>
-              
-              {/* Product details - using a flex layout with flex-grow */}
-              <div className="flex flex-col px-2 flex-grow">
-                {/* Use a flex container with flex-grow for the name and variant details */}
-                <div className="flex-grow">
-                  <h1 className="text-lg font-semibold line-clamp-2 mt-2">
-                    {baseProductName}
-                  </h1>
-                  
-                  {/* Display variant info as "brand" */}
-                  <h2 className="text-base text-gray-600">
-                    {[variantColor, variantCapacity].filter(Boolean).join(' - ')}
-                  </h2>
-                </div>
-                
-                {/* Price and rating section will always be at the bottom */}
-                <div className="mt-auto mb-2">
-                  <div className="mt-1">
-                    <p className="text-gray-600 text-sm">À partir de:</p>
-                    <div className="flex flex-row gap-2 items-center">
-                      <span className="font-semibold text-lg text-gray-400 line-through">
-                        {Math.round((overallLowestPrice * 1.2 + Number.EPSILON) * 100) / 100}
-                        &euro;
-                      </span>
-                      <span className="font-semibold text-xl">
-                        {Math.round((overallLowestPrice + Number.EPSILON) * 100) / 100}
-                        &euro;
-                      </span>
-                    </div>
+              <img
+                src={imageUrl}
+                alt={variantTitle}
+                className="object-contain h-44 w-32 m-4 mx-auto"
+              />
+              <div className="flex flex-col gap-1 px-2">
+                <h1 className="text-2xl font-semibold line-clamp-3 min-h-[3rem]">
+                  {baseProductName}
+                </h1>
+                {/* Display variant info without gaps between color and capacity */}
+                <h2 className="text-xl text-gray-600">
+                  {[variantColor, variantCapacity, "Original"].filter(Boolean).join(' - ')}
+                </h2>
+                <div className="mt-1">
+                  <p className="text-gray-600 text-sm">A partir de:</p>
+                  <div className="flex flex-row gap-2 items-center">
+                    <span className="font-semibold text-2xl text-gray-400 line-through">
+                      {Math.round((lowestPrice * 1.2 + Number.EPSILON) * 100) / 100}
+                      &euro;
+                    </span>
+                    <span className="font-semibold text-2xl">
+                      {Math.round((lowestPrice + Number.EPSILON) * 100) / 100}
+                      &euro;
+                    </span>
                   </div>
-                  
-                  <StarRating rating={5} totalStars={5} />
                 </div>
+                <StarRating rating={5} totalStars={5} />
               </div>
             </div>
           );

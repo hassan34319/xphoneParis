@@ -689,111 +689,112 @@ const ProductSelection: React.FC<ProductSelectionProps> = ({
         <div>
           <h1 className="lg:text-xl mt-10 mb-2">Condition</h1>
           <div className="flex flex-wrap md:gap-4 gap-2 mb-12">
-            {uniqueGradesAndPrices.map((gradeAndPrice: any) => {
-              const grade = gradeAndPrice[0];
-              const price = gradeAndPrice[1];
-              const isInStock = gradeAvailability[grade];
-              
-              return (
-                <SelectionButton
-                  key={grade}
-                  selected={selectedGrade === grade}
-                  disabled={!isInStock}
-                >
-                  <input
-                    type="radio"
-                    name="grade"
-                    value={grade}
-                    checked={selectedGrade === grade}
-                    onChange={(e) => gradeChangeHandler(e.target.value)}
-                    className="hidden"
-                    disabled={!isInStock}
-                  />
-                  <div className={`flex flex-col items-center ${!isInStock ? 'opacity-30 cursor-not-allowed' : ''}`}>
-                    <h1 className="w-full text-lg whitespace-nowrap">
-                      {grade}
-                    </h1>
-                    <h1 className="text-lg whitespace-nowrap">
-                      {price} &euro;
-                    </h1>
-                  </div>
-                </SelectionButton>
-              );
-            })}
-          </div>
+  {uniqueGradesAndPrices.map((gradeAndPrice: any) => {
+    const grade = gradeAndPrice[0];
+    const price = gradeAndPrice[1];
+    const isInStock = gradeAvailability[grade];
+    
+    return (
+      <SelectionButton
+        key={grade}
+        selected={selectedGrade === grade}
+        disabled={!isInStock}
+      >
+        <input
+          type="radio"
+          name="grade"
+          value={grade}
+          checked={selectedGrade === grade}
+          onChange={(e) => gradeChangeHandler(e.target.value)}
+          className="hidden"
+          disabled={!isInStock}
+        />
+        <div className={`flex flex-col items-center ${!isInStock ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}`}>
+          <h1 className="w-full text-lg whitespace-nowrap">
+            {grade}
+          </h1>
+          <h1 className="text-lg whitespace-nowrap">
+            {price} &euro;
+          </h1>
+        </div>
+      </SelectionButton>
+    );
+  })}
+</div>
 
           {uniqueCapacities.length > 0 && uniqueCapacities[0] !== 0 && (
             <>
               <h1 className="lg:text-xl my-2">Stockage</h1>
               <div className="flex flex-wrap gap-4 mb-12">
-                {uniqueCapacities.map((capacity: any) => {
-                  const isInStock = capacityAvailability[capacity];
-                  
-                  return (
-                    <SelectionButton
-                      key={capacity}
-                      selected={selectedCapacity == capacity}
-                      disabled={!isInStock}
-                    >
-                      <input
-                        type="radio"
-                        name="capacity"
-                        value={capacity}
-                        checked={selectedCapacity == capacity}
-                        onChange={(e) =>
-                          capacityChangeHandler(parseInt(e.target.value))
-                        }
-                        className="hidden"
-                        disabled={!isInStock}
-                      />
-                      <div className={`flex items-center justify-center ${!isInStock ? 'opacity-30 cursor-not-allowed' : ''}`}>
-                        <h1 className="text-lg">{capacity} Go</h1>
-                      </div>
-                    </SelectionButton>
-                  );
-                })}
-              </div>
+  {uniqueCapacities.map((capacity: any) => {
+    const isInStock = capacityAvailability[capacity];
+    
+    return (
+      <SelectionButton
+        key={capacity}
+        selected={selectedCapacity == capacity}
+        disabled={!isInStock}
+      >
+        <input
+          type="radio"
+          name="capacity"
+          value={capacity}
+          checked={selectedCapacity == capacity}
+          onChange={(e) =>
+            capacityChangeHandler(parseInt(e.target.value))
+          }
+          className="hidden"
+          disabled={!isInStock}
+        />
+        <div className={`flex items-center justify-center ${!isInStock ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}`}>
+          <h1 className="text-lg">{capacity} Go</h1>
+        </div>
+      </SelectionButton>
+    );
+  })}
+</div>
+
             </>
           )}
 
           <h1 className="lg:text-xl my-2">Couleur</h1>
           <div className="flex flex-wrap gap-4">
-            {uniqueColors.map((color: any) => {
-              const isInStock = colorAvailability[color];
-              
-              return (
-                <SelectionButton
-                  key={color}
-                  selected={selectedColor.toLowerCase() === color.toLowerCase()}
-                  disabled={!isInStock}
-                >
-                  <input
-                    type="radio"
-                    name="color"
-                    value={color}
-                    checked={selectedColor.toLowerCase() === color.toLowerCase()}
-                    onChange={(e) => colorChangeHandler(e.target.value)}
-                    className="hidden"
-                    disabled={!isInStock}
-                  />
-                  <div className={`flex items-center text-lg min-w-[120px] relative ${!isInStock ? 'opacity-30 cursor-not-allowed' : ''}`}>
-                    <div className="absolute left-28 sm:left-6 md:left-4 xl:left-16">
-                      <span
-                        className={`w-4 h-4 rounded-full inline-block ${
-                          color.toLowerCase().startsWith('blanc') ? 'border border-black' : ''
-                        }`}
-                        style={{ backgroundColor: getColorCode(color) }}
-                      ></span>
-                    </div>
-                    <span className="ml-36 sm:ml-12 md:ml-10 xl:ml-24">
-                      {String(color).charAt(0).toUpperCase() +
-                        String(color).split(' ')[0].slice(1)}
-                    </span>
-                  </div>
-                </SelectionButton>
-              );
-            })}
+  {uniqueColors.map((color: any) => {
+    const isInStock = colorAvailability[color];
+    
+    return (
+      <SelectionButton
+        key={color}
+        selected={selectedColor.toLowerCase() === color.toLowerCase()}
+        disabled={!isInStock}
+      >
+        <input
+          type="radio"
+          name="color"
+          value={color}
+          checked={selectedColor.toLowerCase() === color.toLowerCase()}
+          onChange={(e) => colorChangeHandler(e.target.value)}
+          className="hidden"
+          disabled={!isInStock}
+        />
+        <div className={`flex items-center text-lg min-w-[120px] relative ${!isInStock ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}`}>
+          <div className="absolute left-28 sm:left-6 md:left-4 xl:left-16">
+            <span
+              className={`w-4 h-4 rounded-full inline-block ${
+                color.toLowerCase().startsWith('blanc') ? 'border border-black' : ''
+              }`}
+              style={{ backgroundColor: getColorCode(color) }}
+            ></span>
           </div>
+          <span className="ml-36 sm:ml-12 md:ml-10 xl:ml-24">
+            {String(color).charAt(0).toUpperCase() +
+              String(color).split(' ')[0].slice(1)}
+          </span>
+        </div>
+      </SelectionButton>
+    );
+  })}
+</div>
         </div>
       </div>
     </ClientOnly>

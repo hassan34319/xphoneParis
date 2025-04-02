@@ -149,8 +149,23 @@ const SidebarModal: React.FC<NavbarProps> = ({
     console.log("Navigating to products page with product ID: ", productId);
     toggleSidebar();
     
-    // Redirect to products page with query parameter instead of product component page
-    router.push(`/products?search=${productId}`);
+    // Add exact=true parameter to search
+    router.push(`/products?exactName=${encodeURIComponent(productId)}`);
+  };
+  
+  const handleProductClick2 = (e: React.MouseEvent, productId: string) => {
+    console.log("Product clicked")
+    e.preventDefault(); // Prevent default link behavior
+    
+    const actualProductId = getProductIdFromReference(productId);
+    
+    setActiveProduct(actualProductId);
+    setIsSubModalOpen(false);
+    setIsThirdModalOpen(false);
+    toggleSidebar();
+    
+    // Add exact=true parameter to search
+    router.push(`/products?search=${encodeURIComponent(productId)}&exact=true`);
   };
 
   const getProductIdFromReference = (referenceId: string) => {
@@ -167,21 +182,21 @@ const SidebarModal: React.FC<NavbarProps> = ({
     return referenceId;
   };
   
-  const handleProductClick2 = (e: React.MouseEvent, productId: string) => {
-    console.log("Product clicked")
-    e.preventDefault(); // Prevent default link behavior
+  // const handleProductClick2 = (e: React.MouseEvent, productId: string) => {
+  //   console.log("Product clicked")
+  //   e.preventDefault(); // Prevent default link behavior
     
-    const actualProductId = getProductIdFromReference(productId);
+  //   const actualProductId = getProductIdFromReference(productId);
     
     
-    setActiveProduct(actualProductId);
-    setIsSubModalOpen(false);
-    setIsThirdModalOpen(false);
-    toggleSidebar();
+  //   setActiveProduct(actualProductId);
+  //   setIsSubModalOpen(false);
+  //   setIsThirdModalOpen(false);
+  //   toggleSidebar();
     
-    // Changed from product component page to products page with query parameter
-    router.push(`/products?search=${productId}`);
-  };
+  //   // Changed from product component page to products page with query parameter
+  //   router.push(`/products?search=${productId}`);
+  // };
 
   const closeSubModal = () => {
     setIsSubModalOpen(false);
@@ -364,7 +379,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
                 activeCategoryData?.products?.map((product) => (
                   <Link
                     key={product._id}
-                    href={`/products?search=${product.name}`}
+                    href={`/products?exactName=${encodeURIComponent(product.name)}`}
                     className={`block py-2 border-t border-b border-gray-200 cursor-pointer ${
                       activeProduct === product._id ? "bg-gray-100" : ""
                     }`}
@@ -433,7 +448,7 @@ const SidebarModal: React.FC<NavbarProps> = ({
               {activeSubcategoryData?.products.map((product) => (
                 <Link
                   key={product._id}
-                  href={`/products?search=${product.name}`}
+                  href={`/products?exactName=${encodeURIComponent(product.name)}`}
                   className={`block py-2 border-t border-b border-gray-200 cursor-pointer ${
                     activeProduct === product._id ? "bg-gray-100" : ""
                   }`}
