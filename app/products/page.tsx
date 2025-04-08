@@ -69,8 +69,11 @@ async function ProductsPage({
   
   return (
     <div className="w-11/12 mx-auto">
-      <h1 className="text-3xl my-4 underline-offset-8 underline ">
+      {/* <h1 className="text-3xl my-4 underline-offset-8 underline ">
         {displaySearch}
+      </h1> */}
+      <h1 className="text-3xl my-4 underline-offset-8 underline ">
+        
       </h1>
       {/* <h2 className="text-xl text-gray-800 mb-4">
         {" "}
