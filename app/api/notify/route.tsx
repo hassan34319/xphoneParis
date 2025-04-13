@@ -17,7 +17,7 @@ interface Item {
   name: string;
   productId: string;
   color: string;
-  capacity: number;
+  capacity: string;
   grade: string;
   price: number;
   quantity: number;
@@ -123,14 +123,14 @@ export async function POST(request: NextRequest) {
               create: cart.map((item: Item) => ({
                 name: item.name,
                 color: item.color,
-                capacity: item.capacity,
+                capacity: parseInt(item.capacity, 10), // Convert string to integer
                 grade: item.grade,
                 price: item.price,
                 quantity: item.quantity,
                 productId: item.productId,
                 image: item.image,
               })),
-            },
+            }
           },
         });
         

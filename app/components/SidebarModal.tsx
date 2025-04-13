@@ -99,15 +99,15 @@ const SidebarModal: React.FC<NavbarProps> = ({
         return;
       }
   
-      // Handle closing modals in reverse order (innermost to outermost)
-      if (isThirdModalOpen) {
+      // Close all modals at once when clicking outside
+      if (isOpen || isSubModalOpen || isThirdModalOpen) {
         setIsThirdModalOpen(false);
-        setActiveSubcategory("");
-      } else if (isSubModalOpen) {
         setIsSubModalOpen(false);
         setActiveCategory("");
-      } else if (isOpen) {
-        toggleSidebar();
+        setActiveSubcategory("");
+        if (isOpen) {
+          toggleSidebar();
+        }
       }
     };
   
