@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { BiPencil, BiChevronDown, BiChevronUp } from "react-icons/bi";
@@ -47,8 +47,17 @@ interface OrdersPageProps {
 }
 
 const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
-  const [ordersState, setOrdersState] = useState<Order[]>(orders);
+  // Filter out failed orders - we only want processed orders
+  const [ordersState, setOrdersState] = useState<Order[]>([]);
   const [expandedOrders, setExpandedOrders] = useState<{ [key: string]: boolean }>({});
+
+  // Initialize state with filtered orders
+  useEffect(() => {
+    const filteredOrders = orders.filter(order => 
+      order.status !== "Failed" && order.status !== "failed"
+    );
+    setOrdersState(filteredOrders);
+  }, [orders]);
 
   const toggleOrderExpand = (orderId: string) => {
     setExpandedOrders(prev => ({
@@ -100,186 +109,186 @@ const OrdersComponent: React.FC<OrdersPageProps> = ({ orders }) => {
     <ClientOnly>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Orders</h1>
-        <div className="overflow-x-auto">
-          <table className="w-full border bg-white shadow-md rounded-lg">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="py-3 px-4 border-b text-left">Order Details</th>
-                <th className="py-3 px-4 border-b text-center">Status</th>
-                <th className="py-3 px-4 border-b text-center">Total</th>
-                <th className="py-3 px-4 border-b text-center">Promo</th>
-                <th className="py-3 px-4 border-b text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ordersState.map((order) => (
-                <>
-                  <tr 
-                    key={order.id}
-                    className="hover:bg-gray-50 cursor-pointer"
-                    onClick={() => toggleOrderExpand(order.id)}
-                  >
-                    <td className="py-4 px-4 border-b">
-                      <div className="flex items-center">
-                        {expandedOrders[order.id] ? (
-                          <BiChevronUp className="mr-2 text-gray-500" />
-                        ) : (
-                          <BiChevronDown className="mr-2 text-gray-500" />
-                        )}
-                        <div>
-                          <div className="font-medium">{order.id}</div>
-                          <div className="text-sm text-gray-500">
-                            {formatDate(order.createdAt)}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {order.user.firstName} {order.user.lastName}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 border-b text-center">
-                      <div className="flex items-center justify-center">
-                        {order.editableStatus ? (
-                          <input
-                            type="text"
-                            className="border rounded px-2 py-1 w-full"
-                            value={order.updatedStatus || ""}
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) =>
-                              setOrdersState((prevOrders) =>
-                                prevOrders.map((o) =>
-                                  o.id === order.id
-                                    ? { ...o, updatedStatus: e.target.value }
-                                    : o
-                                )
-                              )
-                            }
-                          />
-                        ) : (
-                          <span className={`px-2 py-1 rounded text-sm ${
-                            order.status === 'Delivered' ? 'bg-green-100 text-green-800' : 
-                            order.status === 'Processing' ? 'bg-blue-100 text-blue-800' : 
-                            order.status === 'Shipped' ? 'bg-purple-100 text-purple-800' : 
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {order.status}
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 border-b text-center">
-                      <div className="font-medium">{order.total} €</div>
-                      {order.discount && (
-                        <div className="text-sm text-green-600">-{order.discount} €</div>
-                      )}
-                    </td>
-                    <td className="py-4 px-4 border-b text-center">
-                      {order.promo ? (
-                        <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-sm">
-                          {order.promo}
-                        </span>
-                      ) : (
-                        <span className="text-gray-400">-</span>
-                      )}
-                    </td>
-                    <td className="py-4 px-4 border-b text-center">
-                      {!order.editableStatus ? (
-                        <button 
-                          className="p-2 hover:bg-gray-100 rounded"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEditStatus(order.id);
-                          }}
-                        >
-                          <BiPencil className="text-gray-600" />
-                        </button>
-                      ) : (
-                        <button
-                          className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSaveStatus(order.id);
-                          }}
-                        >
-                          Save
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                  {expandedOrders[order.id] && (
-                    <tr>
-                      <td colSpan={5} className="bg-gray-50 p-0">
-                        <div className="p-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                              <h3 className="font-medium mb-2">Customer Details</h3>
-                              <div className="bg-white p-3 rounded border">
-                                <p><span className="font-medium">Name:</span> {order.user.firstName} {order.user.lastName}</p>
-                                <p><span className="font-medium">Email:</span> {order.user.email}</p>
-                                <p><span className="font-medium">Phone:</span> {order.user.phoneNumber}</p>
-                              </div>
+        {ordersState.length === 0 ? (
+          <div className="bg-white p-8 rounded-lg shadow-md text-center">
+            <p className="text-gray-500">No processed orders found.</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full border bg-white shadow-md rounded-lg">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="py-3 px-4 border-b text-left">Order Details</th>
+                  <th className="py-3 px-4 border-b text-center">Status</th>
+                  <th className="py-3 px-4 border-b text-center">Total</th>
+                  <th className="py-3 px-4 border-b text-center">Promo</th>
+                  <th className="py-3 px-4 border-b text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ordersState.map((order) => (
+                  <>
+                    <tr 
+                      key={order.id}
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={() => toggleOrderExpand(order.id)}
+                    >
+                      <td className="py-4 px-4 border-b">
+                        <div className="flex items-center">
+                          {expandedOrders[order.id] ? (
+                            <BiChevronUp className="mr-2 text-gray-500" />
+                          ) : (
+                            <BiChevronDown className="mr-2 text-gray-500" />
+                          )}
+                          <div>
+                            <div className="font-medium">{order.id}</div>
+                            <div className="text-sm text-gray-500">
+                              {formatDate(order.createdAt)}
                             </div>
-                            <div>
-                              <h3 className="font-medium mb-2">Shipping Address</h3>
-                              <div className="bg-white p-3 rounded border">
-                                <p>{order.user.shippingAdress}</p>
-                                <p>{order.user.postalCode}, {order.user.city}</p>
-                                <p>{order.user.country}</p>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <h3 className="font-medium mb-2">Order Items</h3>
-                          <div className="bg-white rounded border overflow-hidden">
-                            {order.items.map((item) => (
-                              <div key={item.id} className="p-3 border-b last:border-b-0 flex justify-between">
-                                <div>
-                                  <p className="font-medium">{item.name}</p>
-                                  <p className="text-sm text-gray-600">
-                                    {item.color} • {item.capacity}GB • Grade: {item.grade}
-                                  </p>
-                                </div>
-                                <div className="text-right">
-                                  <p>{item.price} € x {item.quantity}</p>
-                                  <p className="font-medium">{item.price * item.quantity} €</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          
-                          <div className="mt-4 bg-white p-3 rounded border flex flex-col items-end">
-                            <div className="w-48">
-                              <div className="flex justify-between">
-                                <span>Subtotal:</span>
-                                <span>{order.calculated} €</span>
-                              </div>
-                              {/* {order.discount && order.discount>=0 &&(
-                                <div className="flex justify-between text-green-600">
-                                  <span>Discount:</span>
-                                  <span>-{order.discount} €</span>
-                                </div>
-                              )} */}
-                              {order.promo && (
-                                <div className="flex justify-between text-blue-600 text-sm">
-                                  <span>Promo code:</span>
-                                  <span>{order.promo}</span>
-                                </div>
-                              )}
-                              <div className="flex justify-between font-bold mt-2 pt-2 border-t">
-                                <span>Total:</span>
-                                <span>{order.total} €</span>
-                              </div>
+                            <div className="text-sm text-gray-500">
+                              {order.user.firstName} {order.user.lastName}
                             </div>
                           </div>
                         </div>
                       </td>
+                      <td className="py-4 px-4 border-b text-center">
+                        <div className="flex items-center justify-center">
+                          {order.editableStatus ? (
+                            <input
+                              type="text"
+                              className="border rounded px-2 py-1 w-full"
+                              value={order.updatedStatus || ""}
+                              onClick={(e) => e.stopPropagation()}
+                              onChange={(e) =>
+                                setOrdersState((prevOrders) =>
+                                  prevOrders.map((o) =>
+                                    o.id === order.id
+                                      ? { ...o, updatedStatus: e.target.value }
+                                      : o
+                                  )
+                                )
+                              }
+                            />
+                          ) : (
+                            <span className={`px-2 py-1 rounded text-sm ${
+                              order.status === 'Delivered' ? 'bg-green-100 text-green-800' : 
+                              order.status === 'Processing' ? 'bg-blue-100 text-blue-800' : 
+                              order.status === 'Shipped' ? 'bg-purple-100 text-purple-800' : 
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {order.status}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-4 px-4 border-b text-center">
+                        <div className="font-medium">{order.total} €</div>
+                        {order.discount && (
+                          <div className="text-sm text-green-600">-{order.discount} €</div>
+                        )}
+                      </td>
+                      <td className="py-4 px-4 border-b text-center">
+                        {order.promo ? (
+                          <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-sm">
+                            {order.promo}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </td>
+                      <td className="py-4 px-4 border-b text-center">
+                        {!order.editableStatus ? (
+                          <button 
+                            className="p-2 hover:bg-gray-100 rounded"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditStatus(order.id);
+                            }}
+                          >
+                            <BiPencil className="text-gray-600" />
+                          </button>
+                        ) : (
+                          <button
+                            className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSaveStatus(order.id);
+                            }}
+                          >
+                            Save
+                          </button>
+                        )}
+                      </td>
                     </tr>
-                  )}
-                </>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    {expandedOrders[order.id] && (
+                      <tr>
+                        <td colSpan={5} className="bg-gray-50 p-0">
+                          <div className="p-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                              <div>
+                                <h3 className="font-medium mb-2">Customer Details</h3>
+                                <div className="bg-white p-3 rounded border">
+                                  <p><span className="font-medium">Name:</span> {order.user.firstName} {order.user.lastName}</p>
+                                  <p><span className="font-medium">Email:</span> {order.user.email}</p>
+                                  <p><span className="font-medium">Phone:</span> {order.user.phoneNumber}</p>
+                                </div>
+                              </div>
+                              <div>
+                                <h3 className="font-medium mb-2">Shipping Address</h3>
+                                <div className="bg-white p-3 rounded border">
+                                  <p>{order.user.shippingAdress}</p>
+                                  <p>{order.user.postalCode}, {order.user.city}</p>
+                                  <p>{order.user.country}</p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <h3 className="font-medium mb-2">Order Items</h3>
+                            <div className="bg-white rounded border overflow-hidden">
+                              {order.items.map((item) => (
+                                <div key={item.id} className="p-3 border-b last:border-b-0 flex justify-between">
+                                  <div>
+                                    <p className="font-medium">{item.name}</p>
+                                    <p className="text-sm text-gray-600">
+                                      {item.color} • {item.capacity}GB • Grade: {item.grade}
+                                    </p>
+                                  </div>
+                                  <div className="text-right">
+                                    <p>{item.price} € x {item.quantity}</p>
+                                    <p className="font-medium">{item.price * item.quantity} €</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            
+                            <div className="mt-4 bg-white p-3 rounded border flex flex-col items-end">
+                              <div className="w-48">
+                                <div className="flex justify-between">
+                                  <span>Subtotal:</span>
+                                  <span>{order.calculated} €</span>
+                                </div>
+                                {order.promo && (
+                                  <div className="flex justify-between text-blue-600 text-sm">
+                                    <span>Promo code:</span>
+                                    <span>{order.promo}</span>
+                                  </div>
+                                )}
+                                <div className="flex justify-between font-bold mt-2 pt-2 border-t">
+                                  <span>Total:</span>
+                                  <span>{order.total} €</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </ClientOnly>
   );
