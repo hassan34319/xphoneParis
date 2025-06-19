@@ -56,7 +56,7 @@ const Cart: React.FC<Props> = ({ promoCodes, currentUser }) => {
   const [applied, setApplied] = useState(false);
   
   // Fixed Delivery Fee
-  const deliveryFee = 7.99;
+  const deliveryFee = 0;
 
   useEffect(() => {
     // Reset total price when promo code changes
